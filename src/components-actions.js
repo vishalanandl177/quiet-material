@@ -134,7 +134,7 @@ export function initActionComponents(root = document) {
     wrapper.style.setProperty('--qm-range-low', `${(+low.value - state.min) / (state.max - state.min || 1) * 100}%`);
     wrapper.style.setProperty('--qm-range-high', `${(+high.value - state.min) / (state.max - state.min || 1) * 100}%`);
     for (const output of wrapper.querySelectorAll('[data-qm-range-output]')) {
-      output.textContent = output.dataset.qmRangeOutput === 'low' ? low.value : output.dataset.qmRangeOutput === 'high' ? high.value : `${low.value} – ${high.value}`;
+      output.textContent = output.dataset.qmRangeOutput === 'low' ? low.value : output.dataset.qmRangeOutput === 'high' ? high.value : `${low.value} - ${high.value}`;
     }
     if (eventType) emit(wrapper, eventType, {low: +low.value, high: +high.value});
   }

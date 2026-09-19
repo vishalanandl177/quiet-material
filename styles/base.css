@@ -1,5 +1,5 @@
 
-/* Quiet Material — native HTML first, with color and movement kept purposeful. */
+/* Quiet Material - native HTML first, with color and movement kept purposeful. */
 *, *::before, *::after { box-sizing: border-box; }
 :root { color-scheme: dark; font-family: var(--qm-font-body); background: var(--qm-color-background); color: var(--qm-color-text); }
 body { margin: 0; font-size: var(--qm-type-body); line-height: var(--qm-line-height-body); }

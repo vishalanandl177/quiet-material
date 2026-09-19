@@ -12,7 +12,7 @@ Illustrative concept, not an implementation screenshot. [Phone concept](assets/p
 
 - 169 canonical design tokens with deterministic CSS, JSON, TypeScript, Kotlin, Swift, and Dart exports.
 - Mobile-first 320px baseline, 600/840/1200 window classes, safe-area support, scalable type, and accessible target sizes.
-- Android Compose, Apple SwiftUI, and Flutter source adapters, component catalogs and adaptive examples. Native SDK builds remain pending.
+- Android Compose, Apple SwiftUI, and Flutter source adapters, component catalogs and adaptive examples. Android and Apple library builds and Flutter analysis/widget tests pass CI; application integration and device review remain pending.
 - All 16 MD3 duration slots, seven easing families, and standard/expressive spring definitions with pinned official source references.
 - Web APIs for container transform, shared axis X/Y/Z, fade through, fade, and spring motion.
 - Framework-independent components across all 36 families in the official MD3 catalog, plus supporting patterns such as avatars, tables and empty states.
@@ -154,7 +154,7 @@ The web helper handles ordinary DOM views. It does not capture live video, canva
 
 ## Scope and ownership
 
-The supported theme is dark. Current browser features such as dialog, popover and :has() are used; verify your browser support policy before integrating. The web styles can be used from any framework. Native source adapters combine Quiet components and toolkit controls; platform-specific mappings are documented instead of claiming identical controls on every OS. They have not been compiled or device-tested in this environment. An editable Figma library, advanced data widgets and backend functionality are not included.
+The supported theme is dark. Current browser features such as dialog, popover and :has() are used; verify your browser support policy before integrating. The web styles can be used from any framework. Native source adapters combine Quiet components and toolkit controls; platform-specific mappings are documented instead of claiming identical controls on every OS. Android, macOS and iOS simulator builds plus Flutter analysis/tests pass in CI; device and assistive-technology review remain separate. See [validation](docs/validation.md). An editable Figma library, advanced data widgets and backend functionality are not included.
 
 Catalog coverage means each MD3 family has a reusable implementation or documented native composition with an explicit contract. It does not mean every Material SDK option, branded shape, device or assistive technology has identical behavior. The [matrix](docs/md3-components.md) separates component availability from validation evidence.
 

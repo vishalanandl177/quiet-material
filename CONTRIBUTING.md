@@ -29,3 +29,5 @@ The development command serves the workbench; use the URL printed by the server.
 Never commit credentials, personal production data or private example content. Use invented sample data. Report a security-sensitive issue privately to the repository owner rather than placing details in a public issue.
 
 No public license grant is provided by this private, unpublished project. Contributions and distribution are subject to the owner's agreement.
+
+Use plain ASCII hyphens (`-`) in interface copy and documentation instead of em or en dashes.

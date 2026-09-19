@@ -1,4 +1,4 @@
-# Validation record — v1.3
+# Validation record - v1.3
 
 ## Completed automated checks
 
@@ -26,13 +26,13 @@ The [GitHub Actions workflow](https://github.com/vishalanandl177/quiet-material/
 
 | Adapter | Completed here | Still required |
 | --- | --- | --- |
-| Android Compose | Expanded component source/API review, MD3 helper review and generated token-reference checks | Android SDK compilation, application integration, device/emulator and TalkBack review |
-| Apple SwiftUI | Expanded component source/API review, MD3 helper review and generated token-reference checks | Xcode/Swift package compilation, iPhone/iPad/Mac integration and VoiceOver review |
-| Flutter | Expanded component source/API review, complete semantic color mapping and token-reference checks; widget interaction tests supplied | `flutter analyze`, `flutter test`, host builds and device/desktop assistive-technology review |
+| Android Compose | Android library `assembleDebug` passed with JDK 17, Gradle 8.11.1, AGP 8.10.1, Kotlin 2.3.21 and SDK 36; source/token review | Application integration, device/emulator and TalkBack review |
+| Apple SwiftUI | macOS `swift build` and generic iOS simulator `xcodebuild` passed; source/token review | iPhone/iPad/Mac application integration, rendered flows and VoiceOver review |
+| Flutter | Flutter 3.35.0 dependency resolution, `flutter analyze` and all 9 unit/widget tests passed | Platform host builds and device/desktop assistive-technology review |
 
 Native starters do not include a complete MD3 container-transform route; SwiftUI navigation remains system-owned Apple motion. The shared foundation and web default patterns are implemented, while full native conformance is not claimed. See the [MD3 audit](md3-motion-audit.md).
 
-The corresponding native SDKs were unavailable in the local creation environment. The new `Verify native adapters` GitHub Actions workflow compiles the Android library and Apple package/iOS simulator target, then analyzes and tests Flutter. Its first remote run is pending at this snapshot; no native compilation result is claimed until that run passes. A compiler pass does not replace device, visual or assistive-technology review.
+The corresponding native SDKs were unavailable in the local creation environment, so validation ran on GitHub-hosted build machines. [Native validation run](https://github.com/vishalanandl177/quiet-material/actions/runs/35428708554) passed the Android build, macOS package build, iOS simulator library build, Flutter analysis and Flutter tests for source commit `64c1d92856dcf3f40ca15008a03f9a4fe9a47957`. The [web workflow](https://github.com/vishalanandl177/quiet-material/actions/runs/35428708534) also passed its 105 tests and generated-output check. The initial CI attempt caught an obsolete Kotlin Gradle DSL and an unused Flutter import; both were corrected before this passing run. A compiler pass does not replace device, visual or assistive-technology review.
 
 ## Remaining browser and device checks
 

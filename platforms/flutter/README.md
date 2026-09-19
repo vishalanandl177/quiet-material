@@ -1,6 +1,6 @@
 # Quiet Material for Flutter
 
-A source package for Flutter 3.35+ / Dart 3.9+. It themes stock Material 3 widgets and supplies a reusable component catalog and adaptive shell. Its intended targets are Android, iOS, web, macOS, Windows and Linux through Flutter; native compilation and device testing have not been run for this delivery. This is not a published pub.dev package or a promise that every widget has identical platform behavior.
+A source package for Flutter 3.35+ / Dart 3.9+. It themes stock Material 3 widgets and supplies a reusable component catalog and adaptive shell. Its intended targets are Android, iOS, web, macOS, Windows and Linux through Flutter; Flutter platform host builds and device testing have not been run for this delivery. Flutter analysis and all nine unit/widget tests pass CI. This is not a published pub.dev package or a promise that every widget has identical platform behavior.
 
 ## Integrate
 
@@ -80,7 +80,7 @@ Do not use `OpenContainer` or the package's private transition defaults as evide
 
 ## Validation
 
-The Flutter SDK was not available in the authoring environment. Run `flutter pub get`, `flutter analyze` and `flutter test` in this directory. The included widget tests cover background colors, window class boundaries, navigation reflow and motion preferences. Then run the example on each supported target; web browser evidence elsewhere in this repository does not validate native builds.
+Flutter 3.35.0 dependency resolution, analysis and all 9 unit/widget tests passed in GitHub Actions. Run `flutter pub get`, `flutter analyze` and `flutter test` in this directory when changing the adapter; see the [validation record](../../docs/validation.md). The included widget tests cover background colors, window class boundaries, navigation reflow and motion preferences. Then run the example on each supported target; web browser evidence elsewhere in this repository does not validate native builds.
 
 Current API references: [ThemeData](https://api.flutter.dev/flutter/material/ThemeData-class.html), [CardThemeData](https://api.flutter.dev/flutter/material/CardThemeData-class.html), [MediaQuery.disableAnimationsOf](https://api.flutter.dev/flutter/widgets/MediaQuery/disableAnimationsOf.html), [adaptive layout guidance](https://docs.flutter.dev/ui/adaptive-responsive/general).
 
@@ -117,4 +117,4 @@ QuietSplitButton(
 
 The loading indicator is a real CustomPainter/Ticker seven-contour morph with the shared 650 ms targets, stiffness 200/damping ratio 0.6 and compound rotation. It stops for `MediaQuery.disableAnimations` and muted `TickerMode`, and disposes its ticker when removed. Its artwork is Quiet-specific, not identical to Android's rounded polygons. Progress exposes a numeric percentage only for actual determinate values; the static reduced-motion busy representation does not announce invented progress.
 
-Stable connected button groups/FAB menus/split buttons/toolbars supply their action contracts without claiming expressive connected-shape morphing. Rich help is an interactive MenuAnchor popup rather than a noninteractive Tooltip text span. The five added catalog widget tests cover independent split actions, controlled segmentation, chip removal, reduced-motion loading and narrow-window text reflow. **They must still be run with `flutter test`; the authoring environment has no Flutter SDK.**
+Stable connected button groups/FAB menus/split buttons/toolbars supply their action contracts without claiming expressive connected-shape morphing. Rich help is an interactive MenuAnchor popup rather than a noninteractive Tooltip text span. The five added catalog widget tests cover independent split actions, controlled segmentation, chip removal, reduced-motion loading and narrow-window text reflow. They passed in the remote Flutter 3.35.0 CI job alongside the four existing foundation/layout tests.

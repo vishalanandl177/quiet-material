@@ -62,7 +62,7 @@ travelDates.open();
 // travelDates.destroy();
 ```
 
-Single-date mode is the default and takes/returns a `YYYY-MM-DD` string. Range mode takes/returns `{start,end}`. Omit `value` to begin empty. `min` and `max` are inclusive civil dates; default bounds are years 0001–9999. No UTC parsing or ISO timestamp conversion occurs. Invalid initialization/setValue values throw `RangeError` before modifying the selection. The calendar renders localized month, weekday and accessible day names; the input mode deliberately uses an unambiguous `YYYY-MM-DD` format, with labels and errors.
+Single-date mode is the default and takes/returns a `YYYY-MM-DD` string. Range mode takes/returns `{start,end}`. Omit `value` to begin empty. `min` and `max` are inclusive civil dates; default bounds are years 0001-9999. No UTC parsing or ISO timestamp conversion occurs. Invalid initialization/setValue values throw `RangeError` before modifying the selection. The calendar renders localized month, weekday and accessible day names; the input mode deliberately uses an unambiguous `YYYY-MM-DD` format, with labels and errors.
 
 Every date cell preserves a 48 × 48 CSS-pixel target. The calendar scrolls horizontally inside its labeled region when the viewport cannot fit seven targets; it never requires the picker itself to become wider than its container. Keyboard focus on a day lets the browser reveal that day within the scroll region. The keyboard-input toggle remains outside the scroll region as a compact alternative.
 
@@ -90,7 +90,7 @@ const reminderTime = mountTimePicker(document.querySelector('#reminder-time'), {
 
 Options: `value` defaults to `09:30`; `hour24` defaults to true; `modal` defaults to false. Controller: `open()`, `close()` (cancel), `setValue('HH:mm')`, readonly `value`, `destroy()`. Invalid time strings throw `RangeError`.
 
-The clock provides pointer/touch selection and a focusable slider for keyboard/screen-reader use. The 24-hour clock has outer 1–12 and inner 13–23/00 rings. Minute dragging selects every minute; printed marks show five-minute intervals. Selecting an hour by pointer advances to minutes. Arrow keys adjust one step, PageUp/PageDown five, Home/End the bounds, and Enter/Space changes the active hour/minute field. Explicit hour/minute buttons are also provided. Input mode validates hours/minutes, including noon/midnight conversion for 12-hour input. AM/PM stays visible in both modes.
+The clock provides pointer/touch selection and a focusable slider for keyboard/screen-reader use. The 24-hour clock has outer 1-12 and inner 13-23/00 rings. Minute dragging selects every minute; printed marks show five-minute intervals. Selecting an hour by pointer advances to minutes. Arrow keys adjust one step, PageUp/PageDown five, Home/End the bounds, and Enter/Space changes the active hour/minute field. Explicit hour/minute buttons are also provided. Input mode validates hours/minutes, including noon/midnight conversion for 12-hour input. AM/PM stays visible in both modes.
 
 Drafts emit `qm:time-input`; OK emits `qm:time-change` with `{value}` and calls `onChange`. Cancel/Escape restores the committed value and emits `qm:time-cancel`.
 

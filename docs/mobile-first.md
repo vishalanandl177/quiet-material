@@ -11,8 +11,8 @@ These are Quiet Material's shared layout tokens. Their values are a product cont
 | Width in logical units | Class | Layout | Navigation |
 | --- | --- | --- | --- |
 | Below 600 | Compact | One column; 20-unit page padding; cards fill available width | Three primary destinations at most in the compact bar; overflow or a menu for the rest |
-| 600–839 | Medium | Wider single content area or suitable two-column groups; 32-unit padding | Rail or readable menu as appropriate |
-| 840–1199 | Expanded | Primary content plus optional supporting pane; 48-unit padding | Persistent rail/sidebar when content still has enough room |
+| 600-839 | Medium | Wider single content area or suitable two-column groups; 32-unit padding | Rail or readable menu as appropriate |
+| 840-1199 | Expanded | Primary content plus optional supporting pane; 48-unit padding | Persistent rail/sidebar when content still has enough room |
 | 1200 and above | Wide | Constrained readable content plus supporting context; 48-unit padding | Persistent labeled navigation; avoid stretching text across the window |
 
 At larger accessibility text sizes, fewer columns and a readable menu can be preferable even in a wider class. Native adapters may use a platform-native equivalent to the explorer navigation. Preserve destination order and selected state as the presentation changes.

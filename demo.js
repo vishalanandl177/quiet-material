@@ -79,7 +79,7 @@ if('ResizeObserver' in window)new ResizeObserver(entries=>{
   document.documentElement.style.setProperty('--explorer-nav-height',`${entries[0].target.getBoundingClientRect().height}px`);
 }).observe(document.querySelector('.rail'));
 const range=document.querySelector('#volume');range.addEventListener('input',()=>{document.querySelector('#volume-value').textContent=range.value+'%';range.setAttribute('aria-valuetext',range.value+' percent');});
-document.querySelectorAll('[data-page-number]').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('[data-page-number]').forEach(item=>item.removeAttribute('aria-current'));button.setAttribute('aria-current','page');const n=Number(button.dataset.pageNumber);document.querySelector('#pagination-result').textContent=`Showing items ${(n-1)*10+1}–${n*10} of 30.`;}));
+document.querySelectorAll('[data-page-number]').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('[data-page-number]').forEach(item=>item.removeAttribute('aria-current'));button.setAttribute('aria-current','page');const n=Number(button.dataset.pageNumber);document.querySelector('#pagination-result').textContent=`Showing items ${(n-1)*10+1}-${n*10} of 30.`;}));
 const projectForm=document.querySelector('#project-form');const nameInput=document.querySelector('#new-project-name');
 nameInput.addEventListener('input',()=>{nameInput.setCustomValidity('');nameInput.removeAttribute('aria-invalid');document.querySelector('#project-name-error').textContent='';});
 projectForm.addEventListener('submit',event=>{

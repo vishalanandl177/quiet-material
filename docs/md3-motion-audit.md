@@ -34,7 +34,7 @@ Automated checks cover source bindings and animation contracts. The remaining de
 | --- | --- | --- |
 | All 16 MD3 durations | Canonical tokens and generated platform exports | Passed token-value, alias and deterministic generation tests |
 | Seven current easings | Canonical easing tokens; exact emphasized segments; sampled CSS | Passed control-point tests; emphasized CSS sampling error below 0.0001; fallback explicitly labeled |
-| Standard and expressive spring roles | Canonical spring definitions and platform motion helpers | Passed both six-role source-value and finite-sample checks; native execution pending |
+| Standard and expressive spring roles | Canonical spring definitions and platform motion helpers | Passed both six-role source-value and finite-sample checks; native motion/device review remains separate from the passing SDK builds |
 | State feedback and local movement | Component CSS and native adapter recipes | Web ripple hold/release/touch timings verified; switch/sheet use separate standard spatial/effects springs |
 | Container transform | Web motion helper and live study | Web forward/return bounds, corner and content-handoff contracts pass; ordinary DOM, width-fit and straight path only |
 | Shared axis X/Y/Z | Web motion helper and live studies | X/Y/Z, forward/return and RTL keyframe tests pass |
@@ -43,7 +43,7 @@ Automated checks cover source bindings and animation contracts. The remaining de
 | Reduced motion | OS query, local preference, runtime cancellation and native guards | Tests pass for initial OS/local reduction and mid-flight runtime cancellation |
 | Animation GIFs | Motion gallery and reproducible generation script | Seven studies regenerated; manifest/recipe bindings, finite encoding and opt-in Play/Stop tests pass |
 | Native pattern coverage | Android/Flutter helpers and SwiftUI motion foundations | No complete native MD3 container-transform route; SwiftUI system navigation remains Apple motion. See each platform README. |
-| Native compilation and behavior | Android, Apple and Flutter source starters | Pending SDK builds and device/assistive-technology checks |
+| Native compilation and behavior | Android, Apple and Flutter component adapters | Android/macOS/iOS simulator builds and Flutter analysis/tests passed in v1.3 CI; device/assistive-technology checks remain |
 | Real rendered motion quality | Representative phone, tablet and desktop environments | Pending visual/device checks; automated source tests cannot establish frame pacing |
 
 ## Component mapping review

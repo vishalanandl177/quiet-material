@@ -123,7 +123,7 @@ test('range slider normalizes shared limits, clamps crossing, updates ARIA and s
   assert.equal(low.value, '80'); assert.equal(high.getAttribute('aria-valuemin'), '80');
   high.value = '40'; high.dispatchEvent(new window.Event('change', {bubbles: true}));
   assert.equal(high.value, '80'); assert.deepEqual(detail, {low: 80, high: 80});
-  assert.equal(document.querySelector('output').textContent, '80 – 80');
+  assert.equal(document.querySelector('output').textContent, '80 - 80');
   assert.deepEqual([...new window.FormData(document.querySelector('form'))], [['min', '80'], ['max', '80']]);
 });
 

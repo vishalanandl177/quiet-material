@@ -246,7 +246,7 @@ export function mountDatePicker(host, options = {}) {
     if (moveFocus) grid.querySelector('[tabindex="0"]')?.focus();
   }
   function update() {
-    summary.textContent = range ? `${draft.start || 'Start date'} — ${draft.end || 'End date'}` : draft || 'No date selected';
+    summary.textContent = range ? `${draft.start || 'Start date'} - ${draft.end || 'End date'}` : draft || 'No date selected';
     inputs[0].value = range ? draft.start : draft; if (range) inputs[1].value = draft.end;
     confirm.disabled = range ? !(valid(draft.start) && valid(draft.end) && draft.start <= draft.end) : !valid(draft);
     error.textContent = ''; inputs.forEach(input => input.removeAttribute('aria-invalid')); renderGrid();
@@ -262,7 +262,7 @@ export function mountDatePicker(host, options = {}) {
     const values = inputs.map(input => input.value.trim()); const correct = values.every(valid) && (!range || values[0] <= values[1]);
     inputs.forEach((input, index) => input.setAttribute('aria-invalid', String(!valid(values[index]) || (range && values[0] > values[1]))));
     error.textContent = correct ? '' : `Enter ${range ? 'an ordered date range' : 'a date'} as YYYY-MM-DD between ${min} and ${max}.`; confirm.disabled = !correct;
-    if (correct) { draft = range ? { start: values[0], end: values[1] } : values[0]; focused = values[0]; month = focused.slice(0, 7); summary.textContent = range ? `${values[0]} — ${values[1]}` : values[0]; renderGrid(); }
+    if (correct) { draft = range ? { start: values[0], end: values[1] } : values[0]; focused = values[0]; month = focused.slice(0, 7); summary.textContent = range ? `${values[0]} - ${values[1]}` : values[0]; renderGrid(); }
     return correct;
   }
   listeners.on(mode, 'click', () => { inputMode = !inputMode; fields.hidden = !inputMode; calendar.hidden = inputMode; mode.textContent = inputMode ? 'Use calendar' : 'Use keyboard input'; mode.setAttribute('aria-pressed', String(inputMode)); if (inputMode) inputs[0].focus(); else { update(); grid.querySelector('[tabindex="0"]')?.focus(); } });
@@ -334,7 +334,7 @@ export function mountTimePicker(host, options = {}) {
   }
   function readInputs() {
     const h = Number(hourInput.value), m = Number(minuteInput.value); const hourValid = hourInput.value !== '' && Number.isInteger(h) && h >= (hour24 ? 0 : 1) && h <= (hour24 ? 23 : 12); const minuteValid = minuteInput.value !== '' && Number.isInteger(m) && m >= 0 && m <= 59;
-    hourInput.setAttribute('aria-invalid', String(!hourValid)); minuteInput.setAttribute('aria-invalid', String(!minuteValid)); confirm.disabled = !(hourValid && minuteValid); error.textContent = confirm.disabled ? `Enter hours ${hour24 ? '0–23' : '1–12'} and minutes 0–59.` : '';
+    hourInput.setAttribute('aria-invalid', String(!hourValid)); minuteInput.setAttribute('aria-invalid', String(!minuteValid)); confirm.disabled = !(hourValid && minuteValid); error.textContent = confirm.disabled ? `Enter hours ${hour24 ? '0-23' : '1-12'} and minutes 0-59.` : '';
     if (!confirm.disabled) { hour = hour24 ? h : h % 12 + (hour >= 12 ? 12 : 0); minute = m; hourButton.textContent = String(displayHour()).padStart(2, '0'); minuteButton.textContent = String(minute).padStart(2, '0'); }
     return !confirm.disabled;
   }

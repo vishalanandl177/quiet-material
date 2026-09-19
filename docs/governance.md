@@ -19,7 +19,7 @@ The 36-family list tracks the official MD3 catalog reviewed for this release. Up
 ## Explicit limits
 
 - Web styles are framework-independent; dedicated React/Angular/Vue wrapper packages are not included.
-- Android Compose, Apple SwiftUI and Flutter source adapters and component catalogs are included. Native SDK builds and device review remain pending. Stock toolkit controls, branded compositions and platform-specific fallbacks are identified in [platform coverage](platforms.md).
+- Android Compose, Apple SwiftUI and Flutter source adapters and component catalogs are included. Android and Apple SDK builds plus Flutter analysis/tests passed in CI; device review remains pending. Stock toolkit controls, branded compositions and platform-specific fallbacks are identified in [platform coverage](platforms.md).
 - No editable Figma library has been created by this repository; the handoff document describes a future mapping.
 - No application authentication, persistence, backend, permissions or business logic is included.
 - Product-scale data grids with virtualization, general drag-and-drop and rich-text editors are outside this component catalog. Date/time pickers, search and keyboard menus are included; data services and product validation remain application-owned.

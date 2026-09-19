@@ -7,11 +7,11 @@ Quiet Material shares one visual language across platforms: a black application 
 | Target | Implementation supplied here | Delivery status |
 | --- | --- | --- |
 | Responsive web: phone, tablet, desktop browser | HTML/CSS, progressive JavaScript, all 36 MD3 families, supporting patterns and live explorer | Implemented; exact automated/browser evidence is recorded in [validation](validation.md) |
-| Android | [Compose adapter and component catalog](../platforms/android/) plus generated Kotlin tokens | Reusable source; native compilation and device verification remain pending |
-| iOS / iPadOS | [SwiftUI package and component catalog](../platforms/apple/) plus generated Swift tokens | Reusable source; Xcode compilation and device verification remain pending |
-| macOS | SwiftUI adapter, Flutter adapter, or responsive web | Native builds and desktop accessibility verification remain pending |
+| Android | [Compose adapter and component catalog](../platforms/android/) plus generated Kotlin tokens | Android library build passed in CI; device verification remains pending |
+| iOS / iPadOS | [SwiftUI package and component catalog](../platforms/apple/) plus generated Swift tokens | iOS simulator library build passed in CI; device verification remains pending |
+| macOS | SwiftUI adapter, Flutter adapter, or responsive web | Swift package build passed in CI; desktop accessibility verification remains pending |
 | Windows / Linux desktop | [Flutter source package and example](../platforms/flutter/) or responsive web | Flutter host apps must be created and validated on supported build hosts |
-| Shared Flutter application | Theme, component wrappers and explicit Material aliases, adaptive shell, motion helpers and generated Dart tokens | Source package; SDK analysis, widget tests and target builds remain pending |
+| Shared Flutter application | Theme, component wrappers and explicit Material aliases, adaptive shell, motion helpers and generated Dart tokens | Flutter analysis and all 9 unit/widget tests passed; platform host builds remain pending |
 | Other UI stacks | Canonical JSON design tokens and contracts in this documentation | Requires a platform adapter and validation by the consuming team |
 
 Flutter targets Android, iOS, web and desktop operating systems; supported OS versions depend on the Flutter SDK selected for the product. A framework's supported-platform list is not evidence that this repository has been tested on those devices. Consult [Flutter's platform matrix](https://docs.flutter.dev/reference/supported-platforms) when setting a minimum OS.
@@ -20,7 +20,7 @@ The adapters supply reusable components and explicit native compositions across 
 
 ## One component contract, native toolkit behavior
 
-The web implementation and state contracts are in the [36-family matrix](md3-components.md). The native APIs below are defined in [Compose QuietCatalog.kt](../platforms/android/src/main/kotlin/com/quietmaterial/QuietCatalog.kt), [SwiftUI QuietCatalog.swift](../platforms/apple/Sources/QuietMaterial/QuietCatalog.swift) and [Flutter quiet_catalog.dart](../platforms/flutter/lib/src/quiet_catalog.dart), together with their theme modules. An alias uses the toolkit's implementation under the Quiet theme; a composition is identified explicitly. All native rows describe source availability, not successful SDK builds or device verification.
+The web implementation and state contracts are in the [36-family matrix](md3-components.md). The native APIs below are defined in [Compose QuietCatalog.kt](../platforms/android/src/main/kotlin/com/quietmaterial/QuietCatalog.kt), [SwiftUI QuietCatalog.swift](../platforms/apple/Sources/QuietMaterial/QuietCatalog.swift) and [Flutter quiet_catalog.dart](../platforms/flutter/lib/src/quiet_catalog.dart), together with their theme modules. An alias uses the toolkit's implementation under the Quiet theme; a composition is identified explicitly. The rows describe source APIs; the delivery table and [validation record](validation.md) identify which SDK builds/tests passed and which device checks remain.
 
 | Official family | Android Compose | Apple SwiftUI | Flutter |
 | --- | --- | --- | --- |

@@ -58,7 +58,7 @@ Weights are 400, 500 and 600. The “bold” token is 600, not 700. Line-height 
 
 ## Spacing, shape and layout
 
-Space tokens run from `--qm-space-0` through `--qm-space-12` in 4px steps: 0–48px. Use 8–12px inside a control group, 16–24px between related items and 32–48px between major groups. These are composition recommendations; the actual component stylesheet is authoritative for a primitive's padding.
+Space tokens run from `--qm-space-0` through `--qm-space-12` in 4px steps: 0-48px. Use 8-12px inside a control group, 16-24px between related items and 32-48px between major groups. These are composition recommendations; the actual component stylesheet is authoritative for a primitive's padding.
 
 | Shape token | Value | Application |
 | --- | --- | --- |

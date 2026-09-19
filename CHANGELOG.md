@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.3.0 — 2026-09-19
+## 1.3.0 - 2026-09-19
 
 - Expand the reusable web catalog to all 36 families in the current MD3 catalog and publish an explicit family/variant/platform matrix.
 - Add FABs, extended FABs and FAB menus; button groups, segmented and split buttons; filled/elevated/outlined/text buttons; toggle icon buttons; filled/outlined/elevated cards; all four chip types; floating-label fields; and two-thumb range sliders.
@@ -10,7 +10,7 @@
 - Expand native source catalogs and document platform compositions separately from native compilation and device validation.
 - Keep `styles/quiet-material.css` as the public entry point, now importing the complete base/component stylesheet set. Integrations must retain the entire `styles/` directory.
 
-## 1.2.0 — 2026-09-19
+## 1.2.0 - 2026-09-19
 
 - Replace the partial custom motion vocabulary with all 16 MD3 durations, seven easing families, exact emphasized path data, and both six-role spring schemes. Add pinned official source provenance and deterministic browser motion exports.
 - Add container transform, shared axis X/Y/Z, fade through, fade, and spring APIs. Apply transitions to destinations, tabs, dialogs and snackbars; retain synchronous state and focus changes.
@@ -20,7 +20,7 @@
 - Keep existing token aliases; motion behavior intentionally changes to the verified MD3 bindings.
 
 
-## 1.1.0 — 2026-09-19
+## 1.1.0 - 2026-09-19
 
 - Mobile-first explorer and reusable component defaults, four compact navigation actions, safe-area padding, relative typography, and RTL switch direction.
 - 94 shared tokens with deterministic CSS, JSON, TypeScript, Kotlin, Swift and Dart outputs; cross-platform parity tests.
@@ -29,7 +29,7 @@
 - Platform/mobile-first guides and integration, scope and validation updates.
 
 
-## 1.0.0 — Initial private foundation
+## 1.0.0 - Initial private foundation
 
 - Establish the approved black-and-charcoal visual language, rounded containers, pill controls and restrained accent colors.
 - Add source design tokens, generated CSS variables and framework-independent component styles.

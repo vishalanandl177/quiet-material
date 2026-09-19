@@ -15,4 +15,4 @@ Run `npm run check` to rebuild every token output and execute the repository tes
 
 For application integration, retain all of `styles/`, `src/` and `exports/`; the public entry points import the component modules and generated motion values.
 
-Native SDK instructions and pending build/device checks are recorded inside each platform adapter and [validation](docs/validation.md).
+Native SDK instructions, passing CI results and remaining application-host/device checks are recorded inside each platform adapter and [validation](docs/validation.md).

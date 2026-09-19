@@ -34,7 +34,7 @@ The web sheet uses the standard scheme's default spatial spring for 24 px of ver
 
 [Play the container-transform GIF](../assets/motion/container-transform.gif)
 
-Use a container transform when an element becomes a larger or smaller surface representing the same object. This forward study runs for 500 ms with the exact two-segment emphasized curve. Bounds interpolate throughout, incoming detail fades over eased progress 0–0.25, and corner shape changes over 0–0.75. The return recipe is 400 ms, with its own fade and shape thresholds. These bindings follow the defaults in [MaterialContainerTransform](https://github.com/material-components/material-components-android/blob/master/lib/java/com/google/android/material/transition/MaterialContainerTransform.java).
+Use a container transform when an element becomes a larger or smaller surface representing the same object. This forward study runs for 500 ms with the exact two-segment emphasized curve. Bounds interpolate throughout, incoming detail fades over eased progress 0-0.25, and corner shape changes over 0-0.75. The return recipe is 400 ms, with its own fade and shape thresholds. These bindings follow the defaults in [MaterialContainerTransform](https://github.com/material-components/material-components-android/blob/master/lib/java/com/google/android/material/transition/MaterialContainerTransform.java).
 
 ## Shared axis: related steps
 
