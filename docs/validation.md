@@ -75,6 +75,17 @@ Four behaviours were checked by reading computed values and layout metrics out o
 
 The reduced-motion result is a token measurement. It shows the durations an animation would read, not that every transition visibly stops over time, and it says nothing about a real operating-system reduced-motion setting.
 
+An accessible-name and target-size sweep over the showcase, reading computed geometry out of the browser, found 50 interactive elements, all with a resolvable accessible name and none below the 48-unit target once a padded label wrapper is taken into account.
+
+### Two defects this review found and fixed
+
+An adversarial pass over the migrated stylesheets, rather than a re-read of the intended design, surfaced two real problems:
+
+- **The segmented control had no perceivable boundary.** Its container took the decorative `colorOutlineVariant` #242424 edge on a `colorSurfaceLow` #080808 fill. That fill is 1.05:1 against the black canvas and the edge is 1.29:1 against the fill, so an unselected segmented control was effectively invisible and failed [non-text contrast](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html). The container and the dividers between choices now take the functional `colorOutline` #828282, which measures 5.21:1 on that fill. The group edge is what identifies it as a control, so the functional role is the correct one.
+- **A standalone link carried an inline-sized target.** The workbench note's action measured 103 by 19 px. It sits beside prose in a flex row rather than inside a sentence, so the WCAG 2.5.8 inline exception does not cleanly apply and the system's own 48-unit contract should hold. It now carries that target.
+
+The dropdown listbox keeps the decorative edge deliberately. It is a floating container of options rather than a control, it already separates from the page through `colorSurfaceHigh` and elevation, and it matches the menu treatment; the combobox that opens it carries the functional boundary.
+
 ## Native validation status
 
 No Android, Apple or Flutter SDK is installed in the authoring environment, so none of the native commands below was run here. The native sources for this migration were written and reviewed by inspection here, and built on GitHub-hosted machines by [`.github/workflows/native.yml`](../.github/workflows/native.yml).
