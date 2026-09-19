@@ -3,6 +3,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'quiet_tokens.dart';
 
+// Shape and edge steps used by the wrappers below. The theme declares the same ones; these stay
+// private so the catalog adds no public surface.
+const BorderRadius _radiusControl = BorderRadius.all(Radius.circular(QuietTokens.radiusControl));
+const BorderRadius _radiusCard = BorderRadius.all(Radius.circular(QuietTokens.radiusCard));
+const RoundedRectangleBorder _cardShape = RoundedRectangleBorder(borderRadius: _radiusCard);
+const BorderSide _controlEdge = BorderSide(color: QuietTokens.colorOutline, width: QuietTokens.borderWidth);
+const BorderSide _disabledEdge = BorderSide(color: QuietTokens.colorDisabled, width: QuietTokens.borderWidth);
+const BorderSide _dangerEdge = BorderSide(color: QuietTokens.colorDanger, width: QuietTokens.borderWidth);
+const BorderSide _focusEdge = BorderSide(color: QuietTokens.colorFocus, width: QuietTokens.borderFocus);
+// On a white fill the ring switches to the contrast token so it reads against the fill it sits on.
+const BorderSide _focusEdgeOnFill = BorderSide(color: QuietTokens.colorFocusContrast, width: QuietTokens.borderFocus);
+// A field's edge identifies it as a control, so both variants state the corner and the boundary
+// token rather than inheriting Flutter's own 4 unit corner.
+const BorderRadius _underlineRadius = BorderRadius.vertical(top: Radius.circular(QuietTokens.radiusControl));
+const OutlineInputBorder _fieldBox = OutlineInputBorder(borderRadius: _radiusControl, borderSide: _controlEdge);
+const OutlineInputBorder _fieldBoxFocused = OutlineInputBorder(borderRadius: _radiusControl, borderSide: _focusEdge);
+const OutlineInputBorder _fieldBoxDisabled = OutlineInputBorder(borderRadius: _radiusControl, borderSide: _disabledEdge);
+const OutlineInputBorder _fieldBoxError = OutlineInputBorder(borderRadius: _radiusControl, borderSide: _dangerEdge);
+const UnderlineInputBorder _fieldLine = UnderlineInputBorder(borderRadius: _underlineRadius, borderSide: _controlEdge);
+const UnderlineInputBorder _fieldLineFocused = UnderlineInputBorder(borderRadius: _underlineRadius, borderSide: _focusEdge);
+const UnderlineInputBorder _fieldLineDisabled = UnderlineInputBorder(borderRadius: _underlineRadius, borderSide: _disabledEdge);
+const UnderlineInputBorder _fieldLineError = UnderlineInputBorder(borderRadius: _underlineRadius, borderSide: _dangerEdge);
+
 enum QuietButtonKind { filled, tonal, outlined, text, elevated }
 enum QuietChipKind { assist, suggestion, filter, input }
 enum QuietCardKind { filled, outlined, elevated }
@@ -15,6 +38,17 @@ class QuietAction {
   final IconData? icon;
 }
 
+/// The filled-button theme carries the strong white action, and Flutter applies that same theme to
+/// FilledButton.tonal. The tonal step is restated here so the secondary variant stays graphite.
+final ButtonStyle _tonalStyle = ButtonStyle(
+  backgroundColor: WidgetStateProperty.resolveWith((states) => states.contains(WidgetState.disabled)
+      ? QuietTokens.colorSurfaceLow : QuietTokens.colorPrimaryContainer),
+  foregroundColor: WidgetStateProperty.resolveWith((states) => states.contains(WidgetState.disabled)
+      ? QuietTokens.colorDisabled : QuietTokens.colorOnPrimaryContainer),
+  side: WidgetStateProperty.resolveWith(
+    (states) => states.contains(WidgetState.focused) ? _focusEdge : null),
+);
+
 class QuietButton extends StatelessWidget {
   const QuietButton({super.key, required this.label, this.onPressed,
     this.kind = QuietButtonKind.filled});
@@ -24,7 +58,7 @@ class QuietButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) => switch (kind) {
     QuietButtonKind.filled => FilledButton(onPressed: onPressed, child: Text(label)),
-    QuietButtonKind.tonal => FilledButton.tonal(onPressed: onPressed, child: Text(label)),
+    QuietButtonKind.tonal => FilledButton.tonal(onPressed: onPressed, style: _tonalStyle, child: Text(label)),
     QuietButtonKind.outlined => OutlinedButton(onPressed: onPressed, child: Text(label)),
     QuietButtonKind.text => TextButton(onPressed: onPressed, child: Text(label)),
     QuietButtonKind.elevated => ElevatedButton(onPressed: onPressed, child: Text(label)),
@@ -39,10 +73,34 @@ class QuietIconButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final bool? selected;
   final bool filled;
+  // A chosen icon toggle takes the white fill and black glyph; an unchosen filled toggle takes the
+  // graphite step; a quiet icon action has no fill at all and keeps the primary content colour.
+  ButtonStyle get _style {
+    final toggleable = selected != null;
+    return ButtonStyle(
+      backgroundColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.disabled)) return filled ? QuietTokens.colorSurfaceLow : null;
+        if (states.contains(WidgetState.selected)) return QuietTokens.colorPrimary;
+        if (!filled) return null;
+        return toggleable ? QuietTokens.colorPrimaryContainer : QuietTokens.colorPrimary;
+      }),
+      foregroundColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.disabled)) return QuietTokens.colorDisabled;
+        if (states.contains(WidgetState.selected)) return QuietTokens.colorOnPrimary;
+        if (!filled) return QuietTokens.colorText;
+        return toggleable ? QuietTokens.colorOnPrimaryContainer : QuietTokens.colorOnPrimary;
+      }),
+      side: WidgetStateProperty.resolveWith((states) {
+        if (!states.contains(WidgetState.focused)) return null;
+        final onFill = states.contains(WidgetState.selected) || (filled && !toggleable);
+        return onFill ? _focusEdgeOnFill : _focusEdge;
+      }),
+    );
+  }
   @override
   Widget build(BuildContext context) => filled
-      ? IconButton.filled(tooltip: label, icon: Icon(icon), onPressed: onPressed, isSelected: selected)
-      : IconButton(tooltip: label, icon: Icon(icon), onPressed: onPressed, isSelected: selected);
+      ? IconButton.filled(tooltip: label, icon: Icon(icon), onPressed: onPressed, isSelected: selected, style: _style)
+      : IconButton(tooltip: label, icon: Icon(icon), onPressed: onPressed, isSelected: selected, style: _style);
 }
 
 class QuietFab extends StatelessWidget {
@@ -66,7 +124,7 @@ class QuietButtonGroup extends StatelessWidget {
   const QuietButtonGroup({super.key, required this.actions});
   final List<QuietAction> actions;
   @override
-  Widget build(BuildContext context) => Wrap(spacing: 8, runSpacing: 8, children: [
+  Widget build(BuildContext context) => Wrap(spacing: QuietTokens.space2, runSpacing: QuietTokens.space2, children: [
     for (final action in actions) QuietButton(label: action.label, onPressed: action.onPressed),
   ]);
 }
@@ -129,9 +187,14 @@ class QuietCard extends StatelessWidget {
   final QuietCardKind kind;
   @override
   Widget build(BuildContext context) => switch (kind) {
-    QuietCardKind.filled => Card.filled(child: child),
-    QuietCardKind.outlined => Card.outlined(child: child),
-    QuietCardKind.elevated => Card(elevation: 1, child: child),
+    // The default container step.
+    QuietCardKind.filled => Card.filled(color: QuietTokens.colorSurface, child: child),
+    // Nothing but the grouping edge: the canvas reads through.
+    QuietCardKind.outlined => Card.outlined(color: QuietTokens.colorBackground, child: child),
+    // Recessed fill plus the one locally raised shadow composite.
+    QuietCardKind.elevated => Card(color: QuietTokens.colorSurfaceLow,
+      shadowColor: QuietTokens.elevationLevel1Color,
+      elevation: QuietTokens.elevationLevel1OffsetY, child: child),
   };
 }
 
@@ -164,7 +227,7 @@ class QuietProgress extends StatelessWidget {
 /// Seven Quiet contours with the MD3 650ms step, 200/.6 spring and compound rotation.
 /// Branded contours intentionally differ from Android RoundedPolygon artwork.
 class QuietLoadingIndicator extends StatefulWidget {
-  const QuietLoadingIndicator({super.key, required this.label, this.size = 48});
+  const QuietLoadingIndicator({super.key, required this.label, this.size = QuietTokens.sizeControl});
   final String label;
   final double size;
   @override
@@ -258,10 +321,11 @@ class QuietRichTooltip extends StatelessWidget {
   Widget build(BuildContext context) => MenuAnchor(
     builder: (context, controller, child) => QuietIconButton(label: label, icon: Icons.info_outline,
       onPressed: () => controller.isOpen ? controller.close() : controller.open()),
-    menuChildren: [SizedBox(width: 280, child: Padding(padding: const EdgeInsets.all(16),
+    // 280 - rich help measure; no size token matches this reading width.
+    menuChildren: [SizedBox(width: 280, child: Padding(padding: const EdgeInsets.all(QuietTokens.space4),
       child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
         children: [Text(title, style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 8), Text(message),
+          const SizedBox(height: QuietTokens.space2), Text(message),
           if (action != null) TextButton(onPressed: action!.onPressed, child: Text(action!.label))])))],
   );
 }
@@ -296,19 +360,23 @@ class QuietListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ListTile(title: Text(title),
     subtitle: supporting == null ? null : Text(supporting!), leading: leading,
-    trailing: trailing, onTap: onTap, selected: selected, enabled: enabled, minVerticalPadding: 12);
+    trailing: trailing, onTap: onTap, selected: selected, enabled: enabled,
+    minVerticalPadding: QuietTokens.space3);
 }
 
 class QuietCarousel extends StatelessWidget {
+  // 240 / 280 - carousel viewport and item measures; no size token matches either.
   const QuietCarousel({super.key, required this.children, this.height = 240,
     this.itemExtent = 280, this.onTap});
   final List<Widget> children;
   final double height;
   final double itemExtent;
   final ValueChanged<int>? onTap;
+  // 6 - the inter-item trim CarouselView applies on both edges; no spacing step matches.
   @override
   Widget build(BuildContext context) => SizedBox(height: height, child: CarouselView(
     itemExtent: itemExtent, itemSnapping: true, onTap: onTap,
+    backgroundColor: QuietTokens.colorSurface, shape: _cardShape,
     padding: const EdgeInsets.all(6), children: children));
 }
 
@@ -318,19 +386,23 @@ Future<T?> showQuietBottomSheet<T>(BuildContext context, {required WidgetBuilder
 
 PersistentBottomSheetController showQuietStandardBottomSheet(BuildContext context,
     {required WidgetBuilder builder}) => showBottomSheet(context: context,
-      builder: builder, showDragHandle: true, backgroundColor: QuietTokens.colorSurface);
+      builder: builder, showDragHandle: true, backgroundColor: QuietTokens.colorSurfaceHigh);
 
 /// Full screen modal with the platform's back handling and safe drawing area.
 Future<T?> showQuietFullScreenDialog<T>(BuildContext context,
     {required WidgetBuilder builder}) => showDialog<T>(context: context,
-      builder: (context) => Dialog.fullscreen(child: SafeArea(child: builder(context))));
+      builder: (context) => Dialog.fullscreen(backgroundColor: QuietTokens.colorBackground,
+        child: SafeArea(child: builder(context))));
 
 /// Focus-contained, dismissible trailing sheet. Uses a dialog route, not an unfocusable overlay.
+// 360 - side sheet measure cap; no size token matches it.
 Future<T?> showQuietSideSheet<T>(BuildContext context, {required WidgetBuilder builder,
     double width = 360}) => showDialog<T>(context: context,
       builder: (context) => Align(alignment: AlignmentDirectional.centerEnd,
         child: ConstrainedBox(constraints: BoxConstraints(maxWidth: width),
-          child: SizedBox.expand(child: Material(color: QuietTokens.colorSurface,
+          child: SizedBox.expand(child: Material(color: QuietTokens.colorSurfaceHigh,
+            borderRadius: const BorderRadiusDirectional.horizontal(
+              start: Radius.circular(QuietTokens.radiusDialog)),
             child: SafeArea(child: builder(context)))))));
 
 class QuietToolbar extends StatelessWidget {
@@ -338,8 +410,8 @@ class QuietToolbar extends StatelessWidget {
   final List<QuietAction> actions;
   @override
   Widget build(BuildContext context) => Material(color: QuietTokens.colorSurface,
-    borderRadius: BorderRadius.circular(28), child: Padding(padding: const EdgeInsets.all(8),
-      child: Wrap(spacing: 8, runSpacing: 8, children: [for (final action in actions)
+    borderRadius: _radiusControl, child: Padding(padding: const EdgeInsets.all(QuietTokens.space2),
+      child: Wrap(spacing: QuietTokens.space1, runSpacing: QuietTokens.space1, children: [for (final action in actions)
         action.icon == null ? QuietButton(label: action.label, onPressed: action.onPressed,
           kind: QuietButtonKind.text) : QuietIconButton(label: action.label,
             icon: action.icon!, onPressed: action.onPressed)])));
@@ -381,8 +453,13 @@ class QuietField extends StatelessWidget {
   Widget build(BuildContext context) => TextField(controller: controller,
     enabled: enabled, readOnly: readOnly, onChanged: onChanged, maxLines: maxLines,
     decoration: InputDecoration(labelText: label, errorText: errorText, helperText: helperText,
-      filled: filled, border: filled ? const UnderlineInputBorder() : const OutlineInputBorder(),
-      enabledBorder: filled ? const UnderlineInputBorder() : const OutlineInputBorder()));
+      filled: filled, fillColor: filled ? QuietTokens.colorSurfaceHigh : null,
+      border: filled ? _fieldLine : _fieldBox,
+      enabledBorder: filled ? _fieldLine : _fieldBox,
+      focusedBorder: filled ? _fieldLineFocused : _fieldBoxFocused,
+      disabledBorder: filled ? _fieldLineDisabled : _fieldBoxDisabled,
+      errorBorder: filled ? _fieldLineError : _fieldBoxError,
+      focusedErrorBorder: filled ? _fieldLineError : _fieldBoxError));
 }
 
 class QuietSearch extends StatelessWidget {

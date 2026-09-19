@@ -45,7 +45,7 @@ class _ExampleWorkspaceState extends State<ExampleWorkspace> {
     selectedIndex: selected,
     onDestinationSelected: (value) => setState(() => selected = value),
     supportingPane: const Card(child: Padding(
-      padding: EdgeInsets.all(24),
+      padding: EdgeInsets.all(QuietTokens.space6),
       child: Text('Focus on one action at a time. Supporting detail moves here when space allows.'),
     )),
     body: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
@@ -54,37 +54,37 @@ class _ExampleWorkspaceState extends State<ExampleWorkspace> {
         key: ValueKey(selected),
         style: Theme.of(context).textTheme.displaySmall,
       ))),
-      const SizedBox(height: 24),
+      const SizedBox(height: QuietTokens.space6),
       if (selected == 0) Card(child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(QuietTokens.space6),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text('Space to think.', style: Theme.of(context).textTheme.headlineMedium),
-          const SizedBox(height: 12),
+          const SizedBox(height: QuietTokens.space3),
           const Text('A black canvas. Clear content. Just enough motion.'),
-          const SizedBox(height: 24),
+          const SizedBox(height: QuietTokens.space6),
           FilledButton(onPressed: () => setState(() => selected = 2), child: const Text('Personalize')),
         ]),
       )),
       if (selected == 1) const Card(child: Padding(
-        padding: EdgeInsets.all(24),
+        padding: EdgeInsets.all(QuietTokens.space6),
         child: Text('You are all caught up. New activity will appear here.'),
       )),
       if (selected == 2) Card(child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(QuietTokens.space5),
         child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           TextField(
             controller: workspaceName,
             decoration: const InputDecoration(labelText: 'Workspace name', helperText: 'Choose a memorable name'),
             textInputAction: TextInputAction.done,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: QuietTokens.space4),
           SwitchListTile(
             contentPadding: EdgeInsets.zero,
             title: const Text('Notifications'),
             value: notifications,
             onChanged: (value) => setState(() => notifications = value),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: QuietTokens.space4),
           const Text('Preferences in this example last for this session only.'),
         ]),
       )),

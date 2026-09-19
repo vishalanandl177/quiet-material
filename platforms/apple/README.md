@@ -37,6 +37,23 @@ QuietTheme {
 
 Use `QuietTextField("Name", text: $name)` and `QuietToggle("Notifications", isOn: $enabled)` with app-owned state. `.disabled(true)` uses the native environment. Public `EnvironmentValues.quietAppearance` exposes the accent and action colors; pass a customized `QuietAppearance` into `QuietTheme`. Root background stays `#000000`.
 
+## Black visual direction
+
+Every surface, label and boundary comes from `QuietTokens`; the adapter contains no colour literals. The page canvas is `colorBackground` (#000000), recessed groupings use `colorSurfaceLow`, cards and rows `colorSurface`, menus, sheets, snackbars and other overlays `colorSurfaceHigh`, and the tonal step is `colorPrimaryContainer`. Primary text is `colorText`, supporting text `colorTextMuted`, and `colorDisabled` is reserved for controls that are genuinely inactive.
+
+A strong action is a `colorAction` fill with a `colorOnAction` label, a tonal action is `colorPrimaryContainer` with `colorOnPrimaryContainer`, outlined and text actions stay transparent with a `colorText` label, and destructive work keeps `colorDanger` / `colorDangerContainer`. Buttons, chips, segments and navigation indicators are capsules; fields and compact surfaces use `radiusControl`, cards, snackbars and rich tooltips `radiusCard`, dialogs and sheet tops `radiusDialog`.
+
+Selection is never signalled by hue:
+
+| State | Treatment |
+| --- | --- |
+| The one chosen option: selected segment, filter chip, tab pill, checked checkbox | `colorPrimary` fill with `colorOnPrimary` content |
+| Current location or row: active navigation destination, current row | `colorPrimaryContainer` fill with `colorOnPrimaryContainer` content |
+
+A decorative grouping edge is `colorOutlineVariant` (cards, snackbars, the segmented track). An edge that identifies a control - text fields, outlined buttons, chips - is `colorOutline` at `borderWidth`. Depth stays solid: surface steps, spacing and a single hairline, with `elevationLevel1/2/3` shadows only on genuinely floating surfaces (elevated buttons and cards, menus, tooltips, snackbars, the FAB). No gradients, glows, blurs or tinted surfaces.
+
+`QuietTheme` applies `.tint(appearance.accent)`, and each control that would otherwise draw the system accent sets its own token tint: sliders, progress views, date and time pickers, the radio `Picker`, `Menu`, text-field carets and the switch. `QuietSegments` draws its own selector because `UISegmentedControl`'s selected-segment tint and selected title colour cannot be tokenized from SwiftUI; its API, single selection and `isSelected` traits are unchanged. The switch stays a native `Toggle`, so its ON track is `colorPrimary` while the thumb remains platform-drawn white - the one system-owned detail the black direction cannot reach.
+
 ## Coverage and native equivalents
 
 | System part | Implementation |
@@ -57,7 +74,7 @@ This is a native adapter with a reusable catalog and runnable example. The catal
 
 The sample measures the **available window**, including iPad split view and macOS resizing. It starts with one column, switches to two at 840 points, and returns to one for accessibility Dynamic Type categories. There are no device-name checks or fixed content heights. Text wraps and the whole page scrolls; controls use minimum 48-point height. A card's container is not made into an extra accessibility element, preserving its children.
 
-Apple's semantic fonts follow user text preferences. Button presses use a 10% state layer with MD3 standard easing; arbitrary 0.98 press scaling has been removed. Custom motion is disabled when `accessibilityReduceMotion` is true; native navigation and sheet motion remain managed by SwiftUI. The seven-contour loading indicator animates only when explicitly mounted for pending work; it pauses for Reduce Motion and an inactive scene. Do not use it as ambient decoration. Do not clamp Dynamic Type or replace system back gestures. Keep custom icons labeled, localize strings, and use leading/trailing alignment for RTL.
+Apple's semantic fonts follow user text preferences. Button presses use the `statePressed` state layer (12%) in the button's own label colour with MD3 standard easing; arbitrary 0.98 press scaling has been removed. Custom motion is disabled when `accessibilityReduceMotion` is true; native navigation and sheet motion remain managed by SwiftUI. The seven-contour loading indicator animates only when explicitly mounted for pending work; it pauses for Reduce Motion and an inactive scene. Do not use it as ambient decoration. Do not clamp Dynamic Type or replace system back gestures. Keep custom icons labeled, localize strings, and use leading/trailing alignment for RTL.
 
 ## MD3 motion integration
 
@@ -70,7 +87,7 @@ QuietMotionProgress(
     milliseconds: expanded ? QuietTokens.motionContainerDuration
                            : QuietTokens.motionContainerReturnDuration
 ) { progress in
-    RoundedRectangle(cornerRadius: 32 - 16 * progress)
+    RoundedRectangle(cornerRadius: QuietTokens.radiusFeature - QuietTokens.radiusControl * progress)
         .fill(QuietTokens.colorSurface)
         .frame(width: 96 + 160 * progress, height: 96 + 64 * progress)
 }
@@ -127,6 +144,6 @@ The adaptive container keeps the content in one structural location and moves na
 
 The loading indicator uses the same seven branded contours, 650 ms target interval, stiffness 200/damping ratio 0.6 and compound rotation as the web implementation. It is a real shape morph, not a spinner alias. `TimelineView` stops its animation schedule for Reduce Motion or an inactive scene. The contour geometry is Quiet artwork, not a copy of Android RoundedPolygon paths.
 
-Apple-specific variants remain explicit: `QuietSegments` is single selection; multiple selection composes filter chips. Radio selection uses native `Picker`; a range uses two labeled native sliders; date range uses two coordinated date controls. Keep range bounds ordered before creating these views. Carousels are horizontal scrolling content, not all MD3 masking variants. `QuietField` has persistent labels rather than MD3 floating-label animation. Search combines a field with app-owned results. Toolbars/groups use native buttons without expressive connected-shape morphing. `QuietStandardBottomSheet` is an in-layout surface without detents; modal bottom sheets use medium/large native detents on iOS and native sheets on macOS. Full-screen dialogs use `fullScreenCover` on iOS and native sheets on macOS. The host must supply a visible dismiss action and can present `QuietSideSheet` through a native sheet at compact widths.
+Apple-specific variants remain explicit: `QuietSegments` is a token-driven single-selection selector with a white selected segment rather than the system segmented control; multiple selection composes filter chips. Radio selection uses native `Picker`; a range uses two labeled native sliders; date range uses two coordinated date controls. Keep range bounds ordered before creating these views. Carousels are horizontal scrolling content, not all MD3 masking variants. `QuietField` has persistent labels rather than MD3 floating-label animation. Search combines a field with app-owned results. Toolbars/groups use native buttons without expressive connected-shape morphing. `QuietStandardBottomSheet` is an in-layout surface without detents; modal bottom sheets use medium/large native detents on iOS and native sheets on macOS. Full-screen dialogs use `fullScreenCover` on iOS and native sheets on macOS. The host must supply a visible dismiss action and can present `QuietSideSheet` through a native sheet at compact widths.
 
 These native presentation choices retain **Apple motion**, not universal MD3 motion parity. Source availability is not SDK validation: run `swift build --package-path platforms/apple` on macOS, then build an iOS host/simulator and test VoiceOver, input, cancellation and state restoration before release.

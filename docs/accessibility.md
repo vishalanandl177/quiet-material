@@ -4,21 +4,42 @@ Quiet Material targets WCAG 2.2 AA in consuming products. A design system cannot
 
 ## Contrast without visual noise
 
-The page remains black. Cards use charcoal to group content. Card separation is decorative; a boundary needed to identify an input, control or state is functional and must remain visible. Use the control outline token and a visible keyboard focus ring even when a screenshot would look cleaner without them.
+The page remains black, `colorBackground` #000000. Surfaces step through #080808, #101010 and #181818 to group content, and the graphite container #242424 carries a current-location highlight. Card separation is decorative; a boundary needed to identify an input, control or state is functional and must remain visible. Use the control outline token and a visible keyboard focus ring even when a screenshot would look cleaner without them.
+
+Two boundary tokens exist and they are not interchangeable. `colorOutlineVariant` #242424 is decorative grouping separation: the edge of a card, accordion, menu, tooltip, table rule or divider. It measures 1.23:1 against `colorSurface` and is not required to reach control-level contrast, because nothing a person must perceive depends on seeing it. `colorOutline` #828282 is the functional boundary for anything whose edge identifies it as a control: text fields, unselected checkboxes and radios, the switch track, outlined buttons and chips. Never use the decorative token where a control boundary is required, and never let a decorative edge be the only thing that marks something as interactive.
 
 | Content | Required treatment |
 | --- | --- |
 | Body text and meaningful secondary text | At least 4.5:1 against every actual background |
 | Large text | At least 3:1; prefer the body-text threshold anyway |
 | Required control boundaries, meaningful icons and state indicators | At least 3:1 against adjacent colors |
+| Decorative grouping separation (card edge, divider, table rule) | No contrast requirement, and never the only identification of a control |
 | Error, success, selection | Text or a recognizable symbol in addition to color |
 | Disabled control | Visually distinct; explain an unavailable action if its reason matters |
 
 The text thresholds come from [WCAG contrast guidance](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html). Large text means at least 24 CSS px regular or approximately 18.67 CSS px bold. Do not round a failing contrast result upward. Functional boundaries and indicators follow [non-text contrast guidance](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html).
 
+### Measured token pairs
+
+These ratios are computed from the shipped token values. They describe token pairs, not audited product screens: content over an image, a state layer or a product's own background must be measured again.
+
+| Pair | Ratio |
+| --- | --- |
+| `colorText` #f4f4f4 on `colorSurface` #101010 | 17.30:1 |
+| `colorTextMuted` #b7b7b7 on `colorSurface` | 9.49:1 |
+| `colorOutline` #828282 on `colorSurface` | 4.95:1 |
+| `colorDisabled` #777777 on `colorSurface` | 4.25:1, up from 3.49:1 before the neutral retune |
+| `colorOnPrimaryContainer` #f4f4f4 on the graphite container #242424 | 14.11:1 |
+| `colorOnPrimary` #000000 on `colorPrimary` #f4f4f4 | 19.09:1 |
+| `colorFocusContrast` #000000 inside a white-filled control | 19.09:1 |
+
+Every pre-existing contrast gate still passes, and `colorOutline` and `colorDisabled` clear 3:1 on all four surface steps, not only on `colorSurface`.
+
 ## Keyboard and focus
 
 Use native buttons, links, inputs, select elements and details wherever possible. Every action must work without a pointer. Keep source order aligned with reading order; do not use positive tabindex. Focus must be visible and not hidden behind sticky UI. Provide a skip link when navigation precedes substantial content.
+
+Focus is one treatment everywhere: a `colorFocus` #f4f4f4 ring at `borderFocus` 3px with `borderFocusOffset` 2px. It must stay visible in all three situations the system creates: on the black canvas, on every charcoal surface and on a white-filled element. A white fill is the case the outer ring alone cannot handle, because a selected chip, segment, tab pill, calendar day, checked checkbox or switched-on track is already `colorPrimary` #f4f4f4. Those controls add an inner separation ring of `colorFocusContrast` #000000 at `borderWidth` 1px, drawn just inside their own edge as an inset shadow, so the white ring reads against the black gap on one side and the control reads against it on the other. Focus and selection are different states and must remain distinguishable: selection is the fill, focus is the ring around it, and a selected control that is not focused shows no ring. Never remove the ring without replacing it with an equally visible indicator, and do not rely on the decorative outline token to stand in for it.
 
 Tabs use one tab stop within the tab list. Left/Right move between horizontal tabs, Home/End reach the ends. In a vertical list, use Up/Down. Automatically activate only when panels are already available without noticeable delay. These behaviors follow the [WAI tabs pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/).
 
@@ -33,6 +54,8 @@ Support 200% text zoom and reflow at 320 CSS px. Long text wraps; essential labe
 ## Forms and status
 
 Associate every field with a persistent label. Use autocomplete and an appropriate input type when the purpose is known. Connect help and errors through aria-describedby; set aria-invalid only when invalidity is established. Explain what happened and how to fix it. Move focus to an error summary after a failed multi-field submission, with links to affected inputs.
+
+A placeholder is not a label, and neither a placeholder nor any other meaningful supporting text is disabled content. Placeholders, helper text, captions, counters, timestamps and secondary list lines use `colorTextMuted` #b7b7b7, which reaches 9.49:1 on `colorSurface`. `colorDisabled` #777777 is reserved for the content of a control that is genuinely unavailable. Styling live text as disabled tells people that working content cannot be used, so the two roles must never be swapped; the token tests fail if they are ever given the same value.
 
 Announce routine feedback through a polite status region. Reserve alert/assertive announcements for urgent interruptions. A snackbar must never be the only place to find an error or a time-sensitive action; provide a persistent equivalent. Loading skeletons are decorative and hidden from assistive technology; the affected content region communicates busy state.
 
@@ -64,9 +87,11 @@ Honor prefers-reduced-motion automatically. A product may expose an additional r
 1. Complete every demonstrated action with Tab, Shift+Tab, Enter, Space, arrows and Escape as appropriate.
 2. Check modal initial focus, tab containment, dismissal and focus restoration.
 3. Inspect names, roles, checked/expanded/selected values and live announcements with a screen reader.
-4. Check focus visibility on black, every charcoal surface and colored controls.
+4. Check focus visibility on black, every charcoal surface and white-filled controls, including the inner separation ring and the case where a control is both selected and focused.
 5. Check default, hovered, focused, selected and error color pairs; token tests alone do not cover composited effects.
-6. Test 320 CSS px, 200% text zoom, long labels, reduced motion and forced colors.
+6. Test reflow at 320 CSS px, 200% text zoom, 400% browser zoom, long labels, reduced motion and forced colors.
 7. Verify product flows with at least a desktop screen reader and a mobile screen reader before claiming support.
+
+Four of these cannot be delegated to anything in this repository. Forced colors, 200% text zoom, reflow at 320 CSS px and 400% browser zoom each need a human in a real browser: the jsdom tests do not render, and the committed screenshots are headless Chromium at default zoom and default text size, so a 320 px capture shows layout but proves nothing about scaled text or a forced palette. None of the four has been run for this release, and neither has a screen-reader pass. [Validation](validation.md) records exactly what was and was not run.
 
 Record browser, OS, assistive technology, version, task and result. Automated checks are useful evidence, not a replacement for these reviews. The normative baseline is [WCAG 2.2](https://www.w3.org/TR/WCAG22/).

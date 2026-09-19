@@ -1,6 +1,6 @@
 # Navigation and containment
 
-The web package supplies reusable app bars, adaptive navigation, drawers, toolbars, primary and secondary tabs, lists, dividers, carousels, standard and modal sheets, and fullscreen dialogs. Components use the existing black canvas, charcoal surfaces and shared MD3 motion tokens.
+The web package supplies reusable app bars, adaptive navigation, drawers, toolbars, primary and secondary tabs, lists, dividers, carousels, standard and modal sheets, and fullscreen dialogs. Components use the existing black canvas, the near-black #080808 / #101010 / #181818 surface steps, #242424 for the tonal step and decorative separation, and the shared MD3 motion tokens. The current destination and the current row use the graphite container with white content; the white fill stays reserved for a single chosen option.
 
 `initNavigationComponents(root)` is the optional initializer in `src/components-navigation.js`. It returns an idempotent cleanup function. Initialize a stable document or subtree once; clean up and reinitialize when replacing a component's structure or slide collection. Include `styles/components-navigation.css` together with the core stylesheet. The package initializer calls this module when using the integrated entry point.
 
@@ -19,7 +19,7 @@ The web package supplies reusable app bars, adaptive navigation, drawers, toolba
 <main id="page-scroll">…</main>
 ```
 
-Variants: `qm-app-bar--small` (default), `--center`, `--medium`, `--large`, and `--bottom`. Bottom bars can contain action buttons and a FAB; they are distinct from destination navigation. `--sticky` opts into sticky positioning. The app must give a named scroll target an actual scrollable height/overflow, or omit `data-qm-scroll-target` to observe the window.
+A top app bar melts into the page: it fills with the #000000 canvas and white content and draws no edge at rest. A decorative 1px #242424 bottom edge appears only once content has scrolled under it, and the bottom app bar keeps the same decorative edge along its top, so the separation never pretends to be a control boundary. Variants: `qm-app-bar--small` (default), `--center`, `--medium`, `--large`, and `--bottom`. Bottom bars can contain action buttons and a FAB; they are distinct from destination navigation. `--sticky` opts into sticky positioning. The app must give a named scroll target an actual scrollable height/overflow, or omit `data-qm-scroll-target` to observe the window.
 
 `data-qm-scroll-behavior` accepts `pinned` (default), `enter-always` (collapse while scrolling down; expand while scrolling up), and `exit-until-collapsed` (collapse beyond 64 logical pixels; expand near the top). Collapse is a discrete state transition using the standard spatial spring; this is not a pixel-by-pixel port of Android nested-scroll physics. The initializer sets `data-qm-scrolled` and `data-qm-collapsed`; it does not clone titles or controls.
 
@@ -41,6 +41,8 @@ Variants: `qm-app-bar--small` (default), `--center`, `--medium`, `--large`, and 
   </main>
 </div>
 ```
+
+Destinations rest on the #000000 canvas with #b7b7b7 labels; hover adds an 8% white state layer, and a disabled destination shows #777777. The current destination is the current-location treatment, never the white fill: in the bar and rail its icon sits in a #242424 graphite pill 56px wide while the label turns #f4f4f4 in the bold weight, and in a drawer, or the expanded adaptive layout from 1200px, the whole row takes the graphite container with white content. `aria-current="page"` carries the same state for assistive technology, and forced-colors mode marks it with a system `Highlight` outline. An in-layout drawer rounds its outer corners to the 24px card radius.
 
 The same navigation tree becomes a bottom bar below 600px, a rail from 600px, and a drawer from 1200px. Focus and current destination remain on the same DOM elements. `qm-adaptive-shell` positions navigation and content; use the navigation standalone for an in-flow specimen. Explicit `qm-navigation--bar`, `--rail`, and `--drawer` variants do not change automatically. `qm-navigation__headline` supplies an optional drawer section heading.
 
@@ -74,11 +76,11 @@ Keep one navigation landmark active for an adaptive destination set. Do not comb
 </div>
 ```
 
-Default, `--floating`, `--docked`, and `--vertical` appearances are available. Vertical toolbars must also use `aria-orientation="vertical"`. Arrow keys move focus, skip disabled/hidden controls and reverse in RTL; Home/End select boundary items. Native buttons retain Enter/Space activation. Toolbar buttons use a single roving tab stop. Inputs can be placed in a toolbar but keep their native keyboard behavior. Stateful actions remain application-owned.
+A default toolbar is a #101010 surface at the 16px control radius; `--floating` lifts it onto #181818 as a pill with the level-2 shadow, and `--docked` spans the full width with square corners. The buttons inside keep their own variants and state layers. Default, `--floating`, `--docked`, and `--vertical` appearances are available. Vertical toolbars must also use `aria-orientation="vertical"`. Arrow keys move focus, skip disabled/hidden controls and reverse in RTL; Home/End select boundary items. Native buttons retain Enter/Space activation. Toolbar buttons use a single roving tab stop. Inputs can be placed in a toolbar but keep their native keyboard behavior. Stateful actions remain application-owned.
 
 ## Tabs, lists and dividers
 
-Add `qm-tabs--primary` or `qm-tabs--secondary` to an existing `.qm-tabs[role="tablist"]` within `[data-qm-tabs]`. Add `qm-tabs--scrollable` for overflow instead of wrapping. Existing tab IDs, `aria-controls`, `aria-labelledby`, `aria-selected` and panel associations are unchanged; core keyboard activation and shared-axis transitions remain active. Primary tabs support an icon and label; secondary tabs use a full-width indicator. Browser focus scrolling reveals offscreen tabs.
+Add `qm-tabs--primary` or `qm-tabs--secondary` to an existing `.qm-tabs[role="tablist"]` within `[data-qm-tabs]`. Add `qm-tabs--scrollable` for overflow instead of wrapping. Existing tab IDs, `aria-controls`, `aria-labelledby`, `aria-selected` and panel associations are unchanged; core keyboard activation and shared-axis transitions remain active. These two variants keep a transparent tab over a decorative 1px #242424 baseline instead of the pill rail: the selected tab raises its label to #f4f4f4 and draws its indicator in white, 3px and pill-capped under a primary tab, 2px and full-width under a secondary tab. Unselected labels stay #b7b7b7 and a disabled tab is #777777. Primary tabs support an icon and label; secondary tabs use a full-width indicator. Browser focus scrolling reveals offscreen tabs.
 
 ```html
 <ul class="qm-list">
@@ -94,7 +96,7 @@ Add `qm-tabs--primary` or `qm-tabs--secondary` to an existing `.qm-tabs[role="ta
 <hr class="qm-divider qm-divider--inset">
 ```
 
-Default one-line, `qm-list__item--two-line` and `--three-line` layouts have 56/72/88px minimum heights and expand for translated text or text zoom. Leading content accepts icons, avatars or images; trailing content accepts supporting text or controls. `qm-list__overline` is optional. Use actual links or buttons for actions, and avoid nesting interactive controls inside an interactive row. A list itself does not create listbox selection semantics.
+A list is a #101010 surface at the 24px card radius. Headlines are #f4f4f4 while overlines, supporting text and trailing text are #b7b7b7; a leading icon sits in a #181818 tile at the 12px tile radius and a leading image is cropped to the same radius. An interactive row takes an 8% white state layer on hover, and a row marked with `aria-current` takes the #242424 graphite container with white content at the 16px control radius, the current-location treatment rather than the white selection fill. Dividers are a 1px decorative #242424 rule in every inset and vertical form. Default one-line, `qm-list__item--two-line` and `--three-line` layouts have 56/72/88px minimum heights and expand for translated text or text zoom. Leading content accepts icons, avatars or images; trailing content accepts supporting text or controls. `qm-list__overline` is optional. Use actual links or buttons for actions, and avoid nesting interactive controls inside an interactive row. A list itself does not create listbox selection semantics.
 
 Dividers support full width, `--inset`, `--inset-leading`, and `--vertical`. For a vertical divider use `<div class="qm-divider qm-divider--vertical" role="separator" aria-orientation="vertical"></div>`. Decorative separators should use `aria-hidden="true"`.
 
@@ -120,7 +122,7 @@ Dividers support full width, `--inset`, `--inset-leading`, and `--vertical`. For
 </section>
 ```
 
-Variants: `--multi-browse` (large, medium and small item rhythm), `--uncontained` (equal-size items), `--hero` (dominant item with a next-item peek), and `--fullscreen` (vertical, one item per viewport). Fullscreen is constrained by the embedding viewport; its track can be sized by the application. Multi-browse uses responsive CSS item widths rather than Android's continuous masking implementation.
+Carousel items are #101010 surfaces at the 32px feature radius, the one place a wider corner is earned by size, and a full-screen item drops to square corners because it fills the viewport. A caption sits over a transparent-to-#000000cc scrim ramp, which exists to keep the text legible over an image rather than as decoration. Variants: `--multi-browse` (large, medium and small item rhythm), `--uncontained` (equal-size items), `--hero` (dominant item with a next-item peek), and `--fullscreen` (vertical, one item per viewport). Fullscreen is constrained by the embedding viewport; its track can be sized by the application. Multi-browse uses responsive CSS item widths rather than Android's continuous masking implementation.
 
 The initializer labels the region/slides, supplies a polite numeric status, disables boundary controls and emits `qm:carousel-change` with `{ index, item, count }`; `index` is zero-based. Left/Right (RTL-aware), Home and End operate when the track itself has focus. Fullscreen uses Up/Down. Keys inside slide controls are untouched. Native touch/wheel scrolling remains available, and manual scroll reconciles the current index. There is no autoplay, swipe requirement or hidden duplicate slide content.
 
@@ -142,7 +144,7 @@ Control-driven scrolling uses the canonical MD3 standard/default spatial spring 
 </aside>
 ```
 
-Standard sheets use in-flow `.qm-sheet` with `--bottom` or `--side` and never trap focus or block surrounding content. Open/close controls use `data-qm-sheet-open="id"` and `data-qm-sheet-close`. Escape closes a standard sheet from within it. Close restores focus to its invoker when focus was inside the sheet. Opening preserves the invoker's focus, appropriate for a nonmodal complementary region. Placement in an application scaffold remains caller-owned.
+A sheet is a #181818 surface at the 32px dialog radius with the level-3 shadow, rounded only on the edges that stay inside the viewport, and its drag handle is a short #b7b7b7 bar in a full-width 48px target that takes a white state layer on hover. A modal sheet adds the #000000cc scrim that the native dialog backdrop paints. Standard sheets use in-flow `.qm-sheet` with `--bottom` or `--side` and never trap focus or block surrounding content. Open/close controls use `data-qm-sheet-open="id"` and `data-qm-sheet-close`. Escape closes a standard sheet from within it. Close restores focus to its invoker when focus was inside the sheet. Opening preserves the invoker's focus, appropriate for a nonmodal complementary region. Placement in an application scaffold remains caller-owned.
 
 The handle is a genuine button, so keyboard and assistive-technology users can change snap states without a gesture. A 24px-or-greater upward/leading drag expands and the reverse collapses; state commits on release and canceled gestures do nothing. The implementation supplies snap-state transitions, not continuous finger-following sheet physics. Use separate visible Expand/Collapse wording with `data-qm-sheet-toggle` when helpful. `data-qm-sheet-details` controls optional expanded content; it is hidden in the collapsed state. Collapsing returns focus to a handle before hiding a focused detail control.
 
@@ -164,7 +166,7 @@ Modal bottom sheets use `<dialog class="qm-dialog qm-dialog--sheet" data-qm-shee
 </dialog>
 ```
 
-Fullscreen dialogs fill the available viewport with a black canvas, safe-area padding and a sticky action bar. Core native dialog behavior supplies Escape, focus containment and invoker restoration. Validation, saving and unsaved-change policy belong to the product. Use `closeQuietDialog` for programmatic dismissal when an exit transition is desired.
+Fullscreen dialogs fill the available viewport with the #000000 canvas, square corners, safe-area padding and a sticky action bar, so a full-screen task reads as the page itself rather than as a floating #181818 surface. Core native dialog behavior supplies Escape, focus containment and invoker restoration. Validation, saving and unsaved-change policy belong to the product. Use `closeQuietDialog` for programmatic dismissal when an exit transition is desired.
 
 ## Validation and source boundaries
 

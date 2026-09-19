@@ -70,6 +70,7 @@ public struct QuietExample: View {
                     }
                     .padding(QuietTokens.space6)
                 }
+                // 280/440/260pt - sheet window geometry, no spacing step matches
                 .frame(minWidth: 280, idealWidth: 440, minHeight: 260)
             }
         }

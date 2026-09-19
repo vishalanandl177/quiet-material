@@ -89,7 +89,10 @@ fun QuietExample() {
                 title = { Text("Your preferences") },
                 text = { Text("$name\nNotifications are ${if (notifications) "on" else "off"}.") },
                 confirmButton = { QuietButton("Done", { showDetails = false }) },
-                containerColor = QuietTokens.colorSurface,
+                shape = QuietDialogShape,
+                containerColor = QuietTokens.colorSurfaceHigh, // A dialog floats, so it takes the elevated step.
+                titleContentColor = QuietTokens.colorText,
+                textContentColor = QuietTokens.colorTextMuted,
             )
         }
     }

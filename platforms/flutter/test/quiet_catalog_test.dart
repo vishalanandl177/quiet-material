@@ -44,6 +44,21 @@ void main() {
     expect(tester.widget<FilledButton>(find.byType(FilledButton)).onPressed, isNull);
   });
 
+  testWidgets('a tonal command keeps the graphite step beside a white filled one', (tester) async {
+    await tester.pumpWidget(host(const Column(children: [
+      QuietButton(label: 'Strong'),
+      QuietButton(label: 'Secondary', kind: QuietButtonKind.tonal),
+    ])));
+    const idle = <WidgetState>{};
+    final commands = tester.widgetList<FilledButton>(find.byType(FilledButton)).toList();
+    expect(commands.length, 2);
+    // The strong command inherits the shared white fill from the theme.
+    expect(commands.first.style, isNull);
+    // FilledButtonTheme also reaches FilledButton.tonal, so the tonal step is restated on the widget.
+    expect(commands.last.style!.backgroundColor!.resolve(idle), QuietTokens.colorPrimaryContainer);
+    expect(commands.last.style!.foregroundColor!.resolve(idle), QuietTokens.colorOnPrimaryContainer);
+  });
+
   testWidgets('input chip removal has a distinct action', (tester) async {
     var removed = false;
     await tester.pumpWidget(host(QuietChip(label: 'Design', kind: QuietChipKind.input,

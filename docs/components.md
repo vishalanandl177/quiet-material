@@ -4,6 +4,8 @@ Load `styles/quiet-material.css` with the entire styles directory intact and cal
 
 The [MD3 family matrix](md3-components.md) is the authoritative catalog: 36 official families, their implemented variants, reusable APIs and native mappings. This guide covers the shared contracts and compatible foundational markup. The component-specific guides linked from the matrix provide the expanded variants and mount APIs.
 
+Everything below renders in the approved black direction: a #000000 page with #080808, #101010 and #181818 containers and #242424 as the single tonal step. A single choice is marked by a white #f4f4f4 fill with #000000 content; a current location is marked by the #242424 graphite container with white content. `color-outline` #828282 draws a control edge, `color-outline-variant` #242424 only separates containers, and focus is a 3px white ring at a 2px offset that never doubles as the selected state. [Foundations](foundations.md) holds the full rules; the stylesheets are authoritative for a primitive's own padding and radius.
+
 ## Catalog and state contracts
 
 The quick reference below includes foundations and supporting patterns as well as MD3 families. It is not a count of official MD3 components. “Product-owned” means styling or markup is available while application actions must be supplied by the consuming product. Default, hover, pressed, focus-visible and disabled states apply to interactive controls when meaningful.
@@ -51,6 +53,8 @@ Badge and alert tones use `data-tone="info|success|warning|danger"`; omit it for
 </article>
 ```
 
+The filled primary button is a white #f4f4f4 fill with #000000 content, so it is the loudest thing on a black page: give an ordinary view one clear primary action and let the rest be tonal, outlined or text. `qm-button--tonal` uses the #242424 graphite container with white content, the outlined variant is transparent with a functional #828282 edge, ghost and text actions carry no fill at all, and `qm-button--danger` keeps the deliberate #522622 container with #ffb4ab content for a destructive action. Every button is a 48px-minimum pill; hover, focus and press are a state layer over the fill rather than a color change, and a disabled button falls back to the #080808 surface with #777777 content. Cards are #101010 by default at a 24px radius with a decorative #242424 edge, with `--high` and `--low` selecting the neighboring surface steps.
+
 Use a link for navigation and a button for an action. Do not nest links or buttons inside another interactive wrapper. For a disabled button use native disabled. aria-disabled alone communicates a state but does not prevent navigation or arbitrary application handlers; the product must suppress those actions if that pattern is needed. Loading is product-owned: expose a status message and prevent duplicate submission.
 
 ## Fields and validation
@@ -75,6 +79,8 @@ Use a link for navigation and a button for an action. Do not nest links or butto
 </div>
 ```
 
+Compatible fields (`.qm-input`, `.qm-select`, `.qm-textarea`) sit on the near-black #080808 surface with a functional 1px #828282 outline at the 16px control radius, and the outline lifts to #b7b7b7 on hover. The label above the field is always visible: it is a real `label`, not a placeholder. Placeholder text renders in #b7b7b7 supporting color at full opacity and never in the #777777 disabled color, which is reserved for inactive controls. A read-only field keeps a dashed edge on a transparent fill, a disabled field drops its text and edge to #777777, and an invalid field (`aria-invalid="true"` or `:user-invalid`) turns its edge #ffb4ab and recolors the helper text in the same danger color, so the error has a boundary, a message and an ARIA state rather than color alone.
+
 On an established validation error, set aria-invalid="true" and point aria-describedby to specific error text. Remove the invalid state when resolved. Placeholder text is supplementary and never the only label. Native validation can be used; asynchronous validation and server errors belong to the application.
 
 ## Selection and range
@@ -93,6 +99,8 @@ On an established validation error, set aria-invalid="true" and point aria-descr
 </div>
 <button class="qm-chip" type="button" aria-pressed="false">Unread</button>
 ```
+
+Selection is a fill, not a hue. A checked switch turns its track white #f4f4f4 and its thumb #000000, and the thumb still travels 20px; unchecked, the track is #101010 inside a functional #828282 edge with a #b7b7b7 thumb. A checked checkbox becomes a white box with a black checkmark, mixed state a black dash, and a checked radio draws a white ring with a white dot. A pressed chip becomes a white pill with black content. The native single range takes a white `accent-color` and leaves the rest of the track to the browser; the two-thumb range slider draws the selected span as a solid white band on a #181818 track. When one of these already-white controls takes keyboard focus, the white ring is separated from the fill by an inner #000000 ring, so focus and selection stay legible as two different things. Unchecked boxes and rings keep their 2px #828282 boundary, and disabled selection controls dim rather than changing color meaning.
 
 Switches apply immediately. Checkboxes may be part of a submitted form. Keep switch labels stable when state changes. For a range whose numeric value is not self-explanatory, maintain aria-valuetext and a visible value in the application. A chip emits `qm:chip-change` with `event.detail.pressed`; filtering the data remains the application's job.
 
@@ -115,6 +123,8 @@ Switches apply immediately. Checkboxes may be part of a submitted form. Keep swi
 </div>
 ```
 
+The base `.qm-tabs` rail is a #080808 pill holding pill tabs: unselected labels are #b7b7b7, and the selected tab is a white fill with black content in the bold label weight. The `--primary` and `--secondary` variants in the navigation guide instead keep a transparent tab, raise the selected label to #f4f4f4 and draw a white indicator bar over a decorative #242424 baseline; the treatment differs but the meaning is the same white.
+
 Keep panels inside their data-qm-tabs wrapper and IDs unique across the page. The module implements automatic activation and skips disabled tabs. Use it for already available panels. A remote-loading or manual-activation tab pattern requires an extension and its own keyboard tests. Native links are a better choice for separate routes. The interaction contract follows the [WAI tabs pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/).
 
 ## Dialog and sheet
@@ -129,6 +139,8 @@ Keep panels inside their data-qm-tabs wrapper and IDs unique across the page. Th
     data-qm-dialog-result="confirmed">Confirm</button>
 </dialog>
 ```
+
+A dialog is a #181818 surface at the 32px dialog radius with a decorative #242424 edge and the level-3 shadow, over a #000000cc scrim; a modal sheet keeps the same surface and rounds only the corners that stay inside the viewport, and a full-screen dialog drops back to the #000000 canvas. Shadows here are earned: the surface genuinely floats above the page.
 
 Add `qm-dialog--sheet` for a modal bottom sheet, `qm-dialog--side-sheet` for a modal side sheet or `qm-dialog--fullscreen` for a full-screen dialog. Standard sheets use `.qm-sheet` in the page layout. Escape and native modal focus behavior come from dialog; the enhancement restores focus to the invoker on close. Only one modal is opened at a time. Confirmation here returns a dialog result; it does not save data. The product listens for close and performs its intended action. Avoid nested modals. Provide a visible close or cancel action and follow the [WAI dialog pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/) for initial-focus decisions.
 
@@ -151,6 +163,8 @@ Add `qm-dialog--sheet` for a modal bottom sheet, `qm-dialog--side-sheet` for a m
   <p>It leaves the active list and remains available in the archive.</p>
 </details>
 ```
+
+A menu is a #181818 surface at the 24px card radius with a decorative #242424 edge and the level-2 shadow; its items are 16px-radius rows that take the graphite container with white content on hover, the same treatment as a current row. A plain tooltip inverts instead: a #f4f4f4 surface with #000000 text at the 12px tile radius, which keeps a short hint readable without competing with a white-filled control. An accordion is a #101010 surface at the 24px card radius with a decorative edge and a #b7b7b7 marker.
 
 This compatible popover example is a simple collection of native controls. The enhanced menu documented in the family matrix adds positioning, arrow-key navigation and managed focus; use that full markup contract when menu semantics are needed. Native popovers require supporting browsers; provide an inline fallback if your browser policy includes older engines. Plain tooltip content is supplementary, never the only source of an essential instruction; touch users still need a complete label. Rich interactive help uses the dedicated rich-tooltip trigger and dialog contract. Accordion semantics and expanded state are native.
 
@@ -176,6 +190,8 @@ showSnackbar('Preview refreshed.', { duration: 6000 });
 // Call dismiss() when the original message no longer applies.
 ```
 
+Feedback defaults to neutral and spends color only on real state. The base alert and badge use the graphite container with white content; `data-tone="success|warning|danger"` opts into #86d9ae, #f3d17d or #ffb4ab with its matching container, and `info` stays graphite. A progress bar is a white indicator on a #181818 track at a pill radius, and a skeleton is a static #181818 block at the 12px tile radius with no shimmer. A snackbar is a #181818 surface at the 24px card radius with a decorative edge and the level-2 shadow; its action label is white and separated from the message by weight and label type rather than by an accent color.
+
 Add `onAction` and `actionLabel` for a real asynchronous application action, alongside a separate `dismissLabel`. Without `onAction`, the existing `actionLabel`-only dismissal behavior remains compatible. A pending action cannot be submitted twice; a rejection keeps the message available and emits `qm:snackbar-action-error`. New messages replace the previous snackbar. Text is rendered as text, announced politely, and an optional timeout pauses on hover/focus. Do not use snackbars for essential errors or a sole recovery action. Alerts present from initial page load do not need role="alert". For urgent new errors the application can add an appropriate live announcement.
 
 Skeletons are static. Replace them with content when loading ends, and provide a labeled progress indicator when the loading state needs more explanation.
@@ -199,6 +215,8 @@ Skeletons are static. Replace them with content when loading ends, and provide a
   <a href="?page=2" aria-label="Next page">Next</a>
 </nav>
 ```
+
+These data patterns follow the same two rules. A table draws its header and footer rules in the decorative #242424, keeps captions and column headers in #b7b7b7, and alternates #080808 rows whose end cells round to the 12px tile radius. Breadcrumbs mark the current page in muted text after a muted separator, and pagination marks the current page with the graphite container and white content, the current-location treatment, not the white selection fill.
 
 Example URLs are illustrative product routes. Only add a focusable table region when it needs keyboard scrolling. Sorting, pagination, filtering, row selection and virtualized rendering are application features, not behavior provided by these classes. For an unavailable page direction, omit the action or use a disabled button with explanatory context.
 

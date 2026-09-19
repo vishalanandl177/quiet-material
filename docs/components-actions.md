@@ -1,10 +1,21 @@
 # Action and selection components
 
-These components extend the black Quiet Material theme. Import the main stylesheet and call `initQuietMaterial(document)`; the core initializer includes `initActionComponents`. The action module can also be initialized independently. Its returned cleanup is idempotent. Initialize after mounting markup; dispose before removing that subtree. State is stored in native controls and ARIA attributes rather than a framework store.
+These components extend the black Quiet Material theme: a #000000 canvas, #080808 / #101010 / #181818 container steps, #242424 as the single tonal step, white #f4f4f4 content and the two selection treatments defined in [foundations](foundations.md). Import the main stylesheet and call `initQuietMaterial(document)`; the core initializer includes `initActionComponents`. The action module can also be initialized independently. Its returned cleanup is idempotent. Initialize after mounting markup; dispose before removing that subtree. State is stored in native controls and ARIA attributes rather than a framework store.
 
 ## Buttons, icon buttons and groups
 
 All buttons use a minimum 48px interaction target. Add an accessible name to icon-only controls; hide decorative icons from assistive technology. Native `disabled` is preferred. Links use `aria-disabled` only when the application also prevents navigation.
+
+Each variant carries a different amount of emphasis, and the emphasis is the reason to choose it:
+
+- `qm-button--filled` is a white #f4f4f4 fill with #000000 content. It is the loudest control in the system, so an ordinary view should carry one clear primary action rather than several white buttons. `qm-button--primary` is the compatible alias for the same white-on-black pairing.
+- `qm-button--tonal` is the #242424 graphite container with white content: a supporting action that still wants a surface.
+- `qm-button--elevated` sits on #080808 with the level-1 shadow, for an action that must separate from a busy background.
+- `qm-button--outlined` is transparent with a functional 1px #828282 edge, because that edge is the only thing identifying it as a control. It never uses the decorative #242424.
+- `qm-button--text` and the compatible `qm-button--ghost` carry no fill or edge at all, for quiet, repeated or tertiary actions.
+- `qm-button--danger` is a deliberate destructive treatment: the #522622 container with #ffb4ab content, never a red-tinted version of the primary fill. Pair it with explicit wording and a confirmation step, not with color alone.
+
+The default `.qm-button` is #181818 with white content. Every variant is a pill (999px) with the bold 600 label weight; hover, focus and press add an 8%, 12% and 12% state layer in the current content color plus a contained ripple, rather than swapping colors. A disabled button drops to the #080808 surface with #777777 content and stops its state layer. Focus is the 3px white ring at a 2px offset; on the white-filled and pressed-toggle variants an inner #000000 ring one border width inside keeps both edges of that ring readable. A pressed icon toggle takes the white fill with black content, including the outlined toggle, whose edge turns transparent so the fill reads as one shape.
 
 ```html
 <button type="button" class="qm-button qm-button--filled">Save</button>
@@ -23,7 +34,7 @@ All buttons use a minimum 48px interaction target. Add an accessible name to ico
 </div>
 ```
 
-Remove `qm-button-group--connected` for a standard spaced group. These groups are ordinary independent actions, each in the Tab sequence. For selectable choices use segmented buttons. Connected group pressed shape uses the standard fast spatial spring; state color uses the standard fast effects spring. The icon toggle emits `qm:icon-change` with `{pressed}`. Keep the accessible label stable while toggling.
+A connected group keeps pill ends on its first and last child and tightens the inner corners to the 8px small radius, separated by a hairline seam; pressing a segment relaxes its corners to the 16px control radius as spatial feedback. Remove `qm-button-group--connected` for a standard spaced group. These groups are ordinary independent actions, each in the Tab sequence. For selectable choices use segmented buttons. Connected group pressed shape uses the standard fast spatial spring; state color uses the standard fast effects spring. The icon toggle emits `qm:icon-change` with `{pressed}`. Keep the accessible label stable while toggling.
 
 Split buttons use two separate actions, with the trailing action opening a menu:
 
@@ -62,7 +73,7 @@ The input component module manages menu opening, positioning, keyboard behavior 
 </div>
 ```
 
-The small FAB has a 40px visual surface inside a 48px button. Standard and large visuals are 56px and 96px. Extended FABs size to their content. Add `qm-fab-menu--floating` to opt into viewport placement; position it above your bottom navigation and safe areas as appropriate for the host app.
+FABs use the #242424 graphite container with white content rather than the white fill, so a floating action does not compete with the primary button in the content area. The standard FAB rounds to the 16px control radius with the level-3 shadow, the large FAB to the 32px feature radius, and the small FAB draws its graphite tile at the 12px tile radius behind a transparent, shadowless button, falling back to #080808 when disabled. The small FAB has a 40px visual surface inside a 48px button. Standard and large visuals are 56px and 96px. Extended FABs size to their content. Add `qm-fab-menu--floating` to opt into viewport placement; position it above your bottom navigation and safe areas as appropriate for the host app.
 
 The FAB menu is an accessible disclosure of ordinary buttons/links, not an ARIA menu. Keyboard activation or Arrow Up opens it and focuses the first action. Escape closes and returns focus; outside press, focus departure and action selection close it. Opening another FAB menu closes the previous one. Entry uses the standard default spatial/effects springs. Exit uses the shared MD3 fade transition; semantics close immediately while an inert visual snapshot fades. Reduced-motion preferences disable movement. Product action callbacks remain application-owned.
 
@@ -79,6 +90,8 @@ The FAB menu is an accessible disclosure of ordinary buttons/links, not an ARIA 
   <button type="button" data-value="bike" aria-pressed="false">Bike</button>
 </div>
 ```
+
+The segmented container is a #080808 pill framed and divided by the decorative #242424: the divisions separate segments that are already one control, so they are not functional edges. Segment labels are white on transparent, hover adds the #101010 surface, and the checked or pressed segment takes the white fill with black content plus the inner black focus ring when focused. A disabled segment shows #777777 content. A vertical group keeps the same treatment at the 24px card radius.
 
 Single selection is a `radiogroup` with one checked `radio`; arrow keys select and move focus, Home/End select the first/last enabled option, and only the selected option participates in Tab order. Horizontal arrows account for RTL. `aria-orientation="vertical"` switches layout and arrow behavior. Multiple selection uses a named `group` of toggle buttons; each remains in the Tab sequence, arrows move focus without changing selection, and Enter/Space toggles normally. Disabled options are skipped. Form reset restores initial selection.
 
@@ -99,6 +112,8 @@ Optional `data-qm-name` creates hidden form inputs, one for each selected enable
 <article class="qm-card qm-card--elevated">Elevated card content</article>
 ```
 
+The four MD3 chip variants share one resting appearance: transparent with a functional 1px #828282 edge, #b7b7b7 label and the 8px small radius, which keeps them visibly distinct from the pill buttons above. A selected filter or input chip becomes the white fill with black content and drops its edge; selected and disabled together falls back to #181818 with #777777 content so the state survives without the white fill. `qm-chip--elevated` trades the edge for #080808 and the level-1 shadow. Input-chip remove buttons inherit the chip's content color and take the #181818 surface on hover, and an inactive input chip dims as a whole. Cards follow their surfaces: `--filled` is #101010, `--outlined` is transparent with the decorative #242424 edge, and `--elevated` is #080808 with the level-1 shadow, all at the 24px card radius with 24px padding, rising to 32px padding from 600px.
+
 Assist/suggestion chips invoke app actions. Filter chip state is handled by the existing core `qm:chip-change` event. Add `qm-chip--elevated` to opt into elevation. A removable input chip uses a container plus a separate remove button, avoiding invalid nested buttons. It dispatches cancelable `qm:chip-remove` with `{value}` before removal; call `preventDefault()` when the app needs to confirm or handle state itself. Focus moves to the next available control or the preceding one. For a tag editor, place a labeled input after the chips, and maintain the application/form value when removing a chip. Set the remove button `disabled` for disabled chips. Cards carry no automatic click behavior: use a link or button inside a card for actions.
 
 ## Filled and outlined fields
@@ -115,6 +130,8 @@ Assist/suggestion chips invoke app actions. Filter chip state is handled by the 
   </div>
 </div>
 ```
+
+Both field variants keep a visible label, a meaningful boundary and a readable placeholder. The outlined variant draws a full functional 1px #828282 edge at the 16px control radius over the page canvas, and its floated label notches that edge by painting its own #000000 background. The filled variant fills with #080808 and keeps a single functional bottom edge, which thickens to a 3px white inset underline on focus instead of an outline. A resting label is #b7b7b7 and rises to #f4f4f4 while the field has focus; placeholder text stays in #b7b7b7 supporting color at full opacity, never in the #777777 disabled color. The caret is white. Prefix and suffix content is #b7b7b7 inside its own 48px target. An invalid field turns its edge, label, helper text and focus ring #ffb4ab, and the filled variant turns its focus underline the same danger color, so the error reads as boundary plus message plus ARIA state. A read-only field switches to a dashed edge; a disabled field dims as a whole. The supporting row carries helper text and the counter in #b7b7b7 at caption size.
 
 Use `qm-text-field--outlined` for the outlined variant. `textarea` uses the same structure and can grow vertically. A real label/ID association is required. Keep `placeholder=" "` so CSS can detect an empty field before initialization. The floating label follows focus, input and browser autofill; counters retain existing `aria-describedby` references and use the same UTF-16 length definition as HTML `maxlength`. `input`/`change` events and form reset update the counter. For programmatic value changes, dispatch a bubbling `input` event. Native required/type/pattern/readonly/disabled behavior is preserved. Set `aria-invalid="true"` and link an error message when the application reports an error.
 
@@ -146,6 +163,8 @@ For a prefix, insert `.qm-text-field__prefix` before the input and add `.qm-text
 </div>
 ```
 
+An unchecked checkbox or radio is a transparent 24px box or circle with a doubled 2px functional #828282 boundary, because that boundary is the only thing that identifies it. Checked, the checkbox becomes a white #f4f4f4 box with a #000000 checkmark and the mixed state a #000000 dash; a checked radio keeps its white ring and adds a white inner dot, since a dot has no content to invert. Focus on a checked checkbox adds the inner #000000 separation ring. Disabled controls dim rather than changing their color meaning. The two-thumb slider draws its unselected track in #181818 and the selected span as a solid white band between two hard stops, never a gradient ramp, with white handles that drop to #777777 when disabled and a focus ring pulled onto the handle inside its 48px target; the single native range takes a white `accent-color` and leaves the remaining track rendering to the browser. Slider outputs are #b7b7b7 at label size.
+
 Checkboxes and radios retain native keyboard, grouping and form behavior; their visual styles use Quiet Material roles and effects springs. Set `checkbox.indeterminate = true` for mixed state. Labels provide 48px targets. Forced-colors mode restores native checkbox/radio appearance.
 
 The range slider has two native form controls and two individually named focus targets. The low input defines shared min/max/step; initialization applies these to both inputs. Crossing is clamped instead of swapping thumb meaning. Arrow keys change one step, Page Up/Down ten steps, Home/End reach the legal limit; horizontal arrows respect RTL. Track interaction picks the closest enabled thumb. Each thumb has a 48px pointer target around its visual handle. Native `input`/`change` are preserved and bubbling `qm:range-input`/`qm:range-change` report `{low, high}`. Outputs can show both values or set `data-qm-range-output="low"` / `"high"`. Reset restores default native values. Continuous sliders may use `step="any"`; keyboard increments are 1% of the domain in that case. Tick rendering for the native discrete single slider follows browser support; the visible output always shows its current value.
@@ -154,4 +173,4 @@ The range slider has two native form controls and two individually named focus t
 
 Behavior tests cover single/multi state, RTL keyboard movement, disabled controls, form values/reset, FAB focus/close, cancellable chip removal, text counters, range crossing and track input. They use jsdom and do not establish browser rendering or screen-reader interoperability. Native device validation and visual comparison to official samples remain separate release checks.
 
-Reference component behavior was checked against Google's official [FAB documentation](https://developer.android.com/develop/ui/compose/components/fab), [segmented button documentation](https://developer.android.com/develop/ui/compose/components/segmented-button), [chip documentation](https://developer.android.com/develop/ui/compose/components/chip) and [slider documentation](https://developer.android.com/develop/ui/compose/components/slider). Quiet Material customizes color and some shapes; its implementation should not be described as a certified pixel-identical reproduction of every platform component.
+Reference component behavior was checked against Google's official [FAB documentation](https://developer.android.com/develop/ui/compose/components/fab), [segmented button documentation](https://developer.android.com/develop/ui/compose/components/segmented-button), [chip documentation](https://developer.android.com/develop/ui/compose/components/chip) and [slider documentation](https://developer.android.com/develop/ui/compose/components/slider). Quiet Material customizes color and some shapes, and the 1.4 migration retuned those values without changing a selector, variant or event; its implementation should not be described as a certified pixel-identical reproduction of every platform component.

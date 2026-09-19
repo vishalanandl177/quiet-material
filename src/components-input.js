@@ -23,7 +23,9 @@ function qmInputPosition(anchor, popup) {
   popup.style.position = 'fixed'; popup.style.margin = '0'; popup.style.inset = 'auto';
   popup.style.left = `${left}px`; popup.style.top = `${Math.max(8, flip ? rect.top - Math.min(box.height, above) : rect.bottom + 4)}px`;
   popup.style.maxHeight = `${Math.max(48, flip ? above - 4 : below - 4)}px`;
-  popup.style.maxWidth = 'calc(100vw - 16px)'; popup.style.overflowY = 'auto'; popup.style.zIndex = '50';
+  popup.style.maxWidth = 'calc(100vw - 16px)'; popup.style.overflowY = 'auto';
+  // Anchored popups share the documented popover tier instead of a local magic number.
+  popup.style.setProperty('z-index', 'var(--qm-layer-popover)');
 }
 function qmInputPopup(popup, show, anchor) {
   popup.dataset.qmInputMotion = '';

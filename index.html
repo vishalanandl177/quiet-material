@@ -5,9 +5,10 @@
   <meta name="color-scheme" content="dark">
   <meta name="description" content="Quiet Material: a complete black-first design system with foundations, accessible components and purposeful motion.">
   <title>Quiet Material - Design system</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='10' fill='%23242424'/%3E%3Ccircle cx='16' cy='11' r='5' fill='%23f4f4f4'/%3E%3Crect x='11' y='19' width='10' height='8' rx='3' fill='%23a8c7fa'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='10' fill='%23242424'/%3E%3Ccircle cx='16' cy='11' r='5' fill='%23f4f4f4'/%3E%3Crect x='11' y='19' width='10' height='8' rx='3' fill='%23b7b7b7'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="styles/quiet-material.css">
   <link rel="stylesheet" href="demo.css">
+  <link rel="stylesheet" href="showcase.css">
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to content</a>
@@ -22,6 +23,16 @@
   <symbol id="i-message" viewBox="0 0 24 24"><path d="M4 4h16v13H9l-5 4zM8 9h8M8 13h5"/></symbol>
   <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 4h7l1 2 1-2h7v16h-7l-1 1-1-1H4zM12 6v15"/></symbol>
   <symbol id="i-screen" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M12 17v4M8 21h8"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+  <symbol id="i-files" viewBox="0 0 24 24"><path d="M13 3H6v18h12V8zM13 3v5h5"/></symbol>
+  <symbol id="i-notes" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 9h6M9 13h6M9 17h4"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4M16 3v4M4 11h16"/></symbol>
+  <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 17V5l10-2v12"/><circle cx="6.5" cy="17.5" r="2.5"/><circle cx="16.5" cy="15.5" r="2.5"/></symbol>
+  <symbol id="i-weather" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6 7 7M17 17l1.4 1.4M18.4 5.6 17 7M7 17l-1.4 1.4"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M4.2 7.5l2.6 1.5M17.2 15l2.6 1.5M4.2 16.5l2.6-1.5M17.2 9l2.6-1.5"/></symbol>
+  <symbol id="i-layout" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18M9 9v11"/></symbol>
 </defs></svg>
 <aside class="rail">
   <a class="brand" href="#overview" aria-label="Quiet Material home"><span></span><span></span></a>
@@ -33,6 +44,7 @@
     <a href="#platforms"><svg aria-hidden="true"><use href="#i-screen"/></svg><span>Platforms</span></a>
     <a href="#patterns"><svg aria-hidden="true"><use href="#i-book"/></svg><span>Patterns</span></a>
     <a href="#accessibility"><svg aria-hidden="true"><use href="#i-check"/></svg><span>Accessibility</span></a>
+    <a href="#showcase"><svg aria-hidden="true"><use href="#i-layout"/></svg><span>Showcase</span></a>
     <button class="more-nav" data-qm-dialog-open="navigation-sheet" aria-label="More design system sections"><svg aria-hidden="true"><use href="#i-grid"/></svg><span>More</span></button>
   </nav>
   <span class="version">v1.3</span>
@@ -59,15 +71,17 @@
   <section class="page" id="foundations" aria-labelledby="foundations-title">
     <div class="page-heading"><p class="eyebrow">01 / FOUNDATIONS</p><h1 id="foundations-title">Start with less.</h1><p class="intro">Every value has a role. Tokens keep the whole system in tune.</p></div>
     <h2 class="section-label">Color</h2><div class="palette-grid">
-      <article class="swatch"><div style="background:#000"></div><h3>Background</h3><code>#000000</code><p>The canvas, always black.</p></article>
-      <article class="swatch"><div style="background:#242424"></div><h3>Surface</h3><code>#242424</code><p>Cards and grouped content.</p></article>
-      <article class="swatch"><div style="background:#2d2d2d"></div><h3>Surface high</h3><code>#2D2D2D</code><p>Elevated panels and dialogs.</p></article>
-      <article class="swatch"><div style="background:#f4f4f4"></div><h3>Text</h3><code>#F4F4F4</code><p>The strongest reading layer.</p></article>
-      <article class="swatch"><div style="background:#a8c7fa"></div><h3>Primary</h3><code>#A8C7FA</code><p>Selected and focused states.</p></article>
-      <article class="swatch"><div style="background:#86d9ae"></div><h3>Accent</h3><code>#86D9AE</code><p>A small, deliberate highlight.</p></article>
+      <article class="swatch"><div style="background:var(--qm-color-background)"></div><h3>Background</h3><code>#000000</code><p>The canvas, always pure black.</p></article>
+      <article class="swatch"><div style="background:var(--qm-color-surface-low);box-shadow:inset 0 0 0 var(--qm-border-width) var(--qm-color-outline)"></div><h3>Surface low</h3><code>#080808</code><p>Recessed grouping, one step off black.</p></article>
+      <article class="swatch"><div style="background:var(--qm-color-surface);box-shadow:inset 0 0 0 var(--qm-border-width) var(--qm-color-outline)"></div><h3>Surface</h3><code>#101010</code><p>Cards and grouped content.</p></article>
+      <article class="swatch"><div style="background:var(--qm-color-surface-high);box-shadow:inset 0 0 0 var(--qm-border-width) var(--qm-color-outline)"></div><h3>Surface high</h3><code>#181818</code><p>Elevated panels, menus and dialogs.</p></article>
+      <article class="swatch"><div style="background:var(--qm-color-primary-container)"></div><h3>Tonal container</h3><code>#242424</code><p>Graphite: the current destination or row.</p></article>
+      <article class="swatch"><div style="background:var(--qm-color-text)"></div><h3>Text</h3><code>#F4F4F4</code><p>The strongest reading layer.</p></article>
+      <article class="swatch"><div style="background:var(--qm-color-primary)"></div><h3>Primary</h3><code>#F4F4F4</code><p>White fill, black content: the chosen option.</p></article>
+      <article class="swatch"><div style="background:var(--qm-color-success)"></div><h3>Status accent</h3><code>#86D9AE</code><p>Kept for genuine status, never for selection.</p></article>
     </div>
     <div class="two-up"><article class="qm-card type-card"><p class="eyebrow">TYPE / SYSTEM SANS</p><div class="type-display">Aa</div><h2>Clear at every size.</h2><p>Large headings set the rhythm. Body text stays comfortable. Small text still needs contrast.</p><dl class="token-list"><div><dt>Display</dt><dd>56 / 61.6 px</dd></div><div><dt>Headline</dt><dd>36 / 45 px</dd></div><div><dt>Title</dt><dd>24 / 30 px</dd></div><div><dt>Body</dt><dd>16 / 25.6 px</dd></div><div><dt>Caption</dt><dd>12 / 19.2 px</dd></div></dl></article>
-    <article class="qm-card"><p class="eyebrow">SHAPE & SPACE</p><h2>Soft, never vague.</h2><div class="shape-samples"><span style="border-radius:16px">16</span><span style="border-radius:24px">24</span><span style="border-radius:40px">40</span><span style="border-radius:999px">Pill</span></div><p>Use 32 px on compact cards, 40 px on spacious cards, and pill shapes for short actions.</p><div class="space-samples"><div style="--n:4">4</div><div style="--n:8">8</div><div style="--n:16">16</div><div style="--n:24">24</div><div style="--n:32">32</div><div style="--n:48">48</div></div><p>Build on a 4 px grid. Let content determine the height.</p></article></div>
+    <article class="qm-card"><p class="eyebrow">SHAPE & SPACE</p><h2>Soft, never vague.</h2><div class="shape-samples"><span style="border-radius:var(--qm-radius-small)">8</span><span style="border-radius:var(--qm-radius-tile)">12</span><span style="border-radius:var(--qm-radius-control)">16</span><span style="border-radius:var(--qm-radius-card)">24</span><span style="border-radius:var(--qm-radius-feature)">32</span><span style="border-radius:var(--qm-radius-pill)">Pill</span></div><p>8 px for embedded detail, 12 px for icon tiles, 16 px for fields and menu items, 24 px for cards and sheets, 32 px for dialogs and large feature surfaces, and pill shapes for buttons, chips and selectors.</p><div class="space-samples"><div style="--n:4">4</div><div style="--n:8">8</div><div style="--n:16">16</div><div style="--n:24">24</div><div style="--n:32">32</div><div style="--n:48">48</div></div><p>Build on a 4 px grid. Let content determine the height.</p></article></div>
     <article class="qm-card prose-panel"><h2>Three responsive modes</h2><div class="three-up"><div><h3>Compact · &lt; 600 px</h3><p>Start at 320 px: one column, three key destinations plus More, and 20 px page padding.</p></div><div><h3>Medium · 600-839 px</h3><p>Use 32 px page padding and a navigation rail. Stack complex panels when space is limited.</p></div><div><h3>Expanded · ≥ 840 px</h3><p>Use 48 px page padding. Add columns when content fits; widen workspaces from 1200 px.</p></div></div></article>
   </section>
 
@@ -138,7 +152,7 @@
 
   <section class="page" id="platforms" aria-labelledby="platforms-title">
     <div class="page-heading"><p class="eyebrow">04 / EVERY SCREEN</p><h1 id="platforms-title">One language.<br>Room to adapt.</h1><p class="intro">Start with the phone. Carry the same clarity to tablets, desktops, and native apps.</p></div>
-    <figure class="platform-hero"><img src="assets/platforms/adaptive-family.png" width="1536" height="1024" alt="Concept of Quiet Material across a phone, tablet, and desktop, with black canvases and rounded charcoal surfaces." loading="lazy"><figcaption>Visual direction · illustrative concept. Platform starters below contain the implementation.</figcaption></figure>
+    <figure class="platform-hero"><img src="assets/platforms/adaptive-family.png" width="1536" height="1024" alt="Concept of Quiet Material across a phone, tablet, and desktop, with pure black canvases and rounded near-black surfaces." loading="lazy"><figcaption>Visual direction · illustrative concept. Platform starters below contain the implementation.</figcaption></figure>
     <div class="platform-grid">
       <article class="qm-card"><span class="qm-badge">Web</span><h2>Use it anywhere.</h2><p>Semantic HTML, reusable CSS, and optional JavaScript. Works with your framework on phones, tablets, and desktop browsers.</p><a class="qm-button qm-button--tonal" href="docs/getting-started.md">Web integration ↗</a></article>
       <article class="qm-card"><span class="qm-badge">Android</span><h2>Built for touch.</h2><p>Jetpack Compose theme and starter components. Native Material 3 controls with shared colors, shape, and spacing.</p><a class="qm-button qm-button--tonal" href="platforms/android/README.md">Android starter ↗</a></article>
@@ -156,12 +170,182 @@
 &lt;/script&gt;</code></pre><a class="qm-button qm-button--tonal" href="docs/getting-started.md">Read the integration guide ↗</a></article></section>
 
   <section class="page" id="accessibility" aria-labelledby="accessibility-title"><div class="page-heading"><p class="eyebrow">06 / ACCESSIBILITY</p><h1 id="accessibility-title">Quiet. For everyone.</h1><p class="intro">Clarity is a behavior, not just a color palette.</p></div><div class="two-up"><article class="qm-card"><h2>Readable contrast</h2><p>Text aims for WCAG AA contrast. Essential control boundaries and focus rings stay visible, even where decorative borders are absent.</p><p class="muted">Color alone never communicates status.</p></article><article class="qm-card"><h2>A keyboard path</h2><p>Tab follows the reading order. Arrow keys move through tabs and native choices. Escape closes dialogs, popovers, and tooltips.</p><button class="qm-button qm-button--tonal" data-qm-dialog-open="settings-sheet">Test keyboard focus</button></article><article class="qm-card"><h2>Room to interact</h2><p>Standard controls have 48 px targets. Touch labels expand the hit area. Content wraps, and text can grow without clipping.</p><p class="muted">At small sizes, simplify the layout before shrinking controls.</p></article><article class="qm-card"><h2>Control over motion</h2><p>Reduced motion suppresses decorative transitions and ripples. Decorative motion plays on request. Progress animation appears only while work is in progress.</p><a class="qm-button qm-button--ghost" href="#motion">Review motion behavior →</a></article></div><article class="qm-card prose-panel"><h2>Accessibility is an ongoing check.</h2><p>This system provides accessible foundations. Each product still needs keyboard, screen reader, zoom, contrast, and assistive-technology testing in its own context. An automated check is not a conformance certification.</p><a class="qm-button qm-button--ghost" href="docs/accessibility.md">Read the testing checklist ↗</a></article></section>
+  <section class="page" id="showcase" aria-labelledby="showcase-title">
+    <div class="page-heading"><p class="eyebrow">07 / SHOWCASE</p><h1 id="showcase-title">Black, applied.</h1><p class="intro">Five illustrative local examples, assembled from the same Quiet Material components as the catalog. Everything below is static demo content inside this page: no launcher, no live device, no accounts, no network requests, and no installed apps are read.</p></div>
+    <div class="showcase-sections">
+
+      <article class="qm-card showcase-example" aria-labelledby="showcase-home-title">
+        <div class="showcase-example-heading"><p class="eyebrow">EXAMPLE 01 / A SPARSE START</p><h2 id="showcase-home-title">Room to begin.</h2><p class="showcase-lede">A greeting, one pill search field, and a grid of icon tiles on the pure black canvas. The tiles are generic illustrative labels with icons drawn in this page - no brands, no installed software.</p></div>
+        <div class="showcase-stage">
+          <div class="showcase-greeting"><p class="eyebrow">ILLUSTRATIVE EXAMPLE</p><h3>Good morning.</h3><p>Nine example tiles. Type to filter them.</p></div>
+          <div class="qm-search-bar" role="search" aria-label="Search the example tiles">
+            <svg aria-hidden="true"><use href="#i-search"/></svg>
+            <div class="qm-search__input"><input class="qm-input" id="showcase-tile-search" type="search" autocomplete="off" placeholder="Search example tiles" aria-label="Search the example tiles" aria-describedby="showcase-tile-status"></div>
+            <button type="button" class="qm-button qm-button--ghost" id="showcase-tile-clear">Clear</button>
+          </div>
+          <div class="showcase-tiles" id="showcase-tile-grid" role="group" aria-label="Example icon tiles">
+            <button type="button" class="qm-button qm-button--tonal showcase-tile" data-showcase-tile="Messages" data-demo-toast="Messages is an illustrative tile. Nothing was opened."><svg aria-hidden="true"><use href="#i-message"/></svg><span>Messages</span></button>
+            <button type="button" class="qm-button qm-button--tonal showcase-tile" data-showcase-tile="Camera" data-demo-toast="Camera is an illustrative tile. Nothing was opened."><svg aria-hidden="true"><use href="#i-camera"/></svg><span>Camera</span></button>
+            <button type="button" class="qm-button qm-button--tonal showcase-tile" data-showcase-tile="Files" data-demo-toast="Files is an illustrative tile. Nothing was opened."><svg aria-hidden="true"><use href="#i-files"/></svg><span>Files</span></button>
+            <button type="button" class="qm-button qm-button--tonal showcase-tile" data-showcase-tile="Notes" data-demo-toast="Notes is an illustrative tile. Nothing was opened."><svg aria-hidden="true"><use href="#i-notes"/></svg><span>Notes</span></button>
+            <button type="button" class="qm-button qm-button--tonal showcase-tile" data-showcase-tile="Calendar" data-demo-toast="Calendar is an illustrative tile. Nothing was opened."><svg aria-hidden="true"><use href="#i-calendar"/></svg><span>Calendar</span></button>
+            <button type="button" class="qm-button qm-button--tonal showcase-tile" data-showcase-tile="Music" data-demo-toast="Music is an illustrative tile. Nothing was opened."><svg aria-hidden="true"><use href="#i-music"/></svg><span>Music</span></button>
+            <button type="button" class="qm-button qm-button--tonal showcase-tile" data-showcase-tile="Weather" data-demo-toast="Weather is an illustrative tile. Nothing was opened."><svg aria-hidden="true"><use href="#i-weather"/></svg><span>Weather</span></button>
+            <button type="button" class="qm-button qm-button--tonal showcase-tile" data-showcase-tile="Clock" data-demo-toast="Clock is an illustrative tile. Nothing was opened."><svg aria-hidden="true"><use href="#i-clock"/></svg><span>Clock</span></button>
+            <button type="button" class="qm-button qm-button--tonal showcase-tile" data-showcase-tile="Settings" data-demo-toast="Settings is an illustrative tile. Nothing was opened."><svg aria-hidden="true"><use href="#i-settings"/></svg><span>Settings</span></button>
+          </div>
+          <p class="qm-helper showcase-note" id="showcase-tile-status" role="status" aria-live="polite"></p>
+        </div>
+      </article>
+
+      <article class="qm-card showcase-example" aria-labelledby="showcase-directory-title">
+        <div class="showcase-example-heading"><p class="eyebrow">EXAMPLE 02 / A GROUPED DIRECTORY</p><h2 id="showcase-directory-title">Everything, in order.</h2><p class="showcase-lede">Filter chips narrow a fixed set of nine entries; alphabetical headings keep the grid readable. A chosen chip takes the white fill with black content, so the choice never rests on hue alone.</p></div>
+        <div class="showcase-stage showcase-stage--recessed">
+          <div class="qm-text-field qm-text-field--outlined" data-qm-text-field><div class="qm-text-field__control"><input id="showcase-directory-search" type="search" autocomplete="off" placeholder=" " aria-describedby="showcase-directory-hint"><label for="showcase-directory-search">Search this example directory</label></div><div class="qm-text-field__support"><span class="qm-helper" id="showcase-directory-hint">Nine local fixtures. Nothing on your device is read.</span></div></div>
+          <div class="flow" id="showcase-directory-filters" role="group" aria-label="Filter the example directory">
+            <button type="button" class="qm-chip qm-chip--filter" data-showcase-filter="all" aria-pressed="true">All</button>
+            <button type="button" class="qm-chip qm-chip--filter" data-showcase-filter="communication" aria-pressed="false">Communication</button>
+            <button type="button" class="qm-chip qm-chip--filter" data-showcase-filter="media" aria-pressed="false">Media</button>
+            <button type="button" class="qm-chip qm-chip--filter" data-showcase-filter="utilities" aria-pressed="false">Utilities</button>
+          </div>
+          <div class="showcase-groups" id="showcase-directory-groups">
+            <section class="showcase-group" data-showcase-group="C" aria-labelledby="showcase-group-c"><h3 class="showcase-group-heading" id="showcase-group-c">C</h3><div class="showcase-tiles">
+              <button type="button" class="qm-button qm-button--tonal showcase-tile" data-showcase-entry="Calendar" data-showcase-category="utilities" data-demo-toast="Calendar is an illustrative directory entry."><svg aria-hidden="true"><use href="#i-calendar"/></svg><span>Calendar</span></button>
+              <button type="button" class="qm-button qm-button--tonal showcase-tile" data-showcase-entry="Camera" data-showcase-category="media" data-demo-toast="Camera is an illustrative directory entry."><svg aria-hidden="true"><use href="#i-camera"/></svg><span>Camera</span></button>
+              <button type="button" class="qm-button qm-button--tonal showcase-tile" data-showcase-entry="Clock" data-showcase-category="utilities" data-demo-toast="Clock is an illustrative directory entry."><svg aria-hidden="true"><use href="#i-clock"/></svg><span>Clock</span></button>
+            </div></section>
+            <section class="showcase-group" data-showcase-group="F" aria-labelledby="showcase-group-f"><h3 class="showcase-group-heading" id="showcase-group-f">F</h3><div class="showcase-tiles">
+              <button type="button" class="qm-button qm-button--tonal showcase-tile" data-showcase-entry="Files" data-showcase-category="utilities" data-demo-toast="Files is an illustrative directory entry."><svg aria-hidden="true"><use href="#i-files"/></svg><span>Files</span></button>
+            </div></section>
+            <section class="showcase-group" data-showcase-group="M" aria-labelledby="showcase-group-m"><h3 class="showcase-group-heading" id="showcase-group-m">M</h3><div class="showcase-tiles">
+              <button type="button" class="qm-button qm-button--tonal showcase-tile" data-showcase-entry="Messages" data-showcase-category="communication" data-demo-toast="Messages is an illustrative directory entry."><svg aria-hidden="true"><use href="#i-message"/></svg><span>Messages</span></button>
+              <button type="button" class="qm-button qm-button--tonal showcase-tile" data-showcase-entry="Music" data-showcase-category="media" data-demo-toast="Music is an illustrative directory entry."><svg aria-hidden="true"><use href="#i-music"/></svg><span>Music</span></button>
+            </div></section>
+            <section class="showcase-group" data-showcase-group="N" aria-labelledby="showcase-group-n"><h3 class="showcase-group-heading" id="showcase-group-n">N</h3><div class="showcase-tiles">
+              <button type="button" class="qm-button qm-button--tonal showcase-tile" data-showcase-entry="Notes" data-showcase-category="communication" data-demo-toast="Notes is an illustrative directory entry."><svg aria-hidden="true"><use href="#i-notes"/></svg><span>Notes</span></button>
+            </div></section>
+            <section class="showcase-group" data-showcase-group="S" aria-labelledby="showcase-group-s"><h3 class="showcase-group-heading" id="showcase-group-s">S</h3><div class="showcase-tiles">
+              <button type="button" class="qm-button qm-button--tonal showcase-tile" data-showcase-entry="Settings" data-showcase-category="utilities" data-demo-toast="Settings is an illustrative directory entry."><svg aria-hidden="true"><use href="#i-settings"/></svg><span>Settings</span></button>
+            </div></section>
+            <section class="showcase-group" data-showcase-group="W" aria-labelledby="showcase-group-w"><h3 class="showcase-group-heading" id="showcase-group-w">W</h3><div class="showcase-tiles">
+              <button type="button" class="qm-button qm-button--tonal showcase-tile" data-showcase-entry="Weather" data-showcase-category="media" data-demo-toast="Weather is an illustrative directory entry."><svg aria-hidden="true"><use href="#i-weather"/></svg><span>Weather</span></button>
+            </div></section>
+          </div>
+          <p class="qm-helper showcase-note" id="showcase-directory-status" role="status" aria-live="polite"></p>
+          <p class="showcase-empty" id="showcase-directory-empty" hidden>Nothing in this example set matches that search.</p>
+        </div>
+      </article>
+
+      <article class="qm-card showcase-example" aria-labelledby="showcase-results-title">
+        <div class="showcase-example-heading"><p class="eyebrow">EXAMPLE 03 / RESULTS YOU CAN READ</p><h2 id="showcase-results-title">Answer first.</h2><p class="showcase-lede">A native search input over six fixed rows. Each row keeps a leading icon tile, a title and one supporting line, so the result reads before it is decorated.</p></div>
+        <div class="showcase-stage">
+          <div class="qm-text-field qm-text-field--filled" data-qm-text-field><div class="qm-text-field__control"><input id="showcase-results-search" type="search" autocomplete="off" placeholder=" " aria-describedby="showcase-results-hint"><label for="showcase-results-search">Search the example results</label></div><div class="qm-text-field__support"><span class="qm-helper" id="showcase-results-hint">Try notes, weather or tokens.</span></div></div>
+          <ul class="qm-list showcase-results" id="showcase-results-list">
+            <li class="qm-list__item qm-list__item--two-line" data-showcase-result="Notes surface ladder black"><span class="qm-list__leading showcase-result-tile"><svg aria-hidden="true"><use href="#i-notes"/></svg></span><span class="qm-list__content"><span class="qm-list__headline">Notes on the surface ladder</span><span class="qm-list__supporting">Black canvas, then three near-black steps.</span></span></li>
+            <li class="qm-list__item qm-list__item--two-line" data-showcase-result="Weather sample forecast fixture"><span class="qm-list__leading showcase-result-tile"><svg aria-hidden="true"><use href="#i-weather"/></svg></span><span class="qm-list__content"><span class="qm-list__headline">Weather sample</span><span class="qm-list__supporting">A fixed fixture row, not a forecast.</span></span></li>
+            <li class="qm-list__item qm-list__item--two-line" data-showcase-result="Files tokens export sample"><span class="qm-list__leading showcase-result-tile"><svg aria-hidden="true"><use href="#i-files"/></svg></span><span class="qm-list__content"><span class="qm-list__headline">Token export sample</span><span class="qm-list__supporting">Illustrative file row for this page.</span></span></li>
+            <li class="qm-list__item qm-list__item--two-line" data-showcase-result="Messages selection rule thread"><span class="qm-list__leading showcase-result-tile"><svg aria-hidden="true"><use href="#i-message"/></svg></span><span class="qm-list__content"><span class="qm-list__headline">Thread about the selection rule</span><span class="qm-list__supporting">White fill for a choice, graphite for a place.</span></span></li>
+            <li class="qm-list__item qm-list__item--two-line" data-showcase-result="Calendar review example date"><span class="qm-list__leading showcase-result-tile"><svg aria-hidden="true"><use href="#i-calendar"/></svg></span><span class="qm-list__content"><span class="qm-list__headline">Design review, example date</span><span class="qm-list__supporting">A static entry with no real schedule.</span></span></li>
+            <li class="qm-list__item qm-list__item--two-line" data-showcase-result="Settings focus ring contrast"><span class="qm-list__leading showcase-result-tile"><svg aria-hidden="true"><use href="#i-settings"/></svg></span><span class="qm-list__content"><span class="qm-list__headline">Focus ring settings</span><span class="qm-list__supporting">Focus stays distinct from selection.</span></span></li>
+          </ul>
+          <p class="qm-helper showcase-note" id="showcase-results-status" role="status" aria-live="polite"></p>
+          <p class="showcase-empty" id="showcase-results-empty" hidden>No example row matches that search.</p>
+        </div>
+      </article>
+
+      <article class="qm-card showcase-example" aria-labelledby="showcase-cards-title">
+        <div class="showcase-example-heading"><p class="eyebrow">EXAMPLE 04 / SMALL CARDS</p><h2 id="showcase-cards-title">A little information.</h2><p class="showcase-lede">A date strip, a status line and a quiet metric. Depth comes from the surface step, the spacing and one selective edge - never from a gradient, a glow or a blur.</p></div>
+        <div class="showcase-stage showcase-cards">
+          <article class="qm-card qm-card--filled showcase-info-card" aria-labelledby="showcase-date-title">
+            <h3 id="showcase-date-title">Example week</h3>
+            <div class="showcase-date-strip" id="showcase-date-strip" role="group" aria-labelledby="showcase-date-title">
+              <button type="button" class="qm-chip qm-chip--filter" data-showcase-day="Monday 12" aria-pressed="false">Mon 12</button>
+              <button type="button" class="qm-chip qm-chip--filter" data-showcase-day="Tuesday 13" aria-pressed="false">Tue 13</button>
+              <button type="button" class="qm-chip qm-chip--filter" data-showcase-day="Wednesday 14" aria-pressed="true">Wed 14</button>
+              <button type="button" class="qm-chip qm-chip--filter" data-showcase-day="Thursday 15" aria-pressed="false">Thu 15</button>
+              <button type="button" class="qm-chip qm-chip--filter" data-showcase-day="Friday 16" aria-pressed="false">Fri 16</button>
+            </div>
+            <p class="qm-helper showcase-note" id="showcase-date-status" role="status" aria-live="polite">Wednesday 14 chosen in this example.</p>
+          </article>
+          <article class="qm-card qm-card--filled showcase-info-card" aria-labelledby="showcase-status-title">
+            <h3 id="showcase-status-title">Status</h3>
+            <div class="qm-alert" data-tone="success"><strong>All examples loaded.</strong><p>Static fixtures only - nothing was fetched.</p></div>
+            <p class="qm-muted">Mint stays reserved for genuine status. It never marks a selection, a link or an ordinary icon.</p>
+          </article>
+          <article class="qm-card qm-card--outlined showcase-info-card" aria-labelledby="showcase-metric-title">
+            <h3 id="showcase-metric-title">Illustrative metric</h3>
+            <p class="showcase-metric">62<span>%</span></p>
+            <div data-qm-progress="linear" data-value="62" data-max="100" aria-label="Illustrative metric, 62 percent"></div>
+            <p class="qm-muted">A made-up figure for this demo. No analytics are collected.</p>
+          </article>
+        </div>
+      </article>
+
+      <article class="qm-card showcase-example" aria-labelledby="showcase-settings-title">
+        <div class="showcase-example-heading"><p class="eyebrow">EXAMPLE 05 / SELECTION, ONE WAY</p><h2 id="showcase-settings-title">Chosen, or current.</h2><p class="showcase-lede">A single choice takes the white fill with black content. The row you are on takes the graphite container. Focus stays its own ring, so the two never blur together. None of these controls stores a preference.</p></div>
+        <div class="showcase-stage showcase-settings">
+          <div class="showcase-setting-block">
+            <h3 id="showcase-text-size-title">Text size</h3>
+            <div class="qm-segmented showcase-segmented" id="showcase-text-size" data-qm-segmented="single" aria-labelledby="showcase-text-size-title">
+              <button type="button" data-value="small">Small</button>
+              <button type="button" data-value="default" aria-checked="true">Default</button>
+              <button type="button" data-value="large">Large</button>
+            </div>
+            <p class="qm-helper showcase-note" id="showcase-text-size-status" role="status" aria-live="polite">Default chosen in this example.</p>
+          </div>
+          <div class="showcase-setting-block">
+            <h3 id="showcase-switch-title">Quiet by default</h3>
+            <div role="group" aria-labelledby="showcase-switch-title">
+              <label class="control-row"><span>Dim decorative edges</span><input class="qm-switch" type="checkbox" role="switch" checked></label>
+              <label class="control-row"><span>Group entries by letter</span><input class="qm-switch" type="checkbox" role="switch"></label>
+              <label class="control-row"><span>Sync across devices</span><input class="qm-switch" type="checkbox" role="switch" disabled></label>
+            </div>
+            <p class="qm-helper showcase-note">The ON track is the white fill and the thumb travel is unchanged. The third row is genuinely inactive, so it uses the disabled colour; helper text never does.</p>
+          </div>
+          <div class="showcase-choices">
+            <fieldset class="showcase-fieldset"><legend>Show on the example home</legend>
+              <label class="check-row"><input class="qm-checkbox" type="checkbox" checked>Icon labels</label>
+              <label class="check-row"><input class="qm-checkbox" type="checkbox" checked>Group headings</label>
+              <label class="check-row"><input class="qm-checkbox" type="checkbox">Supporting lines</label>
+            </fieldset>
+            <fieldset class="showcase-fieldset"><legend>Tile order</legend>
+              <label class="check-row"><input class="qm-radio" type="radio" name="showcase-order" value="alphabetical" checked>Alphabetical</label>
+              <label class="check-row"><input class="qm-radio" type="radio" name="showcase-order" value="grouped">Grouped by kind</label>
+              <label class="check-row"><input class="qm-radio" type="radio" name="showcase-order" value="manual" disabled>Manual</label>
+            </fieldset>
+          </div>
+          <div class="showcase-setting-block">
+            <h3 id="showcase-shape-title">Icon shape</h3>
+            <div class="flow" id="showcase-shape-row" role="group" aria-labelledby="showcase-shape-title">
+              <button type="button" class="qm-chip qm-chip--filter" data-showcase-shape="detail" aria-pressed="false">Detail</button>
+              <button type="button" class="qm-chip qm-chip--filter" data-showcase-shape="tile" aria-pressed="true">Tile</button>
+              <button type="button" class="qm-chip qm-chip--filter" data-showcase-shape="round" aria-pressed="false">Round</button>
+            </div>
+            <div class="shape-samples showcase-shape-preview" id="showcase-shape-preview" data-showcase-shape="tile"><span><svg aria-hidden="true"><use href="#i-message"/></svg></span><span><svg aria-hidden="true"><use href="#i-camera"/></svg></span><span><svg aria-hidden="true"><use href="#i-notes"/></svg></span><span><svg aria-hidden="true"><use href="#i-music"/></svg></span></div>
+            <p class="qm-helper showcase-note" id="showcase-shape-status" role="status" aria-live="polite">Tile corners chosen in this example.</p>
+          </div>
+          <div class="showcase-setting-block">
+            <h3 id="showcase-section-title">Example sections</h3>
+            <ul class="qm-list showcase-rows" id="showcase-section-list" aria-labelledby="showcase-section-title">
+              <li><button type="button" class="qm-list__item qm-list__item--two-line" data-showcase-row="Appearance" aria-current="true"><span class="qm-list__leading showcase-result-tile"><svg aria-hidden="true"><use href="#i-palette"/></svg></span><span class="qm-list__content"><span class="qm-list__headline">Appearance</span><span class="qm-list__supporting">The current row keeps the graphite container.</span></span></button></li>
+              <li><button type="button" class="qm-list__item qm-list__item--two-line" data-showcase-row="Notifications"><span class="qm-list__leading showcase-result-tile"><svg aria-hidden="true"><use href="#i-message"/></svg></span><span class="qm-list__content"><span class="qm-list__headline">Notifications</span><span class="qm-list__supporting">Choose a row to move the highlight.</span></span></button></li>
+              <li><button type="button" class="qm-list__item qm-list__item--two-line" data-showcase-row="Accessibility"><span class="qm-list__leading showcase-result-tile"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span class="qm-list__content"><span class="qm-list__headline">Accessibility</span><span class="qm-list__supporting">Targets stay at least 48 px in every row.</span></span></button></li>
+            </ul>
+            <p class="qm-helper showcase-note" id="showcase-section-status" role="status" aria-live="polite">Appearance is the current example row.</p>
+          </div>
+        </div>
+      </article>
+
+    </div>
+    <div class="overview-note"><span>Illustrative local examples only. Nothing here launches software, reads a device or stores a setting.</span><a href="docs/getting-started.md">Integration guide ↗</a></div>
+  </section>
+
   <footer>Quiet Material <span>Simple is better than complex.</span><a href="README.md">Documentation ↗</a></footer>
 </main>
 <dialog class="qm-dialog" id="project-dialog" aria-labelledby="project-dialog-title" aria-describedby="project-dialog-description"><form id="project-form"><h2 id="project-dialog-title">A fresh start.</h2><p id="project-dialog-description">Name your project. This example adds it to the workspace for this session.</p><label class="qm-field">Project name<input class="qm-input" id="new-project-name" name="projectName" required maxlength="80" placeholder="e.g. My first project" autofocus aria-describedby="project-name-error"><span class="qm-helper" id="project-name-error"></span></label><div class="dialog-actions"><button class="qm-button qm-button--ghost" type="button" data-qm-dialog-close>Cancel</button><button class="qm-button qm-button--primary" type="submit">Create project</button></div></form></dialog>
 <dialog class="qm-dialog" id="delete-dialog" aria-labelledby="delete-title" aria-describedby="delete-description"><h2 id="delete-title">Delete this draft?</h2><p id="delete-description">This is a confirmation example. No real data will be deleted.</p><div class="dialog-actions"><button class="qm-button qm-button--primary" data-qm-dialog-close autofocus>Keep draft</button><button class="qm-button qm-button--danger" id="confirm-delete">Delete draft</button></div></dialog>
 <dialog class="qm-dialog qm-dialog--sheet" id="settings-sheet" data-qm-sheet aria-labelledby="sheet-title"><div class="sheet-handle" aria-hidden="true"></div><h2 id="sheet-title">Make room for focus.</h2><p>Small choices, a calmer interface.</p><label class="control-row"><span>Only essential notifications</span><input type="checkbox" class="qm-switch" role="switch" checked></label><label class="control-row"><span>Compact project list</span><input type="checkbox" class="qm-switch" role="switch"></label><p class="qm-helper">Demo controls only; no account preferences are stored.</p><div class="dialog-actions"><button class="qm-button qm-button--primary" data-qm-dialog-close>Done</button></div></dialog>
-<dialog class="qm-dialog qm-dialog--sheet" id="navigation-sheet" aria-labelledby="navigation-title"><div class="sheet-handle" aria-hidden="true"></div><h2 id="navigation-title">Explore the system.</h2><nav class="more-links" aria-label="More design system sections"><a href="#foundations">Foundations <span aria-hidden="true">↗</span></a><a href="#platforms">Platforms <span aria-hidden="true">↗</span></a><a href="#patterns">Patterns <span aria-hidden="true">↗</span></a><a href="#accessibility">Accessibility <span aria-hidden="true">↗</span></a></nav><div class="dialog-actions"><button class="qm-button" data-qm-dialog-close>Close</button></div></dialog>
+<dialog class="qm-dialog qm-dialog--sheet" id="navigation-sheet" aria-labelledby="navigation-title"><div class="sheet-handle" aria-hidden="true"></div><h2 id="navigation-title">Explore the system.</h2><nav class="more-links" aria-label="More design system sections"><a href="#foundations">Foundations <span aria-hidden="true">↗</span></a><a href="#platforms">Platforms <span aria-hidden="true">↗</span></a><a href="#patterns">Patterns <span aria-hidden="true">↗</span></a><a href="#accessibility">Accessibility <span aria-hidden="true">↗</span></a><a href="#showcase">Showcase <span aria-hidden="true">↗</span></a></nav><div class="dialog-actions"><button class="qm-button" data-qm-dialog-close>Close</button></div></dialog>
 <!-- component dialogs -->
 <dialog class="qm-dialog qm-dialog--drawer" id="example-drawer" aria-labelledby="example-drawer-title"><h2 id="example-drawer-title">Your workspace</h2><nav class="qm-navigation qm-navigation--drawer" data-qm-navigation="drawer" aria-label="Drawer navigation example"><button class="qm-navigation__item" data-qm-nav-target="modal-nav-0" aria-current="page"><span class="qm-navigation__icon"><svg aria-hidden="true"><use href="#i-home"/></svg></span><span>Home</span></button><button class="qm-navigation__item" data-qm-nav-target="modal-nav-1" ><span class="qm-navigation__icon"><svg aria-hidden="true"><use href="#i-grid"/></svg></span><span>Projects</span></button><button class="qm-navigation__item" data-qm-nav-target="modal-nav-2" ><span class="qm-navigation__icon"><svg aria-hidden="true"><use href="#i-message"/></svg></span><span>Inbox</span></button></nav><div class="nav-demo-panels"><section id="modal-nav-0" data-qm-nav-panel ><h3>Home</h3><p>Room for today’s work.</p></section><section id="modal-nav-1" data-qm-nav-panel hidden><h3>Projects</h3><p>Three projects. One shared focus.</p></section><section id="modal-nav-2" data-qm-nav-panel hidden><h3>Inbox</h3><p>You’re all caught up.</p></section></div><div class="dialog-actions"><button type="button" class="qm-button qm-button--tonal" data-qm-dialog-close>Close</button></div></dialog>
 <dialog class="qm-dialog qm-dialog--side-sheet" id="example-side-sheet" aria-labelledby="example-side-title"><h2 id="example-side-title">Project details</h2><p>Keep the story in view, with just enough supporting detail.</p><dl class="token-list"><div><dt>Owner</dt><dd>Design team</dd></div><div><dt>Status</dt><dd>In progress</dd></div><div><dt>Updated</dt><dd>Today</dd></div></dl><label class="control-row"><span>Follow updates</span><input class="qm-switch" type="checkbox" role="switch" checked></label><div class="dialog-actions"><button type="button" class="qm-button qm-button--tonal" data-qm-dialog-close>Done</button></div></dialog>
