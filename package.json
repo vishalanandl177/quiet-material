@@ -30,6 +30,10 @@
     "src",
     "tokens",
     "README.md",
+    "docs",
+    "CHANGELOG.md",
+    "START-HERE.md",
+    "CONTRIBUTING.md",
     "exports",
     "platforms"
   ],

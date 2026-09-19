@@ -1,6 +1,5 @@
 import 'package:animations/animations.dart' as material_motion;
 import 'package:flutter/material.dart';
-import 'package:flutter/physics.dart';
 import 'quiet_tokens.dart';
 
 /// Canonical MD3 curves for custom animations; native controls retain their specs.
