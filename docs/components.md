@@ -140,7 +140,7 @@ Keep panels inside their data-qm-tabs wrapper and IDs unique across the page. Th
 </dialog>
 ```
 
-A dialog is a #181818 surface at the 32px dialog radius with a decorative #242424 edge and the level-3 shadow, over a #000000cc scrim; a modal sheet keeps the same surface and rounds only the edge that leaves the viewport, and a full-screen dialog drops back to the #000000 canvas. Shadows here are earned: the surface genuinely floats above the page.
+A dialog is a #181818 surface at the 32px dialog radius with a decorative #242424 edge and the level-3 shadow, over a #000000cc scrim; a modal sheet keeps the same surface and rounds only the corners that stay inside the viewport, and a full-screen dialog drops back to the #000000 canvas. Shadows here are earned: the surface genuinely floats above the page.
 
 Add `qm-dialog--sheet` for a modal bottom sheet, `qm-dialog--side-sheet` for a modal side sheet or `qm-dialog--fullscreen` for a full-screen dialog. Standard sheets use `.qm-sheet` in the page layout. Escape and native modal focus behavior come from dialog; the enhancement restores focus to the invoker on close. Only one modal is opened at a time. Confirmation here returns a dialog result; it does not save data. The product listens for close and performs its intended action. Avoid nested modals. Provide a visible close or cancel action and follow the [WAI dialog pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/) for initial-focus decisions.
 
