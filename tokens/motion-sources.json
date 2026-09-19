@@ -1,0 +1,119 @@
+{
+  "reviewed": "2026-09-19",
+  "scope": "MD3 curve and spring foundations, current MD3 themed transition bindings, and Material Web ripple component timings. Quiet Material is a custom implementation, not an official Google product or certification.",
+  "sources": [
+    {
+      "id": "md3-motion",
+      "url": "https://m3.material.io/styles/motion/overview",
+      "use": "Design intent and motion patterns"
+    },
+    {
+      "id": "mdc-motion",
+      "url": "https://github.com/material-components/material-components-android/blob/60ff09436d5d477a4b9d02940f31eb01e1250620/docs/theming/Motion.md",
+      "blobSha": "e8bac5046758b88347954294762a0469e36fb295",
+      "use": "16 duration slots, seven baseline curves including exact emphasized path, standard spring roles. Transition tables contain legacy fallback examples; current component code below controls transition bindings."
+    },
+    {
+      "id": "standard-springs",
+      "url": "https://github.com/androidx/androidx/blob/25e614eda28dc7d3d8fef064399fa7ef0e51ad00/compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/tokens/StandardMotionTokens.kt",
+      "blobSha": "29f2e0c7229b116e53bb97823fbef86486f3954e",
+      "sourceVersion": "v0_14_0",
+      "use": "Six standard spring damping/stiffness pairs"
+    },
+    {
+      "id": "expressive-springs",
+      "url": "https://github.com/androidx/androidx/blob/25e614eda28dc7d3d8fef064399fa7ef0e51ad00/compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/tokens/ExpressiveMotionTokens.kt",
+      "blobSha": "0b1321847815a61676fa8b1435d801b08f5a6e99",
+      "sourceVersion": "v0_14_0",
+      "use": "Six expressive spring damping/stiffness pairs"
+    },
+    {
+      "id": "motion-scheme",
+      "url": "https://developer.android.com/reference/kotlin/androidx/compose/material3/MotionScheme",
+      "use": "Standard and expressive schemes; spatial and effects roles"
+    },
+    {
+      "id": "container",
+      "url": "https://github.com/material-components/material-components-android/blob/60ff09436d5d477a4b9d02940f31eb01e1250620/lib/java/com/google/android/material/transition/MaterialContainerTransform.java",
+      "use": "MD3 theme duration bindings: long2 enter, medium4 return; emphasized easing"
+    },
+    {
+      "id": "shared-axis",
+      "url": "https://github.com/material-components/material-components-android/blob/60ff09436d5d477a4b9d02940f31eb01e1250620/lib/java/com/google/android/material/transition/MaterialSharedAxis.java",
+      "use": "MD3 theme duration long1 and emphasized easing"
+    },
+    {
+      "id": "fade-through",
+      "url": "https://github.com/material-components/material-components-android/blob/60ff09436d5d477a4b9d02940f31eb01e1250620/lib/java/com/google/android/material/transition/MaterialFadeThrough.java",
+      "use": "MD3 theme duration long1 and emphasized easing; incoming .92 scale"
+    },
+    {
+      "id": "fade",
+      "url": "https://github.com/material-components/material-components-android/blob/60ff09436d5d477a4b9d02940f31eb01e1250620/lib/java/com/google/android/material/transition/MaterialFade.java",
+      "use": "MD3 theme duration medium4 incoming and short3 outgoing; emphasized decelerate/accelerate"
+    },
+    {
+      "id": "web-ripple",
+      "url": "https://github.com/material-components/material-web/blob/56a486b147b8b7e95e6e8035fa02aed7e0009a85/ripple/internal/ripple.ts",
+      "blobSha": "ab83b61e074406c2ab31fe273eb5ad30452ff560",
+      "use": "Growth450ms; minimum press225ms; touch delay150ms; standard curve"
+    },
+    {
+      "id": "web-ripple-opacity",
+      "url": "https://github.com/material-components/material-web/blob/56a486b147b8b7e95e6e8035fa02aed7e0009a85/ripple/internal/_ripple.scss",
+      "use": "Fade-in105ms; fade-out375ms; hover15ms; linear opacity easing"
+    }
+  ],
+  "bindings": {
+    "officialMD3": {
+      "container": [
+        500,
+        "emphasized"
+      ],
+      "containerReturn": [
+        400,
+        "emphasized"
+      ],
+      "sharedAxis": [
+        450,
+        "emphasized"
+      ],
+      "fadeThrough": [
+        450,
+        "emphasized"
+      ],
+      "fadeEnter": [
+        400,
+        "emphasizedDecelerate"
+      ],
+      "fadeExit": [
+        150,
+        "emphasizedAccelerate"
+      ]
+    },
+    "quietSelections": {
+      "state": [
+        150,
+        "standard"
+      ],
+      "control": [
+        300,
+        "standard"
+      ],
+      "enter": [
+        500,
+        "emphasizedDecelerate"
+      ],
+      "exit": [
+        200,
+        "emphasizedAccelerate"
+      ]
+    },
+    "note": "Quiet selections are reusable project recipes, not a claim that every MD3 component shares these timings. Components using spring schemes use the matching physical role."
+  },
+  "webApproximation": {
+    "emphasized": "Normalized exact two-segment path data is portable. CSS linear() uses1025 uniformly spaced samples plus the exact join. CSS browsers without linear() use standard cubic as an explicitly approximate fallback.",
+    "springs": "Unit mass and zero initial velocity. Derived finite durations use conservative underdamped displacement/speed envelopes <=.001, or the critical response after its speed maximum. Equal-time samples at >=60Hz end at exactly1. These durations are not additional MD3 duration slots; native settling and velocity interruption may differ.",
+    "reducedMotion": "All generated duration variables, including derived spring duration variables, become0ms for OS or local reduced motion. Consumers must also stop ongoing animations and avoid autoplay."
+  }
+}

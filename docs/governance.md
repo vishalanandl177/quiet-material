@@ -1,10 +1,12 @@
 # Scope and governance
 
-## v1.1 scope
+## v1.2 scope
 
 Quiet Material is an independent mobile-first design system inspired by Material's emphasis on purposeful hierarchy and interaction. It is not an official Google library, a complete implementation of Material components, or a replacement for native Android or iOS SDKs.
 
 The repository owns semantic design tokens, generated CSS and native values, framework-independent component styles, a small progressive JavaScript layer, a component workbench and written usage contracts. The approved aesthetic is black pages, charcoal containers, generous rounded shapes, large white typography, restrained blue/mint accents and interaction-driven motion.
+
+Motion foundations now include MD3’s full curve/duration vocabulary, standard and expressive spring parameters, and the four web transition families. Pinned source versions and implementation/validation boundaries are recorded in [the MD3 audit](md3-motion-audit.md). Native system-owned transitions and unimplemented SDK variants are not represented as identical cross-platform motion.
 
 The source package is private and unpublished. No public license grant is supplied. Distribution, package publication and licensing require the repository owner's separate decision. The approved concept image is a visual reference; do not assume it is a source of reusable third-party icons, fonts or brand assets.
 

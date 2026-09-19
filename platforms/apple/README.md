@@ -42,6 +42,7 @@ Use `QuietTextField("Name", text: $name)` and `QuietToggle("Notifications", isOn
 | System part | Implementation |
 | --- | --- |
 | Shared colors, spacing, radii, motion, breakpoints | Generated `QuietTokens.swift` |
+| MD3 curves and springs | `QuietMotionCurve`, `QuietMotion`, `QuietMotionProgress`; all seven curves and both spring schemes |
 | App / sheet surface | `QuietTheme`; background alone ignores safe areas |
 | Button | Native `Button` + `QuietButtonStyle` |
 | Card | `QuietCard` content surface |
@@ -56,7 +57,35 @@ This is an adapter and runnable starter screen, not an implementation of every w
 
 The sample measures the **available window**, including iPad split view and macOS resizing. It starts with one column, switches to two at 840 points, and returns to one for accessibility Dynamic Type categories. There are no device-name checks or fixed content heights. Text wraps and the whole page scrolls; controls use minimum 48-point height. A card's container is not made into an extra accessibility element, preserving its children.
 
-Apple's semantic fonts follow user text preferences. Custom button scaling is disabled when `accessibilityReduceMotion` is true; native navigation and sheet motion remain managed by SwiftUI. No ambient or repeating animation runs. Do not clamp Dynamic Type or replace system back gestures. Keep custom icons labeled, localize strings, and use leading/trailing alignment for RTL.
+Apple's semantic fonts follow user text preferences. Button presses use a 10% state layer with MD3 standard easing; arbitrary 0.98 press scaling has been removed. Custom motion is disabled when `accessibilityReduceMotion` is true; native navigation and sheet motion remain managed by SwiftUI. No ambient or repeating animation runs. Do not clamp Dynamic Type or replace system back gestures. Keep custom icons labeled, localize strings, and use leading/trailing alignment for RTL.
+
+## MD3 motion integration
+
+`QuietMotion.animation(.standard, milliseconds: QuietTokens.durationShort3, reduceMotion: reduceMotion)` returns a native cubic timing animation. The six single-cubic curves are available through `QuietCubicCurve`. MD3's seventh curve, emphasized, consists of two joined cubics and is exposed without a single-cubic approximation through `QuietMotionCurve.emphasized.transform(_:)` and `QuietMotionProgress`:
+
+```swift
+// expanded is app-owned @State. Use 0 and 1 as the progress endpoints.
+QuietMotionProgress(
+    progress: expanded ? 1 : 0,
+    milliseconds: expanded ? QuietTokens.motionContainerDuration
+                           : QuietTokens.motionContainerReturnDuration
+) { progress in
+    RoundedRectangle(cornerRadius: 32 - 16 * progress)
+        .fill(QuietTokens.colorSurface)
+        .frame(width: 96 + 160 * progress, height: 96 + 64 * progress)
+}
+```
+
+This example animates a surface's geometry. It does not implement navigation, shared-element matching or a full container transform. `QuietMotionProgress` observes Reduce Motion. It uses native linear interpolation as a clock, then evaluates the chosen MD3 curve; the return direction evaluates the reverse journey with the same forward-time curve. Use `QuietMotion.spring(speed: .default, effects: false, scheme: .standard, reduceMotion: reduceMotion)` for interruptible custom spatial animation. Effects springs use critically damped tokens. SwiftUI's damping coefficient is calculated from MD3's damping ratio at unit mass.
+
+| Pattern | Host integration contract |
+| --- | --- |
+| Container transform | One matched surface, size/position/shape and content fade; 500 ms outward / 400 ms return, emphasized. Use the progress helper and app-owned shared identity. |
+| Shared axis X/Y/Z | 450 ms emphasized, 30-point X/Y travel or 0.8/1.1 Z scale; fade out through 35% then fade in. Mirror X travel in RTL. |
+| Fade through | 450 ms emphasized; outgoing content fades through 35%, incoming fades afterward with 0.92→1 scale. |
+| Fade | 400 ms emphasized decelerate enter, 150 ms emphasized accelerate exit; enter scale 0.8→1, no exit scale. |
+
+These are custom-presentation contracts, not automatic replacements for SwiftUI's navigation, sheets, menus or toggles. **The starter's native transitions are Apple platform motion, not certified MD3 motion.** Apps requiring identical MD3 navigation must implement and test custom presentations with the helpers, or use the web/Flutter implementation. Preserve dismissal gestures, focus, accessibility and route state when doing so. See the [shared motion guide](../../docs/motion.md) and [official Material motion definitions](https://github.com/material-components/material-components-android/blob/master/docs/theming/Motion.md).
 
 Before releasing a consuming app, build for both iOS and macOS, test a narrow iPhone and iPad split view, largest accessibility text, VoiceOver order, keyboard focus, sheet dismissal, reduced motion, and landscape with the software keyboard open. Run `swift build --package-path platforms/apple` on a Mac for package compilation, then use an iOS simulator/device for iOS verification. **The package has not been compiled or run on an Apple SDK in this repository's Linux authoring environment.**
 

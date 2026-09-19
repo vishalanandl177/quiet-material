@@ -94,3 +94,7 @@ Before shipping a product, review [component contracts](components.md), the [acc
 ## Native applications
 
 For native toolkits, use the [platform starters and coverage matrix](platforms.md). `npm run build` regenerates all six token formats from the same source. [Mobile-first rules](mobile-first.md) apply to available window size, not device names.
+
+## MD3 motion API
+
+Import `transitionView`, `animateMaterial`, `cancelMotion` and `motionReduced` from `src/motion.js` (or the package’s `./motion` export). See [motion contracts](motion.md) and the README example. Keep `exports/quiet-material.motion.js` beside the source tree; it is generated runtime data, not a remote dependency. `closeQuietDialog` from the core module closes semantic state immediately and animates a decorative snapshot; use it for programmatic dismissal where an MD3 fade is appropriate.

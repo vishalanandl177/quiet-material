@@ -10,12 +10,14 @@ Illustrative concept, not an implementation screenshot. [Phone concept](assets/p
 
 ## What is included
 
-- 94 canonical design tokens with deterministic CSS, JSON, TypeScript, Kotlin, Swift, and Dart exports.
+- 169 canonical design tokens with deterministic CSS, JSON, TypeScript, Kotlin, Swift, and Dart exports.
 - Mobile-first 320px baseline, 600/840/1200 window classes, safe-area support, scalable type, and accessible target sizes.
 - Android Compose, Apple SwiftUI, and Flutter starter themes and adaptive examples. Native SDK builds remain pending.
+- All 16 MD3 duration slots, seven easing families, and standard/expressive spring definitions with pinned official source references.
+- Web APIs for container transform, shared axis X/Y/Z, fade through, fade, and spring motion.
 - Framework-independent styles for 27 documented primitives and compositions.
 - Optional progressive JavaScript for tabs, dialog triggers, selectable chips, ripple feedback, tooltip dismissal and snackbars.
-- A responsive component workbench with platform guides, two additional device concepts, and three small, opt-in motion GIFs.
+- A responsive component workbench with platform guides, two additional device concepts, and seven small, opt-in motion GIFs.
 - Foundations, accessibility rules, component contracts, motion recipes, patterns and design-tool handoff guidance.
 - A dependency-free token build and development-only jsdom tests for DOM behavior.
 
@@ -37,9 +39,15 @@ The explorer’s Motion page provides Play and Stop controls; it loads static po
 
 | Study | Active transition | Download |
 | --- | --- | --- |
-| Contained ripple | 350 ms | [GIF](assets/motion/ripple.gif) · [Still](assets/motion/ripple.png) |
-| Switch | 250 ms thumb / 150 ms track | [GIF](assets/motion/switch.gif) · [Still](assets/motion/switch.png) |
-| Bottom sheet | 350 ms | [GIF](assets/motion/sheet.gif) · [Still](assets/motion/sheet.png) |
+| Contained ripple | 450 ms growth, 225 ms minimum press, 375 ms release fade | [GIF](assets/motion/ripple.gif) · [Still](assets/motion/ripple.png) |
+| Switch | Standard fast spatial/effects springs | [GIF](assets/motion/switch.gif) · [Still](assets/motion/switch.png) |
+| Bottom sheet | Standard default spatial/effects springs | [GIF](assets/motion/sheet.gif) · [Still](assets/motion/sheet.png) |
+| Container transform | 500 ms enter / 400 ms return, emphasized | [GIF](assets/motion/container-transform.gif) |
+| Shared axis | 450 ms, emphasized; X/Y/Z in the live explorer | [GIF](assets/motion/shared-axis.gif) |
+| Fade through | 450 ms, emphasized | [GIF](assets/motion/fade-through.gif) |
+| Fade | 400 ms enter / 150 ms exit | [GIF](assets/motion/fade.gif) |
+
+See [motion contracts](docs/motion.md) and the [MD3 source audit](docs/md3-motion-audit.md). The shared foundations and web default patterns follow verified MD3 source. Native starter coverage is explicit: SwiftUI system navigation remains Apple motion, and native adapters do not supply every Material SDK transition variant. Browser/native rendering and device conformance still require validation.
 
 ## Start the workbench
 
@@ -96,7 +104,32 @@ import '@quiet-material/core/styles.css';
 import { initQuietMaterial, showSnackbar } from '@quiet-material/core';
 ```
 
-This package is private and unpublished; the example is not an instruction to install it from the public npm registry. CSS import support depends on your build tool. The package also exposes ./tokens.css and ./tokens.json. Product actions, routing, persistence and data loading remain your application's responsibility.
+This package is private and unpublished; the example is not an instruction to install it from the public npm registry. CSS import support depends on your build tool. The package also exposes ./tokens.css, ./tokens.json, ./motion, and ./motion.json. Product actions, routing, persistence and data loading remain your application's responsibility.
+
+## Use a Material transition
+
+```js
+import { transitionView, animateMaterial } from './src/motion.js';
+
+transitionView({
+  from: summary,
+  to: details,
+  pattern: 'container-transform',
+  update() {
+    summary.hidden = true;
+    details.hidden = false;
+    // Commit app state and focus here, synchronously.
+  },
+});
+
+// Springs decorate an already-committed state. Cancellation keeps that state.
+indicator.style.translate = '80px';
+animateMaterial(indicator, [{translate: '0px'}, {translate: '80px'}], {
+  scheme: 'standard', speed: 'fast', role: 'spatial',
+});
+```
+
+The web helper handles ordinary DOM views. It does not capture live video, canvas content, iframes or shadow DOM. The default container morph uses width fitting and a straight path; specialized SDK variants require a consuming adapter. Reduced motion and unavailable animation support apply the final state immediately.
 
 ## Documentation
 
@@ -105,7 +138,7 @@ This package is private and unpublished; the example is not an instruction to in
 | [Getting started](docs/getting-started.md) | Commands, imports and integration lifecycle |
 | [Platforms](docs/platforms.md) | Android, Apple, Flutter, desktop coverage and native component mappings |
 | [Mobile first](docs/mobile-first.md) | Window classes, safe areas, text scaling, touch, keyboard and RTL |
-| [Motion gallery](docs/motion-gallery.md) | Three small GIFs, static posters, timings and reproducible generator |
+| [Motion gallery](docs/motion-gallery.md) | Seven small GIFs, static posters, timings and reproducible generator |
 | [Foundations](docs/foundations.md) | Principles, exact colors, type, spacing, shape and token architecture |
 | [Components](docs/components.md) | Catalog, states, markup, keyboard contracts and JavaScript lifecycle |
 | [Motion](docs/motion.md) | Custom durations/easings, recipes and reduced motion |

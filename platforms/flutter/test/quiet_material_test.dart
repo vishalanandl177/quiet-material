@@ -3,6 +3,27 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:quiet_material/quiet_material.dart';
 
 void main() {
+  test('MD3 emphasized uses the canonical joined path and all curves are bounded', () {
+    expect(QuietCurves.emphasized.transform(QuietTokens.easingEmphasizedJoinX),
+        closeTo(QuietTokens.easingEmphasizedJoinY, 0.00001));
+    for (final curve in [QuietCurves.standard, QuietCurves.standardAccelerate,
+      QuietCurves.standardDecelerate, QuietCurves.emphasized,
+      QuietCurves.emphasizedAccelerate, QuietCurves.emphasizedDecelerate, QuietCurves.linear]) {
+      expect(curve.transform(0), 0);
+      expect(curve.transform(1), 1);
+      var previous = 0.0;
+      for (var i = 1; i <= 100; i++) {
+        final value = curve.transform(i / 100);
+        expect(value, inInclusiveRange(previous - 0.00001, 1.0));
+        previous = value;
+      }
+    }
+    final effects = quietSpring(effects: true);
+    expect(effects.stiffness, 1600);
+    expect(effects.damping, closeTo(80, 0.00001));
+    expect(quietSpring(speed: QuietMotionSpeed.fast).stiffness, 1400);
+  });
+
   test('window classes change at shared boundaries', () {
     expect(quietWindowClass(320), QuietWindowClass.compact);
     expect(quietWindowClass(599), QuietWindowClass.compact);

@@ -1,48 +1,307 @@
 {
-  "description": "Authored motion studies, not screen recordings.",
-  "samplingMs": 50,
+  "description": "Authored MD3 motion studies, not screen recordings or certified native component clones.",
+  "source": "exports/quiet-material.motion.json",
+  "samplingMs": 20,
+  "samplingMaximumMs": 30,
+  "gifTimeQuantumMs": 10,
   "studies": {
     "ripple": {
       "gif": "assets/motion/ripple.gif",
       "poster": "assets/motion/ripple.png",
       "width": 640,
       "height": 400,
-      "frames": 7,
-      "transitionMs": 350,
+      "frames": 35,
+      "transitionMs": 825,
+      "encodedTransitionMs": 830,
+      "timeQuantizationMs": 5,
       "readingHoldBeforeMs": 700,
       "readingHoldAfterMs": 1050,
-      "totalMs": 2100,
+      "totalMs": 2580,
       "loops": false,
-      "gifBytes": 21366,
-      "posterBytes": 26914
+      "gifBytes": 52104,
+      "posterBytes": 29472,
+      "contract": {
+        "ripple": {
+          "growDuration": 450,
+          "minimumPressDuration": 225,
+          "touchDelay": 150,
+          "fadeInDuration": 105,
+          "fadeDuration": 375,
+          "hoverDuration": 15,
+          "easing": [
+            0.2,
+            0,
+            0,
+            1
+          ]
+        }
+      },
+      "phases": {
+        "heldPressMs": 450,
+        "releaseFadeMs": 375
+      }
     },
     "switch": {
       "gif": "assets/motion/switch.gif",
       "poster": "assets/motion/switch.png",
       "width": 640,
       "height": 400,
-      "frames": 6,
-      "transitionMs": 250,
+      "frames": 9,
+      "transitionMs": 338,
+      "encodedTransitionMs": 340,
+      "timeQuantizationMs": 2,
       "readingHoldBeforeMs": 700,
       "readingHoldAfterMs": 1050,
-      "totalMs": 2000,
+      "totalMs": 2090,
       "loops": false,
-      "gifBytes": 19181,
-      "posterBytes": 32961
+      "gifBytes": 23285,
+      "posterBytes": 34305,
+      "contract": {
+        "standardFastSpatial": {
+          "damping": 0.9,
+          "stiffness": 1400,
+          "duration": 338,
+          "cssEasing": "linear(0, 0.12673051, 0.357279634, 0.573394, 0.738178408, 0.850185482, 0.920268647, 0.961109267, 0.983281483, 0.994374091, 0.999335138, 1.001156035, 1.001523471, 1.001320325, 1.000967847, 1.000640616, 1.000392252, 1.000223943, 1.000118885, 1.0000578, 1.000024716, 1)",
+          "samples": [
+            0,
+            0.12673051,
+            0.357279634,
+            0.573394,
+            0.738178408,
+            0.850185482,
+            0.920268647,
+            0.961109267,
+            0.983281483,
+            0.994374091,
+            0.999335138,
+            1.001156035,
+            1.001523471,
+            1.001320325,
+            1.000967847,
+            1.000640616,
+            1.000392252,
+            1.000223943,
+            1.000118885,
+            1.0000578,
+            1.000024716,
+            1
+          ]
+        },
+        "standardFastEffects": {
+          "damping": 1,
+          "stiffness": 3800,
+          "duration": 223,
+          "cssEasing": "linear(0, 0.257584002, 0.584108913, 0.792594722, 0.902972204, 0.95641105, 0.980958635, 0.991850849, 0.996566644, 0.998571262, 0.999411377, 0.999759492, 0.99990241, 0.999960635, 1)",
+          "samples": [
+            0,
+            0.257584002,
+            0.584108913,
+            0.792594722,
+            0.902972204,
+            0.95641105,
+            0.980958635,
+            0.991850849,
+            0.996566644,
+            0.998571262,
+            0.999411377,
+            0.999759492,
+            0.99990241,
+            0.999960635,
+            1
+          ]
+        }
+      }
     },
     "sheet": {
       "gif": "assets/motion/sheet.gif",
       "poster": "assets/motion/sheet.png",
       "width": 640,
       "height": 400,
-      "frames": 8,
-      "transitionMs": 350,
+      "frames": 12,
+      "transitionMs": 463,
+      "encodedTransitionMs": 470,
+      "timeQuantizationMs": 7,
       "readingHoldBeforeMs": 700,
       "readingHoldAfterMs": 1050,
-      "totalMs": 2100,
+      "totalMs": 2220,
       "loops": false,
-      "gifBytes": 37704,
-      "posterBytes": 37459
+      "gifBytes": 50521,
+      "posterBytes": 37505,
+      "contract": {
+        "standardDefaultSpatial": {
+          "damping": 0.9,
+          "stiffness": 700,
+          "duration": 463,
+          "cssEasing": "linear(0, 0.073717248, 0.228034419, 0.398902188, 0.555021007, 0.684073121, 0.783983323, 0.857607198, 0.909671441, 0.945137764, 0.968427858, 0.983141174, 0.992033726, 0.997118424, 0.999807614, 1.001056243, 1.001486629, 1.001488609, 1.001295412, 1.001038603, 1.000786336, 1.000569029, 1.000395962, 1.00026559, 1.000171643, 1.000106518, 1.000062998, 1.000034983, 1)",
+          "samples": [
+            0,
+            0.073717248,
+            0.228034419,
+            0.398902188,
+            0.555021007,
+            0.684073121,
+            0.783983323,
+            0.857607198,
+            0.909671441,
+            0.945137764,
+            0.968427858,
+            0.983141174,
+            0.992033726,
+            0.997118424,
+            0.999807614,
+            1.001056243,
+            1.001486629,
+            1.001488609,
+            1.001295412,
+            1.001038603,
+            1.000786336,
+            1.000569029,
+            1.000395962,
+            1.00026559,
+            1.000171643,
+            1.000106518,
+            1.000062998,
+            1.000034983,
+            1
+          ]
+        },
+        "standardDefaultEffects": {
+          "damping": 1,
+          "stiffness": 1600,
+          "duration": 331,
+          "cssEasing": "linear(0, 0.142709379, 0.381655888, 0.5901915, 0.741748388, 0.842615291, 0.90634878, 0.945261081, 0.968446965, 0.982013035, 0.989839256, 0.994303569, 0.996826807, 0.998242059, 0.99903073, 0.999467799, 0.999708854, 0.999841245, 0.999913687, 0.999953196, 1)",
+          "samples": [
+            0,
+            0.142709379,
+            0.381655888,
+            0.5901915,
+            0.741748388,
+            0.842615291,
+            0.90634878,
+            0.945261081,
+            0.968446965,
+            0.982013035,
+            0.989839256,
+            0.994303569,
+            0.996826807,
+            0.998242059,
+            0.99903073,
+            0.999467799,
+            0.999708854,
+            0.999841245,
+            0.999913687,
+            0.999953196,
+            1
+          ]
+        }
+      }
+    },
+    "container-transform": {
+      "gif": "assets/motion/container-transform.gif",
+      "poster": "assets/motion/container-transform.png",
+      "width": 640,
+      "height": 400,
+      "frames": 24,
+      "transitionMs": 500,
+      "encodedTransitionMs": 500,
+      "timeQuantizationMs": 0,
+      "readingHoldBeforeMs": 700,
+      "readingHoldAfterMs": 1050,
+      "totalMs": 2250,
+      "loops": false,
+      "gifBytes": 135699,
+      "posterBytes": 34671,
+      "contract": {
+        "container": {
+          "duration": 500,
+          "easing": "emphasized"
+        }
+      }
+    },
+    "shared-axis": {
+      "gif": "assets/motion/shared-axis.gif",
+      "poster": "assets/motion/shared-axis.png",
+      "width": 640,
+      "height": 400,
+      "frames": 21,
+      "transitionMs": 450,
+      "encodedTransitionMs": 450,
+      "timeQuantizationMs": 0,
+      "readingHoldBeforeMs": 700,
+      "readingHoldAfterMs": 1050,
+      "totalMs": 2200,
+      "loops": false,
+      "gifBytes": 93480,
+      "posterBytes": 30975,
+      "contract": {
+        "sharedAxis": {
+          "duration": 450,
+          "easing": "emphasized"
+        }
+      }
+    },
+    "fade-through": {
+      "gif": "assets/motion/fade-through.gif",
+      "poster": "assets/motion/fade-through.png",
+      "width": 640,
+      "height": 400,
+      "frames": 21,
+      "transitionMs": 450,
+      "encodedTransitionMs": 450,
+      "timeQuantizationMs": 0,
+      "readingHoldBeforeMs": 700,
+      "readingHoldAfterMs": 1050,
+      "totalMs": 2200,
+      "loops": false,
+      "gifBytes": 92259,
+      "posterBytes": 29305,
+      "contract": {
+        "fadeThrough": {
+          "duration": 450,
+          "easing": "emphasized"
+        }
+      }
+    },
+    "fade": {
+      "gif": "assets/motion/fade.gif",
+      "poster": "assets/motion/fade.png",
+      "width": 640,
+      "height": 400,
+      "frames": 26,
+      "transitionMs": 800,
+      "encodedTransitionMs": 800,
+      "timeQuantizationMs": 0,
+      "readingHoldBeforeMs": 700,
+      "readingHoldAfterMs": 1050,
+      "totalMs": 2550,
+      "loops": false,
+      "gifBytes": 97790,
+      "posterBytes": 28325,
+      "contract": {
+        "fadeEnter": {
+          "duration": 400,
+          "easing": [
+            0.05,
+            0.7,
+            0.1,
+            1
+          ]
+        },
+        "fadeExit": {
+          "duration": 150,
+          "easing": [
+            0.3,
+            0,
+            0.8,
+            0.15
+          ]
+        }
+      },
+      "phases": {
+        "enterMs": 400,
+        "readingHoldBetweenMs": 250,
+        "exitMs": 150
+      }
     }
   }
 }

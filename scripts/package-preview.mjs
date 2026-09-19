@@ -5,10 +5,13 @@ const tokens = await read('styles/tokens.css');
 const styles = (await read('styles/quiet-material.css')).replace(/@import[^;]+;/g,'');
 html=html.replace('<link rel="stylesheet" href="styles/quiet-material.css">','<style>'+tokens+'\n'+styles+'</style>');
 html=html.replace('<link rel="stylesheet" href="demo.css">','<style>'+await read('demo.css')+'</style>');
-let module = await read('src/quiet-material.js');
+const withoutImports = source => source.replace(/^import .*?;\s*/gm,'');
+const contract = await read('exports/quiet-material.motion.js');
+const engine = withoutImports(await read('src/motion.js'));
+let module = withoutImports(await read('src/quiet-material.js'));
 let demo = (await read('demo.js')).replace(/^import .*?;\s*/gm,'');
 const motion = await read('demo-motion.js');
-html=html.replace('<script type="module" src="demo.js"></script>','<script type="module">\n'+module+'\n'+motion+'\n'+demo+'\n</script>');
+html=html.replace('<script type="module" src="demo.js"></script>','<script type="module">\n'+contract+'\n'+engine+'\n'+module+'\n'+motion+'\n'+demo+'\n</script>');
 // Include posters, opt-in GIF sources and concepts, so the visual explorer travels together.
 const assets = [...new Set([...html.matchAll(/(?:src|data-poster|data-animation)="(assets\/[^\"]+)"/g)].map(match=>match[1]))];
 for (const path of assets) {

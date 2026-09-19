@@ -60,9 +60,7 @@ ThemeData quietMaterialTheme({bool reduceMotion = false}) {
     minimumSize: const Size(48, 48),
     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
     shape: const StadiumBorder(),
-    animationDuration: Duration(
-      milliseconds: reduceMotion ? 0 : QuietTokens.durationShort,
-    ),
+    animationDuration: reduceMotion ? Duration.zero : null,
     backgroundColor: QuietTokens.colorAction,
     foregroundColor: QuietTokens.colorOnAction,
   );
@@ -72,7 +70,7 @@ ThemeData quietMaterialTheme({bool reduceMotion = false}) {
     applyElevationOverlayColor: false,
     visualDensity: VisualDensity.standard,
     materialTapTargetSize: MaterialTapTargetSize.padded,
-    splashFactory: reduceMotion ? NoSplash.splashFactory : InkRipple.splashFactory,
+    splashFactory: reduceMotion ? NoSplash.splashFactory : base.splashFactory,
     textTheme: base.textTheme.copyWith(
       displaySmall: const TextStyle(fontSize: QuietTokens.typeHeadline, height: QuietTokens.lineHeightHeading, fontWeight: FontWeight.w500),
       headlineMedium: const TextStyle(fontSize: QuietTokens.typeTitle, height: QuietTokens.lineHeightHeading, fontWeight: FontWeight.w500),
@@ -96,11 +94,11 @@ ThemeData quietMaterialTheme({bool reduceMotion = false}) {
       side: const BorderSide(color: QuietTokens.colorOutline),
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
       shape: const StadiumBorder(),
-      animationDuration: Duration(milliseconds: reduceMotion ? 0 : QuietTokens.durationShort),
+      animationDuration: reduceMotion ? Duration.zero : null,
     )),
     textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(
       minimumSize: const Size(48, 48),
-      animationDuration: Duration(milliseconds: reduceMotion ? 0 : QuietTokens.durationShort),
+      animationDuration: reduceMotion ? Duration.zero : null,
     )),
     iconButtonTheme: IconButtonThemeData(style: IconButton.styleFrom(
       minimumSize: const Size(48, 48),
@@ -177,21 +175,4 @@ class QuietRoot extends StatelessWidget {
       child: ColoredBox(color: QuietTokens.colorBackground, child: child),
     );
   }
-}
-
-Duration quietDuration(BuildContext context, {int milliseconds = QuietTokens.durationMedium}) =>
-    MediaQuery.disableAnimationsOf(context) ? Duration.zero : Duration(milliseconds: milliseconds);
-
-/// A small state-change fade. No repeating or ambient animation.
-class QuietStateChange extends StatelessWidget {
-  const QuietStateChange({super.key, required this.child});
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) => AnimatedSwitcher(
-    duration: quietDuration(context),
-    switchInCurve: const Cubic(0.2, 0, 0, 1),
-    switchOutCurve: const Cubic(0.2, 0, 0, 1),
-    child: child,
-  );
 }

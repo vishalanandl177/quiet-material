@@ -94,3 +94,59 @@ export function portableValue(token) {
     default: throw new Error(`Unsupported token type: ${token.$type}`);
   }
 }
+
+/** Evaluate a normalized cubic timing curve by solving its time coordinate. */
+export function cubicProgress(points, progress) {
+  if (progress <= 0) return 0;
+  if (progress >= 1) return 1;
+  const [x1, y1, x2, y2] = points;
+  const component = (t, a, b) => 3 * (1 - t) ** 2 * t * a + 3 * (1 - t) * t ** 2 * b + t ** 3;
+  let low = 0, high = 1;
+  for (let i = 0; i < 40; i++) {
+    const mid = (low + high) / 2;
+    if (component(mid, x1, x2) < progress) low = mid;
+    else high = mid;
+  }
+  return component((low + high) / 2, y1, y2);
+}
+
+/** The normalized segments retain the exact two-cubic Material emphasized path. */
+export function emphasizedProgress({ first, second, joinX, joinY }, progress) {
+  return progress <= joinX
+    ? cubicProgress(first, progress / joinX) * joinY
+    : joinY + cubicProgress(second, (progress - joinX) / (1 - joinX)) * (1 - joinY);
+}
+
+/** Unit-mass spring step response, starting at zero position and zero velocity. */
+export function springProgress(damping, stiffness, seconds) {
+  const omega = Math.sqrt(stiffness);
+  if (damping === 1) return 1 - Math.exp(-omega * seconds) * (1 + omega * seconds);
+  const root = Math.sqrt(1 - damping ** 2);
+  const frequency = omega * root;
+  return 1 - Math.exp(-damping * omega * seconds) *
+    (Math.cos(frequency * seconds) + damping / root * Math.sin(frequency * seconds));
+}
+
+/**
+ * Finite web approximation of the physical spring, not an MD3 duration token.
+ * Settle only when both displacement and speed are below .001 and remain there:
+ * analytic envelopes guarantee this for underdamped springs; critical springs
+ * are checked after their speed maximum. Samples are evenly spaced at >=60Hz.
+ */
+export function sampleSpring(damping, stiffness) {
+  if (!(damping > 0 && damping <= 1) || !(stiffness > 0)) throw new Error('Expected a positive MD3 spring with damping ratio at most 1');
+  const omega = Math.sqrt(stiffness), threshold = 0.001;
+  let seconds;
+  if (damping < 1) {
+    seconds = Math.log(Math.max(1, omega) / (threshold * Math.sqrt(1 - damping ** 2))) / (damping * omega);
+  } else {
+    seconds = 1 / omega;
+    while (Math.exp(-omega * seconds) * (1 + omega * seconds) > threshold ||
+      omega ** 2 * seconds * Math.exp(-omega * seconds) > threshold) seconds += 0.001;
+  }
+  const duration = Math.ceil(seconds * 1000);
+  const count = Math.ceil(duration * 60 / 1000);
+  const samples = Array.from({ length: count + 1 }, (_, index) => index === count ? 1 :
+    Number(springProgress(damping, stiffness, duration * index / count / 1000).toFixed(9)));
+  return { damping, stiffness, duration, cssEasing: `linear(${samples.join(', ')})`, samples };
+}

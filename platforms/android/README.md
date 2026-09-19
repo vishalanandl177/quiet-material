@@ -18,6 +18,7 @@ dependencies {
     implementation(platform("androidx.compose:compose-bom:2026.09.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.foundation:foundation")
+    implementation("androidx.compose.animation:animation")
     implementation("androidx.compose.runtime:runtime-saveable")
     implementation("androidx.compose.material3:material3")
 }
@@ -25,7 +26,7 @@ dependencies {
 
 The BOM version above is the stable version documented by Android Developers when this adapter was authored; the Compose compiler is configured separately through the host's Kotlin plugin. This source uses Material 3 surface-container color roles, so do not substitute an old Material 2 dependency. See the official [BOM guide](https://developer.android.com/develop/ui/compose/bom) and [Compose compiler compatibility guidance](https://developer.android.com/jetpack/androidx/releases/compose-kotlin).
 
-Copy all three `.kt` files from `src/main/kotlin/com/quietmaterial/` into your app's `src/main/java/com/quietmaterial/` (or `src/main/kotlin/com/quietmaterial/`). Keep the `com.quietmaterial` package. In the generated activity:
+Copy all `.kt` files from `src/main/kotlin/com/quietmaterial/` into your app's `src/main/java/com/quietmaterial/` (or `src/main/kotlin/com/quietmaterial/`). Keep the `com.quietmaterial` package. In the generated activity:
 
 ```kotlin
 import com.quietmaterial.QuietExample
@@ -56,6 +57,8 @@ Import the usual Compose layout, `Modifier`, Material3 and `dp` symbols for this
 | System part | Implementation |
 | --- | --- |
 | Shared colors, spacing, radii, motion, breakpoints | Generated `QuietTokens.kt`; dimensions are logical `Float` values, append `.dp` |
+| MD3 easing and springs | `QuietEasing` evaluates all seven curves; `QuietMotion.timed` and `springSpec` use generated tokens |
+| Content transitions | `QuietContentChange` supplies fade through and shared axis X/Y/Z, including reverse direction and RTL |
 | Color / typography / shapes | `QuietTheme` wraps native `MaterialTheme`; static dark colors, semantic scalable typography |
 | Root surface | `QuietScaffold`; canvas stays `#000000` |
 | Action / surface / switch / field | `QuietButton`, `QuietCard`, `QuietSwitch`, `QuietTextField` |
@@ -63,6 +66,41 @@ Import the usual Compose layout, `Modifier`, Material3 and `dp` symbols for this
 | Tabs, navigation, sheets, chips, menus, sliders, progress | Use native Material 3 `TabRow`, navigation components, `ModalBottomSheet`, chips, `DropdownMenu`, `Slider`, progress indicators under the theme; no custom wrappers shipped |
 
 Other Material 3 components inherit the color scheme. Pass `containerColor = QuietTokens.colorBackground` to app navigation surfaces that must stay black. The adapter does not turn every native surface black: the canvas is black and content cards remain charcoal. Brand colors remain stable because dynamic wallpaper colors are not selected.
+
+## MD3 motion
+
+Use the **standard** MD3 spring scheme for everyday interactions. Spatial springs animate bounds, shape and position; critically damped effects springs animate color and opacity. `QuietMotion.springSpec(effects = true)` selects effects tokens. `QuietMotion.timed` accepts each of the seven MD3 easings and all 16 duration tokens. `QuietEasing.Emphasized` evaluates the actual two-segment path; it is not substituted with `Standard`.
+
+```kotlin
+// Inside a composable. selection and history belong to the host app.
+QuietContentChange(
+    targetState = selection,
+    pattern = QuietTransitionPattern.SharedAxisX,
+    backwards = movingBack,
+) { destination ->
+    DestinationScreen(destination)
+}
+
+// A product-owned spatial animation:
+val offset by animateFloatAsState(
+    targetValue = targetOffset,
+    animationSpec = QuietMotion.springSpec(),
+    label = "Panel offset",
+)
+```
+
+Import `androidx.compose.animation.core.animateFloatAsState` and your own `DestinationScreen`. Use fade through for unrelated destinations, shared X/Y for sequential peers and shared Z for hierarchical movement. The content helper uses 450 ms with emphasized easing and a 35% fade-through split in eased progress. There is no automatic animation when no content changes.
+
+| Transition | MD3 integration |
+| --- | --- |
+| Container transform | App-owned shared surface, or Material Components Views `MaterialContainerTransform`; 500 ms forward / 400 ms return with emphasized easing. No generic Compose container-transform wrapper is supplied. |
+| Shared axis X/Y/Z | `QuietContentChange` at 450 ms, emphasized; translation 30 dp or scales 0.8/1.1; mirrors horizontal motion in RTL |
+| Fade through | `QuietContentChange` at 450 ms, emphasized; outgoing fade then incoming fade with 0.92→1 scale |
+| Fade | Material component APIs, or a product-owned `AnimatedVisibility` using `motionFadeEnterDuration` (400 ms), `EmphasizedDecelerate`, then `motionFadeExitDuration` (150 ms), `EmphasizedAccelerate`; no exit scale |
+
+The stable Material 3 1.4 library uses its built-in motion scheme. Its public expressive APIs were removed from the stable branch. When the host deliberately adopts a Material 3 release exposing public `MotionScheme`, configure `MaterialTheme(motionScheme = MotionScheme.standard(), …)` and use `MaterialTheme.motionScheme` specs for custom components. This adapter does not require an alpha dependency solely to set a theme parameter. See the [1.4 release notes](https://developer.android.com/jetpack/androidx/releases/compose-material3#1.4.0), current [MotionScheme API](https://developer.android.com/reference/kotlin/androidx/compose/material3/MotionScheme) and [official Material motion guide](https://github.com/material-components/material-components-android/blob/master/docs/theming/Motion.md).
+
+Token availability does not replace app integration: verify shared-element identity, mask/shape interpolation, route back handling, outgoing-content input suppression and focus restoration in the consuming app. Native components retain their own MD3 component-specific recipes rather than forcing every animation to 450 ms. The shared recipe source and coverage are documented in [motion guidance](../../docs/motion.md).
 
 ## Responsive and accessible behavior
 

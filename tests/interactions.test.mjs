@@ -167,7 +167,8 @@ test('snackbar treats HTML-like messages as plain text and dismiss restores focu
   assert.doesNotThrow(dismiss);
 });
 
-test('ripples use one transient node and animation completion removes it', (t) => {
+test('ripples hold while pressed, then release after minimum press time and clean up', (t) => {
+  t.mock.timers.enable({apis:['setTimeout']});
   const { window, document } = fixture(t, '<button class="qm-button">Press</button>');
   const button = document.querySelector('button');
   pointer(window, button);
@@ -176,7 +177,31 @@ test('ripples use one transient node and animation completion removes it', (t) =
   const ripple = button.querySelector('.qm-ripple');
   assert.equal(ripple.getAttribute('aria-hidden'), 'true');
   ripple.dispatchEvent(new window.Event('animationend'));
+  assert.equal(button.querySelector('.qm-ripple'), ripple, 'Growth completion must not remove a held ripple');
+  button.dispatchEvent(new (window.PointerEvent || window.MouseEvent)('pointerup', {bubbles:true,button:0}));
+  assert.equal(ripple.classList.contains('qm-ripple--released'), false);
+  t.mock.timers.tick(226);
+  assert.equal(ripple.classList.contains('qm-ripple--released'), true);
+  const end = new window.Event('transitionend');
+  Object.defineProperty(end, 'propertyName', {value:'opacity'});
+  ripple.dispatchEvent(end);
   assert.equal(button.querySelector('.qm-ripple'), null);
+});
+
+test('touch scrolling cancels delayed feedback and a short tap still receives a ripple', (t) => {
+  t.mock.timers.enable({apis:['setTimeout']});
+  const {window,document} = fixture(t, '<button class="qm-button">Touch</button>');
+  const button=document.querySelector('button');
+  const touch = type => {const event=new window.MouseEvent(type,{bubbles:true,button:0,clientX:10,clientY:10});Object.defineProperties(event,{pointerType:{value:'touch'},pointerId:{value:7}});button.dispatchEvent(event);};
+  touch('pointerdown');
+  assert.equal(button.querySelector('.qm-ripple'),null);
+  touch('pointercancel');t.mock.timers.tick(200);
+  assert.equal(button.querySelector('.qm-ripple'),null);
+  touch('pointerdown');touch('pointerup');
+  assert.ok(button.querySelector('.qm-ripple'));
+  t.mock.timers.tick(226);
+  t.mock.timers.tick(426);
+  assert.equal(button.querySelector('.qm-ripple'),null);
 });
 
 test('system reduced motion suppresses ripple insertion', (t) => {

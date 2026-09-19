@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'quiet_tokens.dart';
-import 'quiet_theme.dart';
+import 'quiet_motion.dart';
 
 enum QuietWindowClass { compact, medium, expanded, wide }
 

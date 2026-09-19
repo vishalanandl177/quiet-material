@@ -25,11 +25,12 @@ code, pre { font-family: var(--qm-font-mono); }
 .qm-muted, .qm-helper { color: var(--qm-color-text-muted); }
 .qm-helper { font-size: var(--qm-type-label); margin-block: 6px 0; }
 
-.qm-button { position: relative; isolation: isolate; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: var(--qm-size-control); max-width: 100%; padding: 12px 24px; border: 0; border-radius: var(--qm-radius-pill); background: var(--qm-color-surface-high); color: var(--qm-color-text); font-size: var(--qm-type-label); font-weight: var(--qm-font-bold); line-height: var(--qm-line-height-control); text-decoration: none; vertical-align: middle; transition: background-color var(--qm-duration-short) var(--qm-easing-standard), transform var(--qm-duration-instant) var(--qm-easing-standard); }
+.qm-button { position: relative; isolation: isolate; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: var(--qm-size-control); max-width: 100%; padding: 12px 24px; border: 0; border-radius: var(--qm-radius-pill); background: var(--qm-color-surface-high); color: var(--qm-color-text); font-size: var(--qm-type-label); font-weight: var(--qm-font-bold); line-height: var(--qm-line-height-control); text-decoration: none; vertical-align: middle; transition: background-color var(--qm-spring-standard-fast-effects-duration) var(--qm-spring-standard-fast-effects-easing); }
 .qm-button { overflow: hidden; }
-.qm-button::before { content: ''; position: absolute; inset: 0; border-radius: inherit; background: currentColor; opacity: 0; pointer-events: none; transition: opacity var(--qm-duration-short) var(--qm-easing-standard); }
+.qm-button::before { content: ''; position: absolute; inset: 0; border-radius: inherit; background: currentColor; opacity: 0; pointer-events: none; transition: opacity var(--qm-motion-ripple-hover-duration) linear; }
 .qm-button:hover::before { opacity: .08; }
-.qm-button:active:not(:disabled):not([aria-disabled='true']) { transform: scale(.98); }
+.qm-button:focus-visible::before { opacity: .12; }
+/* Press feedback uses the state layer and contained ripple; no arbitrary button scaling. */
 .qm-button:active::before { opacity: .12; }
 .qm-button--primary { background: var(--qm-color-action); color: var(--qm-color-on-action); }
 .qm-button--tonal { background: var(--qm-color-primary-container); color: var(--qm-color-on-primary-container); }
@@ -38,15 +39,18 @@ code, pre { font-family: var(--qm-font-mono); }
 .qm-button--icon { width: 48px; min-width: 48px; padding: 12px; }
 .qm-button:disabled, .qm-button[aria-disabled='true'] { color: var(--qm-color-disabled); background: var(--qm-color-surface-low); transform: none; }
 .qm-button:disabled::before, .qm-button[aria-disabled='true']::before { opacity: 0; }
-.qm-ripple { position: absolute; pointer-events: none; border-radius: 50%; background: currentColor; opacity: 0; transform: translate(-50%, -50%) scale(0); animation: qm-ripple var(--qm-duration-long) var(--qm-easing-standard); }
-@keyframes qm-ripple { 0% { transform: translate(-50%, -50%) scale(0); opacity: .16; } 100% { transform: translate(-50%, -50%) scale(1); opacity: 0; } }
+.qm-ripple { position: absolute; pointer-events: none; border-radius: 50%; background: currentColor; opacity: .12; transform: translate(-50%, -50%) scale(0); animation: qm-ripple-grow var(--qm-motion-ripple-grow-duration) var(--qm-easing-standard) both, qm-ripple-appear var(--qm-motion-ripple-fade-in-duration) linear; transition: opacity var(--qm-motion-ripple-fade-duration) linear; }
+.qm-ripple--released { opacity: 0; }
+@keyframes qm-ripple-grow { from { transform: translate(-50%, -50%) scale(0); } to { transform: translate(-50%, -50%) scale(1); } }
+@keyframes qm-ripple-appear { from { opacity: 0; } to { opacity: .12; } }
+
 
 .qm-card { min-width: 0; padding: 24px; border: 0; border-radius: var(--qm-radius-card-compact); background: var(--qm-color-surface); }
 .qm-card--high { background: var(--qm-color-surface-high); }
 .qm-card--low { background: var(--qm-color-surface-low); }
 .qm-field { display: grid; gap: 8px; }
 .qm-field > label, .qm-field > legend { font-size: var(--qm-type-label); font-weight: var(--qm-font-medium); }
-.qm-input, .qm-select, .qm-textarea { width: 100%; min-width: 0; min-height: var(--qm-size-control); padding: 12px 16px; border: 1px solid var(--qm-color-outline); border-radius: var(--qm-radius-control); background: var(--qm-color-surface-low); color: var(--qm-color-text); transition: border-color var(--qm-duration-short) var(--qm-easing-standard); }
+.qm-input, .qm-select, .qm-textarea { width: 100%; min-width: 0; min-height: var(--qm-size-control); padding: 12px 16px; border: 1px solid var(--qm-color-outline); border-radius: var(--qm-radius-control); background: var(--qm-color-surface-low); color: var(--qm-color-text); transition: border-color var(--qm-spring-standard-fast-effects-duration) var(--qm-spring-standard-fast-effects-easing); }
 .qm-input::placeholder, .qm-textarea::placeholder { color: var(--qm-color-text-muted); opacity: 1; }
 .qm-input:hover:not(:disabled), .qm-select:hover:not(:disabled), .qm-textarea:hover:not(:disabled) { border-color: var(--qm-color-text-muted); }
 .qm-textarea { min-height: 128px; resize: vertical; }
@@ -58,8 +62,8 @@ code, pre { font-family: var(--qm-font-mono); }
 
 /* Put each compact native control inside a label with a >=48px target. */
 label:has(> .qm-switch), label:has(> .qm-checkbox), label:has(> .qm-radio) { display: inline-flex; align-items: center; gap: 12px; min-height: 48px; cursor: pointer; }
-.qm-switch { appearance: none; flex-shrink: 0; position: relative; width: 52px; height: 32px; margin: 8px 0; border: 2px solid var(--qm-color-outline); border-radius: var(--qm-radius-pill); background: var(--qm-color-surface); cursor: pointer; transition: background-color var(--qm-duration-short) var(--qm-easing-standard), border-color var(--qm-duration-short) var(--qm-easing-standard); }
-.qm-switch::before { content: ''; position: absolute; top: 5px; inset-inline-start: 5px; width: 18px; height: 18px; border-radius: 50%; background: var(--qm-color-text-muted); transition: transform var(--qm-duration-medium) var(--qm-easing-standard), background-color var(--qm-duration-short) var(--qm-easing-standard); }
+.qm-switch { appearance: none; flex-shrink: 0; position: relative; width: 52px; height: 32px; margin: 8px 0; border: 2px solid var(--qm-color-outline); border-radius: var(--qm-radius-pill); background: var(--qm-color-surface); cursor: pointer; transition: background-color var(--qm-spring-standard-fast-effects-duration) var(--qm-spring-standard-fast-effects-easing), border-color var(--qm-spring-standard-fast-effects-duration) var(--qm-spring-standard-fast-effects-easing); }
+.qm-switch::before { content: ''; position: absolute; top: 5px; inset-inline-start: 5px; width: 18px; height: 18px; border-radius: 50%; background: var(--qm-color-text-muted); transition: transform var(--qm-spring-standard-fast-spatial-duration) var(--qm-spring-standard-fast-spatial-easing), background-color var(--qm-spring-standard-fast-effects-duration) var(--qm-spring-standard-fast-effects-easing); }
 .qm-switch:checked { background: var(--qm-color-primary); border-color: var(--qm-color-primary); }
 .qm-switch:checked::before { transform: translateX(20px); background: var(--qm-color-on-primary); }
 :dir(rtl) .qm-switch:checked::before { transform: translateX(-20px); }
@@ -68,7 +72,7 @@ label:has(> .qm-switch), label:has(> .qm-checkbox), label:has(> .qm-radio) { dis
 .qm-checkbox:disabled, .qm-radio:disabled { cursor: not-allowed; }
 .qm-range { width: 100%; min-height: 48px; margin: 0; accent-color: var(--qm-color-primary); cursor: pointer; }
 .qm-range:disabled { cursor: not-allowed; }
-.qm-chip { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 10px 18px; border: 1px solid var(--qm-color-outline); border-radius: var(--qm-radius-pill); background: transparent; color: var(--qm-color-text-muted); font-size: var(--qm-type-label); transition: background-color var(--qm-duration-short) var(--qm-easing-standard); }
+.qm-chip { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 10px 18px; border: 1px solid var(--qm-color-outline); border-radius: var(--qm-radius-pill); background: transparent; color: var(--qm-color-text-muted); font-size: var(--qm-type-label); transition: background-color var(--qm-spring-standard-fast-effects-duration) var(--qm-spring-standard-fast-effects-easing); }
 .qm-chip:hover { background: var(--qm-color-surface); }
 .qm-chip { position: relative; isolation: isolate; overflow: hidden; }
 .qm-chip[aria-pressed='true'] { background: var(--qm-color-primary-container); color: var(--qm-color-primary); border-color: var(--qm-color-primary); }
@@ -81,23 +85,26 @@ label:has(> .qm-switch), label:has(> .qm-checkbox), label:has(> .qm-radio) { dis
 .qm-avatar { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; background: var(--qm-color-surface-high); color: var(--qm-color-text); object-fit: cover; flex-shrink: 0; }
 
 .qm-tabs { display: flex; flex-wrap: wrap; gap: 4px; width: fit-content; max-width: 100%; padding: 6px; border-radius: var(--qm-radius-pill); background: var(--qm-color-surface-low); }
-.qm-tab { min-height: 48px; max-width: 100%; border: 0; border-radius: var(--qm-radius-pill); padding: 12px 16px; background: transparent; color: var(--qm-color-text-muted); font-size: var(--qm-type-label); transition: background-color var(--qm-duration-medium) var(--qm-easing-standard), color var(--qm-duration-short) var(--qm-easing-standard); }
+.qm-tab { min-height: 48px; max-width: 100%; border: 0; border-radius: var(--qm-radius-pill); padding: 12px 16px; background: transparent; color: var(--qm-color-text-muted); font-size: var(--qm-type-label); transition: background-color var(--qm-spring-standard-fast-effects-duration) var(--qm-spring-standard-fast-effects-easing), color var(--qm-spring-standard-fast-effects-duration) var(--qm-spring-standard-fast-effects-easing); }
 .qm-tab:hover { color: var(--qm-color-text); }
 .qm-tab[aria-selected='true'] { background: var(--qm-color-surface-high); color: var(--qm-color-text); font-weight: var(--qm-font-bold); }
 .qm-tab:disabled { color: var(--qm-color-disabled); }
 .qm-dialog { width: min(560px, calc(100% - 32px)); max-height: calc(100dvh - 48px); padding: 24px; overflow: auto; overscroll-behavior: contain; border: 0; border-radius: var(--qm-radius-dialog); background: var(--qm-color-surface-high); color: var(--qm-color-text); }
-.qm-dialog[open] { animation: qm-enter var(--qm-duration-medium) var(--qm-easing-enter); }
+.qm-dialog[open] { animation: qm-fade-scale var(--qm-motion-fade-enter-duration) var(--qm-easing-emphasized-decelerate), qm-fade-opacity var(--qm-motion-fade-enter-duration) var(--qm-motion-fade-enter-opacity-easing); }
+.qm-dialog[data-qm-motion-enhanced][open] { animation: none; }
 .qm-dialog::backdrop { background: rgb(0 0 0 / .72); }
 .qm-dialog--sheet { position: fixed; inset: auto 0 0; width: min(640px, 100%); max-height: 85dvh; padding-bottom: max(24px,env(safe-area-inset-bottom)); margin: 0 auto; border-radius: 32px 32px 0 0; }
-.qm-dialog--sheet[open] { animation: qm-sheet-enter var(--qm-duration-long) var(--qm-easing-enter); }
-@keyframes qm-enter { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
-@keyframes qm-sheet-enter { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+.qm-dialog--sheet[open] { animation: qm-sheet-enter var(--qm-spring-standard-default-spatial-duration) var(--qm-spring-standard-default-spatial-easing), qm-sheet-opacity var(--qm-spring-standard-default-effects-duration) var(--qm-spring-standard-default-effects-easing); }
+@keyframes qm-fade-scale { from { transform: scale(.8); } to { transform: scale(1); } }
+@keyframes qm-fade-opacity { from { opacity: 0; } to { opacity: 1; } }
+@keyframes qm-sheet-enter { from { transform: translateY(24px); } to { transform: translateY(0); } }
+@keyframes qm-sheet-opacity { from { opacity: 0; } to { opacity: 1; } }
 .qm-menu { min-width: 220px; max-width: calc(100vw - 32px); padding: 8px; border: 0; border-radius: 24px; background: var(--qm-color-surface-high); color: var(--qm-color-text); }
-.qm-menu:popover-open { display: grid; gap: 4px; animation: qm-enter var(--qm-duration-short) var(--qm-easing-enter); }
+.qm-menu:popover-open { display: grid; gap: 4px; animation: qm-fade-scale var(--qm-motion-fade-enter-duration) var(--qm-easing-emphasized-decelerate), qm-fade-opacity var(--qm-motion-fade-enter-duration) var(--qm-motion-fade-enter-opacity-easing); }
 .qm-menu a, .qm-menu button { display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 12px 16px; border: 0; border-radius: 16px; background: transparent; color: inherit; font: inherit; text-align: start; text-decoration: none; }
 .qm-menu a:hover, .qm-menu button:hover { background: var(--qm-color-surface); }
 .qm-tooltip-wrap { position: relative; display: inline-flex; }
-.qm-tooltip { position: absolute; z-index: 5; left: 50%; bottom: calc(100% + 8px); width: max-content; max-width: min(240px, 80vw); padding: 8px 12px; border-radius: 12px; background: var(--qm-color-text); color: var(--qm-color-background); font-size: var(--qm-type-caption); line-height: 1.5; opacity: 0; visibility: hidden; transform: translateX(-50%); transition: opacity var(--qm-duration-short) var(--qm-easing-standard); }
+.qm-tooltip { position: absolute; z-index: 5; left: 50%; bottom: calc(100% + 8px); width: max-content; max-width: min(240px, 80vw); padding: 8px 12px; border-radius: 12px; background: var(--qm-color-text); color: var(--qm-color-background); font-size: var(--qm-type-caption); line-height: 1.5; opacity: 0; visibility: hidden; transform: translateX(-50%); transition: opacity var(--qm-spring-standard-fast-effects-duration) var(--qm-spring-standard-fast-effects-easing); }
 .qm-tooltip::after { content: ''; position: absolute; inset: 100% 0 -10px; }
 .qm-tooltip-wrap:hover .qm-tooltip, .qm-tooltip-wrap:focus-within .qm-tooltip { opacity: 1; visibility: visible; }
 .qm-tooltip-wrap[data-qm-tooltip-dismissed] .qm-tooltip { opacity: 0; visibility: hidden; }
@@ -150,6 +157,7 @@ label:has(> .qm-switch), label:has(> .qm-checkbox), label:has(> .qm-radio) { dis
   .qm-button, .qm-button::before, .qm-input, .qm-select, .qm-textarea, .qm-switch, .qm-switch::before, .qm-chip, .qm-tab, .qm-tooltip { transition: none; }
   .qm-button:active:not(:disabled):not([aria-disabled='true']) { transform: none; }
   .qm-ripple, .qm-dialog[open], .qm-dialog--sheet[open], .qm-menu:popover-open { animation: none; }
+  .qm-ripple { display: none; transition: none; }
 }
 @media (forced-colors: active) {
   :focus-visible { outline-color: Highlight; }
@@ -179,3 +187,5 @@ label:has(> .qm-switch), label:has(> .qm-checkbox), label:has(> .qm-radio) { dis
 :root[data-qm-motion='reduced'] .qm-dialog[open],
 :root[data-qm-motion='reduced'] .qm-menu:popover-open,
 :root[data-qm-motion='reduced'] .qm-ripple { animation: none; }
+
+:root[data-qm-motion='reduced'] .qm-ripple { display: none; transition: none; }

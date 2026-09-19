@@ -1,6 +1,6 @@
 {
   "name": "@quiet-material/core",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A mobile-first, black Material-inspired design system with portable tokens and native starters.",
   "private": true,
   "license": "UNLICENSED",
@@ -17,7 +17,12 @@
     "./tokens.css": "./styles/tokens.css",
     "./tokens.json": "./tokens/quiet-material.tokens.json",
     "./tokens.resolved.json": "./exports/quiet-material.tokens.resolved.json",
-    "./tokens.ts": "./exports/quiet-material.tokens.ts"
+    "./tokens.ts": "./exports/quiet-material.tokens.ts",
+    "./motion": {
+      "types": "./src/motion.d.ts",
+      "default": "./src/motion.js"
+    },
+    "./motion.json": "./exports/quiet-material.motion.json"
   },
   "files": [
     "styles",

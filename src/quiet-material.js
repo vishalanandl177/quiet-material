@@ -1,6 +1,13 @@
 /** Quiet Material: optional, dependency-free progressive enhancement. */
+import {transitionView, cancelMotion} from './motion.js';
 const instances = new WeakMap();
 const notifications = new WeakMap();
+
+/** Close semantics immediately; only a noninteractive visual snapshot fades out. */
+export function closeQuietDialog(dialog, result = '') {
+  if (!dialog?.open) return;
+  return transitionView({from: dialog, to: null, pattern: 'fade', update: () => dialog.close(result)});
+}
 
 function elements(root, selector) {
   const result = Array.from(root.querySelectorAll(selector));
@@ -23,8 +30,10 @@ export function initQuietMaterial(root = document) {
   const win = doc.defaultView;
   const listeners = [];
   const ripples = new Map();
+  const pendingTouches = new Map();
   const dialogInvokers = new Map();
   const observedDialogs = new WeakSet();
+  const ownedDialogMotion = new Set();
   const ownedTooltipDismissals = new Set();
   let disposed = false;
 
@@ -43,7 +52,7 @@ export function initQuietMaterial(root = document) {
       .filter((tab) => tab.closest('[data-qm-tabs]') === wrapper);
   }
 
-  function activateTab(wrapper, current, focus = false) {
+  function activateTab(wrapper, current, focus = false, animate = false) {
     if (!enabled(current)) return;
     const tabs = tabSet(wrapper);
     const panels = elements(wrapper, '[role="tabpanel"]')
@@ -54,8 +63,14 @@ export function initQuietMaterial(root = document) {
       tab.setAttribute('aria-selected', String(selected));
       tab.tabIndex = selected ? 0 : -1;
     }
-    for (const panel of panels) panel.hidden = panel.id !== activeId;
-    if (focus) current.focus();
+    const previous = panels.find(panel => !panel.hidden);
+    const next = panels.find(panel => panel.id === activeId);
+    const update = () => { for (const panel of panels) panel.hidden = panel.id !== activeId; if (focus) current.focus(); };
+    if (animate && previous && next && previous !== next) {
+      transitionView({from: previous, to: next, pattern: 'shared-axis',
+        axis: current.closest('[role="tablist"]')?.getAttribute('aria-orientation') === 'vertical' ? 'y' : 'x',
+        reverse: panels.indexOf(next) < panels.indexOf(previous), update});
+    } else update();
   }
 
   for (const wrapper of elements(root, '[data-qm-tabs]')) {
@@ -73,9 +88,31 @@ export function initQuietMaterial(root = document) {
     const active = ripples.get(button);
     if (!active) return;
     win.clearTimeout(active.timeout);
-    active.node.removeEventListener('animationend', active.finish);
+    win.clearTimeout(active.releaseTimer);
+    active.node.removeEventListener('transitionend', active.finish);
     active.node.remove();
     ripples.delete(button);
+  }
+
+  function milliseconds(element, name, fallback) {
+    const raw = win.getComputedStyle(element).getPropertyValue(name).trim();
+    const value = Number.parseFloat(raw);
+    return Number.isFinite(value) ? value * (raw.endsWith('ms') ? 1 : 1000) : fallback;
+  }
+
+  function releaseRipple(button) {
+    const active = ripples.get(button);
+    if (!active || active.released || active.releaseTimer !== null) return;
+    const minimum = milliseconds(button, '--qm-motion-ripple-minimum-press-duration', 225);
+    const wait = Math.max(0, minimum - (win.performance.now() - active.started));
+    const release = () => {
+      active.releaseTimer = null;
+      if (ripples.get(button) !== active) return;
+      active.released = true;
+      active.node.classList.add('qm-ripple--released');
+      active.timeout = win.setTimeout(() => clearRipple(button), milliseconds(button, '--qm-motion-ripple-fade-duration', 375) + 50);
+    };
+    if (wait) active.releaseTimer = win.setTimeout(release, wait); else release();
   }
 
   function ripple(button, event) {
@@ -93,24 +130,54 @@ export function initQuietMaterial(root = document) {
     node.style.setProperty('--qm-ripple-y', `${y}px`);
     node.style.setProperty('--qm-ripple-size', `${size}px`);
     Object.assign(node.style, { left: `${x}px`, top: `${y}px`, width: `${size}px`, height: `${size}px` });
-    const finish = () => clearRipple(button);
-    node.addEventListener('animationend', finish);
-    const timeout = win.setTimeout(finish, 900);
-    ripples.set(button, { node, timeout, finish });
+    const finish = event => { if (event.propertyName === 'opacity' && ripples.get(button)?.released) clearRipple(button); };
+    node.addEventListener('transitionend', finish);
+    ripples.set(button, {node, finish, started: win.performance.now(), pointerId: event.pointerId,
+      keyboard: !pointer, released: false, releaseTimer: null, timeout: null});
     button.append(node);
   }
 
   listen(root, 'pointerdown', (event) => {
     if (event.button !== 0) return;
     const button = closest(event, 'button.qm-button, button.qm-chip');
-    if (button) ripple(button, event);
+    if (!button) return;
+    if (event.pointerType === 'touch') {
+      const previous = pendingTouches.get(button);
+      if (previous) win.clearTimeout(previous.timer);
+      const timer = win.setTimeout(() => {pendingTouches.delete(button); ripple(button, event);},
+        milliseconds(button, '--qm-motion-ripple-touch-delay', 150));
+      pendingTouches.set(button, {event, timer});
+    } else ripple(button, event);
   });
+
+  listen(win, 'pointerup', event => {
+    for (const [button, pending] of pendingTouches) if (pending.event.pointerId === event.pointerId) {
+      win.clearTimeout(pending.timer); pendingTouches.delete(button); ripple(button, pending.event);
+    }
+    for (const [button, active] of ripples) if (!active.keyboard && active.pointerId === event.pointerId) releaseRipple(button);
+  }, true);
+  listen(win, 'pointercancel', event => {
+    for (const [button, pending] of pendingTouches) if (pending.event.pointerId === event.pointerId) {
+      win.clearTimeout(pending.timer); pendingTouches.delete(button);
+    }
+    for (const [button, active] of ripples) if (active.pointerId === event.pointerId) clearRipple(button);
+  }, true);
+  const clearFeedback = () => {
+    for (const pending of pendingTouches.values()) win.clearTimeout(pending.timer);
+    pendingTouches.clear();
+    for (const button of ripples.keys()) clearRipple(button);
+  };
+  listen(win, 'blur', clearFeedback);
+  const preference = win.matchMedia?.('(prefers-reduced-motion: reduce)');
+  if (preference?.addEventListener) listen(preference, 'change', () => {if (reducedMotion()) clearFeedback();});
+  const motionObserver = new win.MutationObserver(() => {if (reducedMotion()) clearFeedback();});
+  motionObserver.observe(doc.documentElement, {attributes: true, attributeFilter: ['data-qm-motion']});
 
   listen(root, 'click', (event) => {
     const tab = closest(event, '[data-qm-tabs] [role="tab"]');
     if (tab) {
       event.preventDefault();
-      activateTab(tab.closest('[data-qm-tabs]'), tab);
+      activateTab(tab.closest('[data-qm-tabs]'), tab, false, true);
       return;
     }
 
@@ -128,11 +195,17 @@ export function initQuietMaterial(root = document) {
         listen(dialog, 'close', () => {
           const invoker = dialogInvokers.get(dialog);
           dialogInvokers.delete(dialog);
-          if (invoker?.isConnected && enabled(invoker)) invoker.focus({ preventScroll: true });
+          const active = doc.activeElement;
+          if (invoker?.isConnected && enabled(invoker) && (active === doc.body || active === invoker || dialog.contains(active))) invoker.focus({ preventScroll: true });
         });
+        listen(dialog, 'cancel', event => {event.preventDefault(); closeQuietDialog(dialog);});
       }
       dialogInvokers.set(dialog, opener);
-      dialog.showModal();
+      if (dialog.classList.contains('qm-dialog--sheet')) dialog.showModal();
+      else {
+        if (!dialog.hasAttribute('data-qm-motion-enhanced')) {dialog.setAttribute('data-qm-motion-enhanced', ''); ownedDialogMotion.add(dialog);}
+        transitionView({from: null, to: dialog, pattern: 'fade', update: () => dialog.showModal()});
+      }
       return;
     }
 
@@ -141,7 +214,7 @@ export function initQuietMaterial(root = document) {
       const dialog = closer.closest('dialog');
       if (dialog?.open) {
         event.preventDefault();
-        dialog.close(closer.dataset.qmDialogResult || '');
+        closeQuietDialog(dialog, closer.dataset.qmDialogResult || '');
       }
       return;
     }
@@ -185,7 +258,7 @@ export function initQuietMaterial(root = document) {
       else if (delta) index = (index + delta + tabs.length) % tabs.length;
       else return;
       event.preventDefault();
-      if (tabs[index]) activateTab(wrapper, tabs[index], true);
+      if (tabs[index]) activateTab(wrapper, tabs[index], true, true);
       return;
     }
 
@@ -194,6 +267,18 @@ export function initQuietMaterial(root = document) {
       if (button) ripple(button, event);
     }
   });
+
+  listen(win, 'keyup', event => {
+    if (event.key === 'Enter' || event.key === ' ') for (const [button, active] of ripples) if (active.keyboard) releaseRipple(button);
+  }, true);
+
+  // beforetoggle exposes the outgoing pixels before the UA hides a popover.
+  // The native operation proceeds immediately; only this inert copy fades out.
+  for (const menu of elements(root, '.qm-menu[popover]')) {
+    listen(menu, 'beforetoggle', event => {
+      if (event.newState === 'closed') transitionView({from: menu, to: null, pattern: 'fade', update() {}});
+    });
+  }
 
   function resetTooltip(event) {
     const wrapper = closest(event, '.qm-tooltip-wrap[data-qm-tooltip-dismissed]');
@@ -214,7 +299,11 @@ export function initQuietMaterial(root = document) {
     if (disposed) return;
     disposed = true;
     for (const remove of listeners) remove();
-    for (const button of ripples.keys()) clearRipple(button);
+    clearFeedback();
+    motionObserver.disconnect();
+    cancelMotion(root);
+    for (const dialog of ownedDialogMotion) dialog.removeAttribute('data-qm-motion-enhanced');
+    ownedDialogMotion.clear();
     for (const wrapper of ownedTooltipDismissals) {
       if (wrapper.getAttribute('data-qm-tooltip-dismissed') === '') {
         wrapper.removeAttribute('data-qm-tooltip-dismissed');
@@ -264,7 +353,7 @@ export function showSnackbar(message, options = {}) {
   button.type = 'button';
   button.textContent = options.actionLabel || 'Dismiss';
   snackbar.append(content, button);
-  state.region.append(snackbar);
+  transitionView({from: null, to: snackbar, pattern: 'fade', update: () => state.region.append(snackbar)});
   win.clearTimeout(state.announceTimer);
   state.live.textContent = '';
   state.announceTimer = win.setTimeout(() => { state.live.textContent = String(message); }, 50);
@@ -282,7 +371,7 @@ export function showSnackbar(message, options = {}) {
     dismissed = true;
     win.clearTimeout(timer);
     const restoreFocus = snackbar.contains(doc.activeElement);
-    snackbar.remove();
+    transitionView({from: snackbar, to: null, pattern: 'fade', update: () => snackbar.remove()});
     if (restoreFocus && previousFocus?.isConnected && typeof previousFocus.focus === 'function') {
       previousFocus.focus({ preventScroll: true });
     }

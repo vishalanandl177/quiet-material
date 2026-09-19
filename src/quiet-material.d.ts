@@ -24,6 +24,9 @@ export declare function initQuietMaterial(root?: QuietMaterialRoot): () => void;
 /** Display plain text feedback without moving focus; returns an idempotent dismiss function. */
 export declare function showSnackbar(message: string, options?: SnackbarOptions): () => void;
 
+/** Close the native dialog immediately and fade a noninteractive visual snapshot. */
+export declare function closeQuietDialog(dialog: HTMLDialogElement, result?: string): import('./motion.js').MaterialMotionHandle | undefined;
+
 /** Emitted from a button.qm-chip[aria-pressed] after its pressed state changes. */
 export interface QuietMaterialChipChangeDetail {
   pressed: boolean;

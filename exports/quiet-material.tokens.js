@@ -280,7 +280,4 @@ export const quietTokens = {
     1
   ],
   "motionContainerReturnDuration": 400
-} as const;
-
-export type QuietTokenName = keyof typeof quietTokens;
-export type QuietTokens = typeof quietTokens;
+};

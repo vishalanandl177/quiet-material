@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.2.0 — 2026-09-19
+
+- Replace the partial custom motion vocabulary with all 16 MD3 durations, seven easing families, exact emphasized path data, and both six-role spring schemes. Add pinned official source provenance and deterministic browser motion exports.
+- Add container transform, shared axis X/Y/Z, fade through, fade, and spring APIs. Apply transitions to destinations, tabs, dialogs and snackbars; retain synchronous state and focus changes.
+- Correct ripple growth/hold/release/touch timings; remove arbitrary button shrinking. Use separate standard spatial/effects springs for switch and sheet motion.
+- Add live pattern/spring controls, expand to seven token-driven GIFs, and record encoding approximations.
+- Add native curve/spring/transition helpers and document remaining native container, system-navigation and device-validation boundaries.
+- Keep existing token aliases; motion behavior intentionally changes to the verified MD3 bindings.
+
+
 ## 1.1.0 — 2026-09-19
 
 - Mobile-first explorer and reusable component defaults, four compact navigation actions, safe-area padding, relative typography, and RTL switch direction.

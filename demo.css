@@ -92,6 +92,16 @@ figcaption {font-size:.75rem;line-height:1.6;color:#b7b7bd;margin-top:12px;}
 .motion-study h3 {font-size:1.125rem;margin-bottom:6px;}
 .motion-study figcaption p {font-size:.8125rem;margin-bottom:16px;}
 .motion-gallery {margin-top:24px;}
+.motion-controls {display:flex;flex-wrap:wrap;gap:20px;margin-block:24px;}
+.motion-controls .qm-field {flex:1 1 220px;min-width:0;}
+.transition-stage {display:grid;align-items:center;justify-items:center;min-height:320px;background:#000;border-radius:28px;margin-block:24px;padding:16px;}
+.transition-surface {padding:24px;border-radius:24px;background:#242424;min-width:0;}
+.transition-surface h3 {margin-block:20px 12px;}
+.transition-surface p {margin:0;}
+.transition-summary {width:min(100%,260px);}
+.transition-detail {width:100%;min-height:260px;border-radius:32px;}
+.spring-track {padding:12px;background:#000;border-radius:999px;margin-block:24px;overflow:hidden;}
+.spring-dot {display:block;width:48px;height:48px;background:#a8c7fa;border-radius:50%;translate:0px;}
 @media (min-width:600px) {
   .rail {inset:0 auto 0 0;width:112px;padding:24px 8px;display:flex;align-items:center;flex-direction:column;overflow-y:auto;}
   :dir(rtl) .rail {inset:0 0 0 auto;}

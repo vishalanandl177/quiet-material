@@ -1,18 +1,20 @@
-# Validation record — v1.1
+# Validation record — v1.2
 
 ## Completed automated checks
 
-On 2026-09-19, `npm run check` passed all **31 tests**:
+On 2026-09-19, `npm run check` passed all **56 tests**:
 
-- Canonical token validation, alias/cycle checks, deterministic generation and parity across CSS, resolved JSON, TypeScript, Kotlin, Swift and Dart.
+- Canonical token validation, alias/cycle checks, deterministic generation and parity across CSS, JSON, JavaScript, TypeScript, Kotlin, Swift and Dart.
+- All 16 MD3 durations, seven easing families, exact emphasized segments, standard/expressive physical spring values, component ripple timings and current themed transition bindings. Emphasized CSS sampling stays within 0.0001 of the exact source path.
+- Four web motion families, X/Y/Z and RTL/reverse cases, immediate semantic updates, inert snapshots, interruption, style cleanup, native-dialog snapshot ownership, and queued route-scroll handling.
 - Tested contrast pairings for text, statuses, action text, focus and control boundaries; pure opaque black canvas.
 - DOM interaction checks for tabs including RTL/vertical cases, disabled items, repeated setup/cleanup, chips, tooltips, snackbars and reduced-motion ripple suppression.
 - Opt-in GIF playback, replay, stop, one-study-at-a-time behavior, reduced-motion prevention, and timer cleanup. Asset dimensions, sizes, single-cycle encoding and manifest paths/durations are checked.
 - Explorer IDs, labels, ARIA references, local resources and enhancement targets.
 
-JavaScript syntax, self-contained preview generation and `git diff --check` passed. The preview embeds the new concepts, posters and opt-in GIF sources. HTTP smoke checks passed for the explorer, module, GIF, concept PNG, resolved tokens and native guide; Git metadata paths returned 404.
+JavaScript syntax, self-contained preview generation and `git diff --check` passed. The preview embeds the concepts, all seven posters/GIFs, the motion runtime and generated contract; the combined module parses with no external imports. HTTP smoke checks passed for the explorer, module, GIF, concept PNG, resolved tokens and native guide; Git metadata paths returned 404.
 
-The motion generator was run, its three static posters visually inspected, and byte-identical regeneration verified. Both additional generated device concepts were visually reviewed. These are illustrative references and motion studies, not screenshots or recordings of a tested application.
+The motion generator was run, its seven static posters visually inspected, and byte-identical regeneration verified. Both additional generated device concepts were visually reviewed. These are illustrative references and motion studies, not screenshots or recordings of a tested application.
 
 The [GitHub Actions workflow](https://github.com/vishalanandl177/quiet-material/actions) runs the repository checks on push and pull request and verifies that every generated token output stays in sync. Consult the run for the relevant commit for remote results.
 
@@ -20,9 +22,11 @@ The [GitHub Actions workflow](https://github.com/vishalanandl177/quiet-material/
 
 | Adapter | Completed here | Still required |
 | --- | --- | --- |
-| Android Compose | Source/API review and generated token-reference checks | Android SDK compilation, application integration, device/emulator and TalkBack review |
-| Apple SwiftUI | Source/API review and generated token-reference checks | Xcode/Swift package compilation, iPhone/iPad/Mac integration and VoiceOver review |
+| Android Compose | Source/API review, MD3 helper review and generated token-reference checks | Android SDK compilation, application integration, device/emulator and TalkBack review |
+| Apple SwiftUI | Source/API review, MD3 helper review and generated token-reference checks | Xcode/Swift package compilation, iPhone/iPad/Mac integration and VoiceOver review |
 | Flutter | Source/API review, complete semantic color mapping and token-reference checks; widget tests supplied | `flutter analyze`, `flutter test`, host builds and device/desktop assistive-technology review |
+
+Native starters do not include a complete MD3 container-transform route; SwiftUI navigation remains system-owned Apple motion. The shared foundation and web default patterns are implemented, while full native conformance is not claimed. See the [MD3 audit](md3-motion-audit.md).
 
 The corresponding native SDKs were unavailable in this environment. Source adapters have not been represented as compiled or production-verified packages.
 

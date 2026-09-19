@@ -530,33 +530,137 @@
     }
   },
   "duration": {
-    "instant": {
+    "short1": {
+      "$type": "duration",
+      "$value": {
+        "value": 50,
+        "unit": "ms"
+      }
+    },
+    "short2": {
       "$type": "duration",
       "$value": {
         "value": 100,
         "unit": "ms"
       }
     },
-    "short": {
+    "short3": {
       "$type": "duration",
       "$value": {
         "value": 150,
         "unit": "ms"
       }
     },
-    "medium": {
+    "short4": {
+      "$type": "duration",
+      "$value": {
+        "value": 200,
+        "unit": "ms"
+      }
+    },
+    "medium1": {
       "$type": "duration",
       "$value": {
         "value": 250,
         "unit": "ms"
       }
     },
-    "long": {
+    "medium2": {
+      "$type": "duration",
+      "$value": {
+        "value": 300,
+        "unit": "ms"
+      }
+    },
+    "medium3": {
       "$type": "duration",
       "$value": {
         "value": 350,
         "unit": "ms"
       }
+    },
+    "medium4": {
+      "$type": "duration",
+      "$value": {
+        "value": 400,
+        "unit": "ms"
+      }
+    },
+    "long1": {
+      "$type": "duration",
+      "$value": {
+        "value": 450,
+        "unit": "ms"
+      }
+    },
+    "long2": {
+      "$type": "duration",
+      "$value": {
+        "value": 500,
+        "unit": "ms"
+      }
+    },
+    "long3": {
+      "$type": "duration",
+      "$value": {
+        "value": 550,
+        "unit": "ms"
+      }
+    },
+    "long4": {
+      "$type": "duration",
+      "$value": {
+        "value": 600,
+        "unit": "ms"
+      }
+    },
+    "extraLong1": {
+      "$type": "duration",
+      "$value": {
+        "value": 700,
+        "unit": "ms"
+      }
+    },
+    "extraLong2": {
+      "$type": "duration",
+      "$value": {
+        "value": 800,
+        "unit": "ms"
+      }
+    },
+    "extraLong3": {
+      "$type": "duration",
+      "$value": {
+        "value": 900,
+        "unit": "ms"
+      }
+    },
+    "extraLong4": {
+      "$type": "duration",
+      "$value": {
+        "value": 1000,
+        "unit": "ms"
+      }
+    },
+    "instant": {
+      "$type": "duration",
+      "$value": "{duration.short2}",
+      "$description": "Compatibility alias; use the numbered MD3 duration scale in new code."
+    },
+    "short": {
+      "$type": "duration",
+      "$value": "{duration.short3}",
+      "$description": "Compatibility alias; use the numbered MD3 duration scale in new code."
+    },
+    "medium": {
+      "$type": "duration",
+      "$value": "{duration.medium1}",
+      "$description": "Compatibility alias; use the numbered MD3 duration scale in new code."
+    },
+    "long": {
+      "$type": "duration",
+      "$value": "{duration.medium3}",
+      "$description": "Compatibility alias; use the numbered MD3 duration scale in new code."
     }
   },
   "easing": {
@@ -569,7 +673,16 @@
         1
       ]
     },
-    "enter": {
+    "standardAccelerate": {
+      "$type": "cubicBezier",
+      "$value": [
+        0.3,
+        0,
+        1,
+        1
+      ]
+    },
+    "standardDecelerate": {
       "$type": "cubicBezier",
       "$value": [
         0,
@@ -578,14 +691,101 @@
         1
       ]
     },
-    "exit": {
+    "emphasized": {
+      "$description": "Exact two-segment MD3 emphasized path. first and second are normalized cubic Bezier segments; joinX and joinY map the segments into the whole curve. This is not the standard single cubic curve.",
+      "$extensions": {
+        "com.quietmaterial.motion": {
+          "path": "M 0,0 C 0.05,0 0.133333,0.06 0.166666,0.4 C 0.208333,0.82 0.25,1 1,1"
+        }
+      },
+      "first": {
+        "$type": "cubicBezier",
+        "$value": [
+          0.3000012000048,
+          0,
+          0.8000012000048,
+          0.15
+        ]
+      },
+      "second": {
+        "$type": "cubicBezier",
+        "$value": [
+          0.050000359999711974,
+          0.7,
+          0.10000071999942399,
+          1
+        ]
+      },
+      "joinX": {
+        "$type": "number",
+        "$value": 0.166666
+      },
+      "joinY": {
+        "$type": "number",
+        "$value": 0.4
+      }
+    },
+    "emphasizedAccelerate": {
       "$type": "cubicBezier",
       "$value": [
         0.3,
         0,
+        0.8,
+        0.15
+      ]
+    },
+    "emphasizedDecelerate": {
+      "$type": "cubicBezier",
+      "$value": [
+        0.05,
+        0.7,
+        0.1,
+        1
+      ]
+    },
+    "linear": {
+      "$type": "cubicBezier",
+      "$value": [
+        0,
+        0,
         1,
         1
       ]
+    },
+    "legacy": {
+      "$type": "cubicBezier",
+      "$value": [
+        0.4,
+        0,
+        0.2,
+        1
+      ]
+    },
+    "legacyAccelerate": {
+      "$type": "cubicBezier",
+      "$value": [
+        0.4,
+        0,
+        1,
+        1
+      ]
+    },
+    "legacyDecelerate": {
+      "$type": "cubicBezier",
+      "$value": [
+        0,
+        0,
+        0.2,
+        1
+      ]
+    },
+    "enter": {
+      "$type": "cubicBezier",
+      "$value": "{easing.standardDecelerate}"
+    },
+    "exit": {
+      "$type": "cubicBezier",
+      "$value": "{easing.standardAccelerate}"
     }
   },
   "size": {
@@ -674,6 +874,300 @@
     "pagePaddingExpanded": {
       "$type": "dimension",
       "$value": "{space.12}"
+    }
+  },
+  "spring": {
+    "$description": "MD3 MotionScheme v0_14_0 physical parameters. Damping is a unitless damping ratio; stiffness uses normalized mass=1. Standard is the Quiet default; expressive is opt-in.",
+    "standard": {
+      "fast": {
+        "spatial": {
+          "damping": {
+            "$type": "number",
+            "$value": 0.9
+          },
+          "stiffness": {
+            "$type": "number",
+            "$value": 1400
+          }
+        },
+        "effects": {
+          "damping": {
+            "$type": "number",
+            "$value": 1
+          },
+          "stiffness": {
+            "$type": "number",
+            "$value": 3800
+          }
+        }
+      },
+      "default": {
+        "spatial": {
+          "damping": {
+            "$type": "number",
+            "$value": 0.9
+          },
+          "stiffness": {
+            "$type": "number",
+            "$value": 700
+          }
+        },
+        "effects": {
+          "damping": {
+            "$type": "number",
+            "$value": 1
+          },
+          "stiffness": {
+            "$type": "number",
+            "$value": 1600
+          }
+        }
+      },
+      "slow": {
+        "spatial": {
+          "damping": {
+            "$type": "number",
+            "$value": 0.9
+          },
+          "stiffness": {
+            "$type": "number",
+            "$value": 300
+          }
+        },
+        "effects": {
+          "damping": {
+            "$type": "number",
+            "$value": 1
+          },
+          "stiffness": {
+            "$type": "number",
+            "$value": 800
+          }
+        }
+      }
+    },
+    "expressive": {
+      "fast": {
+        "spatial": {
+          "damping": {
+            "$type": "number",
+            "$value": 0.6
+          },
+          "stiffness": {
+            "$type": "number",
+            "$value": 800
+          }
+        },
+        "effects": {
+          "damping": {
+            "$type": "number",
+            "$value": 1
+          },
+          "stiffness": {
+            "$type": "number",
+            "$value": 3800
+          }
+        }
+      },
+      "default": {
+        "spatial": {
+          "damping": {
+            "$type": "number",
+            "$value": 0.8
+          },
+          "stiffness": {
+            "$type": "number",
+            "$value": 380
+          }
+        },
+        "effects": {
+          "damping": {
+            "$type": "number",
+            "$value": 1
+          },
+          "stiffness": {
+            "$type": "number",
+            "$value": 1600
+          }
+        }
+      },
+      "slow": {
+        "spatial": {
+          "damping": {
+            "$type": "number",
+            "$value": 0.8
+          },
+          "stiffness": {
+            "$type": "number",
+            "$value": 200
+          }
+        },
+        "effects": {
+          "damping": {
+            "$type": "number",
+            "$value": 1
+          },
+          "stiffness": {
+            "$type": "number",
+            "$value": 800
+          }
+        }
+      }
+    }
+  },
+  "motion": {
+    "$description": "Semantic bindings for Quiet Material. Platform component defaults remain authoritative. Ripple timings are Material Web component timings, separate from the 16 system duration slots.",
+    "state": {
+      "duration": {
+        "$type": "duration",
+        "$value": "{duration.short3}"
+      },
+      "easing": {
+        "$type": "cubicBezier",
+        "$value": "{easing.standard}"
+      }
+    },
+    "control": {
+      "duration": {
+        "$type": "duration",
+        "$value": "{duration.medium2}"
+      },
+      "easing": {
+        "$type": "cubicBezier",
+        "$value": "{easing.standard}"
+      }
+    },
+    "enter": {
+      "duration": {
+        "$type": "duration",
+        "$value": "{duration.long2}"
+      },
+      "easing": {
+        "$type": "cubicBezier",
+        "$value": "{easing.emphasizedDecelerate}"
+      }
+    },
+    "exit": {
+      "duration": {
+        "$type": "duration",
+        "$value": "{duration.short4}"
+      },
+      "easing": {
+        "$type": "cubicBezier",
+        "$value": "{easing.emphasizedAccelerate}"
+      }
+    },
+    "container": {
+      "duration": {
+        "$type": "duration",
+        "$value": "{duration.long2}"
+      },
+      "$description": "MD3 themed transition binding from current Material Components for Android source; see motion-sources.json.",
+      "$extensions": {
+        "com.quietmaterial.motion": {
+          "easingPath": "easing.emphasized"
+        }
+      }
+    },
+    "sharedAxis": {
+      "duration": {
+        "$type": "duration",
+        "$value": "{duration.long1}"
+      },
+      "$description": "MD3 themed transition binding from current Material Components for Android source; see motion-sources.json.",
+      "$extensions": {
+        "com.quietmaterial.motion": {
+          "easingPath": "easing.emphasized"
+        }
+      }
+    },
+    "fadeThrough": {
+      "duration": {
+        "$type": "duration",
+        "$value": "{duration.long1}"
+      },
+      "$description": "MD3 themed transition binding from current Material Components for Android source; see motion-sources.json.",
+      "$extensions": {
+        "com.quietmaterial.motion": {
+          "easingPath": "easing.emphasized"
+        }
+      }
+    },
+    "fadeEnter": {
+      "duration": {
+        "$type": "duration",
+        "$value": "{duration.medium4}"
+      },
+      "$description": "MD3 themed transition binding from current Material Components for Android source; see motion-sources.json.",
+      "easing": {
+        "$type": "cubicBezier",
+        "$value": "{easing.emphasizedDecelerate}"
+      }
+    },
+    "fadeExit": {
+      "duration": {
+        "$type": "duration",
+        "$value": "{duration.short3}"
+      },
+      "$description": "MD3 themed transition binding from current Material Components for Android source; see motion-sources.json.",
+      "easing": {
+        "$type": "cubicBezier",
+        "$value": "{easing.emphasizedAccelerate}"
+      }
+    },
+    "ripple": {
+      "growDuration": {
+        "$type": "duration",
+        "$value": "{duration.long1}"
+      },
+      "minimumPressDuration": {
+        "$type": "duration",
+        "$value": {
+          "value": 225,
+          "unit": "ms"
+        }
+      },
+      "touchDelay": {
+        "$type": "duration",
+        "$value": "{duration.short3}"
+      },
+      "fadeInDuration": {
+        "$type": "duration",
+        "$value": {
+          "value": 105,
+          "unit": "ms"
+        }
+      },
+      "fadeDuration": {
+        "$type": "duration",
+        "$value": {
+          "value": 375,
+          "unit": "ms"
+        }
+      },
+      "hoverDuration": {
+        "$type": "duration",
+        "$value": {
+          "value": 15,
+          "unit": "ms"
+        }
+      },
+      "easing": {
+        "$type": "cubicBezier",
+        "$value": "{easing.standard}"
+      }
+    },
+    "containerReturn": {
+      "duration": {
+        "$type": "duration",
+        "$value": "{duration.medium4}"
+      },
+      "$description": "MD3 themed transition binding from current Material Components for Android source; see motion-sources.json.",
+      "$extensions": {
+        "com.quietmaterial.motion": {
+          "easingPath": "easing.emphasized"
+        }
+      }
     }
   }
 }

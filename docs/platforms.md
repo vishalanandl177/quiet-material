@@ -84,3 +84,7 @@ Black belongs to the application's canvas and safe-area background. Charcoal bel
 The system contains the visual foundations, reusable token outputs, responsive layout contracts, core component specifications, motion demonstrations, starter adapters and contribution guidance. Product readiness still requires building the selected native adapter on its actual SDK and verifying the product's screens, state handling and assistive-technology workflows. Record that evidence in [validation](validation.md); do not replace pending checks with a blanket “all platforms tested” statement.
 
 The repository remains private and has no public license grant. “Usable across platforms” describes implementation portability. “Anyone may download, redistribute or reuse it” requires a separate repository visibility and licensing decision by the owner.
+
+## MD3 motion coverage
+
+The shared system exports all duration/easing roles plus standard and expressive springs. Web supplies the four default transition families and a finite sampled spring helper. Android and Flutter include selected transition helpers; SwiftUI includes curve/spring/progress helpers. Native starters do not implement a full MD3 container-transform route, and SwiftUI system-owned navigation remains Apple motion. Consult the [MD3 audit](md3-motion-audit.md) and each native README before describing a product as having identical motion across platforms.

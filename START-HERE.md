@@ -1,4 +1,4 @@
-# Quiet Material 1.1
+# Quiet Material 1.2
 
 Start with [README](README.md), [platforms](docs/platforms.md) and [mobile-first rules](docs/mobile-first.md).
 
@@ -9,7 +9,7 @@ npm ci
 npm run dev
 ```
 
-Open the printed local URL. The Platforms page includes the device concepts and native starter links; the Motion page has three opt-in single-cycle GIFs.
+Open the printed local URL. The Platforms page includes the device concepts and native starter links; the Motion page has seven opt-in single-cycle GIFs and live MD3 transition/spring examples.
 
 Run `npm run check` to rebuild every token output and execute the repository tests. Run `npm run package:preview` to generate `dist/quiet-material-preview.html`, which embeds styles, scripts and visual assets. Documentation links in that standalone file require the full checkout and a matching relative location.
 

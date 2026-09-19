@@ -83,6 +83,22 @@
   "lineHeightHeading": 1.25,
   "lineHeightBody": 1.6,
   "lineHeightControl": 1.25,
+  "durationShort1": 50,
+  "durationShort2": 100,
+  "durationShort3": 150,
+  "durationShort4": 200,
+  "durationMedium1": 250,
+  "durationMedium2": 300,
+  "durationMedium3": 350,
+  "durationMedium4": 400,
+  "durationLong1": 450,
+  "durationLong2": 500,
+  "durationLong3": 550,
+  "durationLong4": 600,
+  "durationExtraLong1": 700,
+  "durationExtraLong2": 800,
+  "durationExtraLong3": 900,
+  "durationExtraLong4": 1000,
   "durationInstant": 100,
   "durationShort": 150,
   "durationMedium": 250,
@@ -91,6 +107,68 @@
     0.2,
     0,
     0,
+    1
+  ],
+  "easingStandardAccelerate": [
+    0.3,
+    0,
+    1,
+    1
+  ],
+  "easingStandardDecelerate": [
+    0,
+    0,
+    0,
+    1
+  ],
+  "easingEmphasizedFirst": [
+    0.3000012000048,
+    0,
+    0.8000012000048,
+    0.15
+  ],
+  "easingEmphasizedSecond": [
+    0.050000359999711974,
+    0.7,
+    0.10000071999942399,
+    1
+  ],
+  "easingEmphasizedJoinX": 0.166666,
+  "easingEmphasizedJoinY": 0.4,
+  "easingEmphasizedAccelerate": [
+    0.3,
+    0,
+    0.8,
+    0.15
+  ],
+  "easingEmphasizedDecelerate": [
+    0.05,
+    0.7,
+    0.1,
+    1
+  ],
+  "easingLinear": [
+    0,
+    0,
+    1,
+    1
+  ],
+  "easingLegacy": [
+    0.4,
+    0,
+    0.2,
+    1
+  ],
+  "easingLegacyAccelerate": [
+    0.4,
+    0,
+    1,
+    1
+  ],
+  "easingLegacyDecelerate": [
+    0,
+    0,
+    0.2,
     1
   ],
   "easingEnter": [
@@ -117,5 +195,87 @@
   "breakpointWide": 1200,
   "layoutPagePaddingCompact": 20,
   "layoutPagePaddingMedium": 32,
-  "layoutPagePaddingExpanded": 48
+  "layoutPagePaddingExpanded": 48,
+  "springStandardFastSpatialDamping": 0.9,
+  "springStandardFastSpatialStiffness": 1400,
+  "springStandardFastEffectsDamping": 1,
+  "springStandardFastEffectsStiffness": 3800,
+  "springStandardDefaultSpatialDamping": 0.9,
+  "springStandardDefaultSpatialStiffness": 700,
+  "springStandardDefaultEffectsDamping": 1,
+  "springStandardDefaultEffectsStiffness": 1600,
+  "springStandardSlowSpatialDamping": 0.9,
+  "springStandardSlowSpatialStiffness": 300,
+  "springStandardSlowEffectsDamping": 1,
+  "springStandardSlowEffectsStiffness": 800,
+  "springExpressiveFastSpatialDamping": 0.6,
+  "springExpressiveFastSpatialStiffness": 800,
+  "springExpressiveFastEffectsDamping": 1,
+  "springExpressiveFastEffectsStiffness": 3800,
+  "springExpressiveDefaultSpatialDamping": 0.8,
+  "springExpressiveDefaultSpatialStiffness": 380,
+  "springExpressiveDefaultEffectsDamping": 1,
+  "springExpressiveDefaultEffectsStiffness": 1600,
+  "springExpressiveSlowSpatialDamping": 0.8,
+  "springExpressiveSlowSpatialStiffness": 200,
+  "springExpressiveSlowEffectsDamping": 1,
+  "springExpressiveSlowEffectsStiffness": 800,
+  "motionStateDuration": 150,
+  "motionStateEasing": [
+    0.2,
+    0,
+    0,
+    1
+  ],
+  "motionControlDuration": 300,
+  "motionControlEasing": [
+    0.2,
+    0,
+    0,
+    1
+  ],
+  "motionEnterDuration": 500,
+  "motionEnterEasing": [
+    0.05,
+    0.7,
+    0.1,
+    1
+  ],
+  "motionExitDuration": 200,
+  "motionExitEasing": [
+    0.3,
+    0,
+    0.8,
+    0.15
+  ],
+  "motionContainerDuration": 500,
+  "motionSharedAxisDuration": 450,
+  "motionFadeThroughDuration": 450,
+  "motionFadeEnterDuration": 400,
+  "motionFadeEnterEasing": [
+    0.05,
+    0.7,
+    0.1,
+    1
+  ],
+  "motionFadeExitDuration": 150,
+  "motionFadeExitEasing": [
+    0.3,
+    0,
+    0.8,
+    0.15
+  ],
+  "motionRippleGrowDuration": 450,
+  "motionRippleMinimumPressDuration": 225,
+  "motionRippleTouchDelay": 150,
+  "motionRippleFadeInDuration": 105,
+  "motionRippleFadeDuration": 375,
+  "motionRippleHoverDuration": 15,
+  "motionRippleEasing": [
+    0.2,
+    0,
+    0,
+    1
+  ],
+  "motionContainerReturnDuration": 400
 }

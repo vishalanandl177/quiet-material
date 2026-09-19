@@ -39,7 +39,7 @@ public struct QuietTheme<Content: View>: View {
     }
 }
 
-/// Native Button semantics with Quiet Material's restrained press response.
+/// Native Button semantics with an MD3 pressed state layer; no arbitrary press scaling.
 public struct QuietButtonStyle: ButtonStyle {
     @Environment(\.quietAppearance) private var appearance
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -55,11 +55,13 @@ public struct QuietButtonStyle: ButtonStyle {
             .frame(minWidth: QuietTokens.sizeTouchTarget, minHeight: QuietTokens.sizeTouchTarget)
             .foregroundStyle(isEnabled ? appearance.onAction : QuietTokens.colorTextMuted)
             .background(isEnabled ? appearance.action : QuietTokens.colorSurfaceHigh, in: Capsule())
+            .overlay(Capsule().fill(appearance.onAction)
+                .opacity(configuration.isPressed && isEnabled ? 0.10 : 0)
+                .allowsHitTesting(false))
             .contentShape(Capsule())
-            .opacity(configuration.isPressed && isEnabled ? 0.86 : 1)
-            .scaleEffect(configuration.isPressed && !reduceMotion && isEnabled ? 0.98 : 1)
-            .animation(reduceMotion ? nil : .timingCurve(0.2, 0, 0, 1,
-                duration: QuietTokens.durationShort / 1000), value: configuration.isPressed)
+            .animation(QuietMotion.animation(.standard,
+                milliseconds: QuietTokens.durationShort3, reduceMotion: reduceMotion),
+                value: configuration.isPressed)
     }
 }
 

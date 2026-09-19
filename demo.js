@@ -1,5 +1,6 @@
-import {initQuietMaterial, showSnackbar} from './src/quiet-material.js';
+import {initQuietMaterial, showSnackbar, closeQuietDialog} from './src/quiet-material.js';
 import {initMotionStudies} from './demo-motion.js';
+import {transitionView, animateMaterial, cancelMotion} from './src/motion.js';
 
 // Capture small copyable examples before interactive state is added.
 for (const specimen of document.querySelectorAll('.specimen')) {
@@ -18,14 +19,18 @@ function route(focus=false) {
   // The skip-link target must remain a focus destination, not a route.
   if(requested==='content' && pages.some(page=>page.hidden)) {document.querySelector('main').focus();return;}
   const current=pages.find(page=>page.id===requested)||pages[0];
+  const previous=pages.find(page=>!page.hidden);
   motionStudies?.stopAll();
   const navigationSheet=document.querySelector('#navigation-sheet');
-  if(navigationSheet.open)navigationSheet.close();
-  pages.forEach(page=>page.hidden=page!==current);
+  if(navigationSheet.open)closeQuietDialog(navigationSheet);
+  const update=()=>{
+    pages.forEach(page=>page.hidden=page!==current);
+    if(focus) {window.scrollTo(0,0);const title=current.querySelector('h1');title.tabIndex=-1;title.focus({preventScroll:true});}
+  };
+  if(focus && previous && previous!==current)transitionView({from:previous,to:current,pattern:'fade-through',update});else update();
   navLinks.forEach(link=>{if(link.hash==='#'+current.id)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');});
   document.querySelector('.more-nav').toggleAttribute('data-current',!['overview','components','motion'].includes(current.id));
   document.title=`${current.id.charAt(0).toUpperCase()+current.id.slice(1)} · Quiet Material`;
-  if(focus) {window.scrollTo(0,0);const title=current.querySelector('h1');title.tabIndex=-1;title.focus({preventScroll:true});}
 }
 route();window.addEventListener('hashchange',()=>route(true));
 document.addEventListener('click',event=>{const action=event.target.closest('[data-demo-toast]');if(action)showSnackbar(action.dataset.demoToast);});
@@ -37,7 +42,7 @@ const media=window.matchMedia('(prefers-reduced-motion: reduce)');
 motionStudies=initMotionStudies(document,{isReduced:()=>media.matches||motionToggle.checked,announce:message=>document.querySelector('#motion-gallery-status').textContent=message});
 function updateMotion() {document.documentElement.dataset.qmMotion=motionToggle.checked?'reduced':'full';if(media.matches||motionToggle.checked)motionStudies.stopAll();document.querySelector('#motion-status').textContent=media.matches?'Reduced motion is enabled by your system.':motionToggle.checked?'Reduced motion is enabled for this preview.':'Standard subtle motion is enabled.';}
 motionToggle.addEventListener('change',updateMotion);media.addEventListener('change',updateMotion);document.querySelector('#motion-preference-button').addEventListener('click',()=>{motionToggle.checked=!motionToggle.checked;updateMotion();});updateMotion();
-document.addEventListener('visibilitychange',()=>{if(document.hidden)motionStudies.stopAll();});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){motionStudies.stopAll();cancelMotion(document);}});
 // Reserve the actual bottom-nav height, including large text and safe-area insets.
 if('ResizeObserver' in window)new ResizeObserver(entries=>{
   document.documentElement.style.setProperty('--explorer-nav-height',`${entries[0].target.getBoundingClientRect().height}px`);
@@ -52,6 +57,45 @@ projectForm.addEventListener('submit',event=>{
   const row=document.createElement('div');row.className='project-row';
   const icon=document.createElement('span');icon.className='project-icon';icon.textContent='✓';
   const content=document.createElement('span');const title=document.createElement('strong');title.textContent=name;const hint=document.createElement('small');hint.textContent='Created in this preview session';content.append(title,hint);row.append(icon,content);document.querySelector('#project-list').append(row);
-  document.querySelector('#project-dialog').close();projectForm.reset();showSnackbar(`“${name}” created in the workspace.`);
+  closeQuietDialog(document.querySelector('#project-dialog'));projectForm.reset();showSnackbar(`“${name}” created in the workspace.`);
 });
-document.querySelector('#confirm-delete').addEventListener('click',()=>{document.querySelector('#delete-dialog').close();showSnackbar('Confirmation complete. No real data was deleted.');});
+document.querySelector('#confirm-delete').addEventListener('click',()=>{closeQuietDialog(document.querySelector('#delete-dialog'));showSnackbar('Confirmation complete. No real data was deleted.');});
+
+const patternSelect=document.querySelector('#transition-pattern');
+const axisSelect=document.querySelector('#transition-axis');
+const transitionStage=document.querySelector('#transition-stage');
+const summaryView=document.querySelector('#transition-summary');
+const detailView=document.querySelector('#transition-detail');
+const transitionButton=document.querySelector('#play-transition');
+let detailVisible=false;
+patternSelect.addEventListener('change',()=>{
+  cancelMotion(transitionStage);detailVisible=false;summaryView.hidden=false;detailView.hidden=true;
+  document.querySelector('#transition-axis-field').hidden=patternSelect.value!=='shared-axis';
+  transitionButton.textContent='Show next view';document.querySelector('#transition-status').textContent='Summary view';
+});
+transitionButton.addEventListener('click',()=>{
+  const next=!detailVisible;
+  transitionView({from:detailVisible?detailView:summaryView,to:next?detailView:summaryView,
+    pattern:patternSelect.value,axis:axisSelect.value,reverse:detailVisible,
+    update:()=>{detailVisible=next;summaryView.hidden=next;detailView.hidden=!next;
+      transitionButton.textContent=next?'Return to summary':'Show next view';
+      document.querySelector('#transition-status').textContent=next?'Detail view':'Summary view';}});
+});
+let springAtEnd=false;
+const springDot=document.querySelector('#spring-dot');
+const springTrack=document.querySelector('#spring-track');
+const springDestination=()=>springAtEnd?Math.max(0,springTrack.clientWidth-springDot.offsetWidth-24)*(getComputedStyle(springTrack).direction==='rtl'?-1:1):0;
+const settleSpringLayout=()=>{cancelMotion(springDot);springDot.style.translate=`${springDestination()}px`;};
+if('ResizeObserver' in window)new ResizeObserver(settleSpringLayout).observe(springTrack);
+else window.addEventListener('resize',settleSpringLayout);
+document.querySelector('#play-spring').addEventListener('click',()=>{
+  const dot=springDot;
+  const current=Number.parseFloat(getComputedStyle(dot).translate)||0;
+  springAtEnd=!springAtEnd;
+  const target=springDestination();
+  const scheme=document.querySelector('#spring-scheme').value;
+  const speed=document.querySelector('#spring-speed').value;
+  dot.style.translate=`${target}px`;
+  animateMaterial(dot,[{translate:`${current}px`},{translate:`${target}px`}],{scheme,speed,role:'spatial'});
+  document.querySelector('#spring-status').textContent=`${scheme==='standard'?'Standard':'Expressive'} · ${speed} spatial spring${media.matches||motionToggle.checked?' · movement reduced':''}.`;
+});
