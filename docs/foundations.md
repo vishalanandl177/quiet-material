@@ -43,7 +43,7 @@ Use semantic variables in product code. Palette tokens are implementation ingred
 
 The surfaces form one deliberate ladder: #000000 canvas, then #080808, #101010 and #181818 for containers, with #242424 as the single tonal step above them. Keep most pixels neutral. A page usually needs only one visual primary action. Errors, warnings and real positive states may use their semantic colors when an actual state needs them; never use the success color merely to make a card attractive.
 
-The token tests compute the ratios this palette produces: text 17.30:1 on `color-surface`, text-muted 9.49:1, outline 4.95:1, disabled 4.25:1 (up from 3.49:1 before the neutral retune), on-primary-container on the graphite container 14.11:1, and on-primary on a white fill 19.09:1. Those are token-pair figures, not a product audit; see [accessibility](accessibility.md) for the acceptance policy.
+Measured against `color-surface`, the pairs come out at text 17.30:1, text-muted 9.49:1, outline 4.95:1 and disabled 4.25:1, the last up from 3.49:1 against the former #242424 surface. Content on the graphite container is 14.11:1, and `color-on-primary` on a white fill is 19.09:1. The token tests gate the thresholds these figures clear; they are token-pair calculations, not a product audit, so see [accessibility](accessibility.md) for the acceptance policy.
 
 ### Selection and current location
 
@@ -51,6 +51,8 @@ Selection has exactly two treatments, and they are not interchangeable.
 
 - A single-choice indicator is a **white fill with black content**: `color-primary` background, `color-on-primary` content. This covers a selected chip, a segmented-button segment, a selected tab pill, a selected calendar day, a checked switch track and a checked checkbox. A checked radio uses the same white for its ring and inner dot, because a dot carries no content to invert.
 - A current-location highlight is the **graphite container with white content**: `color-primary-container` background, `color-on-primary-container` content. This covers the active navigation destination, the current page in pagination and the current row in a list.
+
+Primary and secondary tabs are the one deliberate variation: instead of filling the tab, they keep a transparent background, raise the label to `color-text` and draw the indicator bar in `color-primary`, which is the same white with the same meaning.
 
 Selection is never signalled by hue alone. The checkmark glyph, the switch thumb travel, the tab indicator, the control boundary and the ARIA state all stay in place, so the state survives a forced-colors or monochrome rendering.
 
@@ -100,13 +102,13 @@ Space tokens run from `--qm-space-0` through `--qm-space-12` in 4px steps: 0-48p
 
 | Shape token | Value | Application |
 | --- | --- | --- |
-| radius-small | 8px | Small embedded details: MD3 chip corners, the inner corners of connected and split buttons, and, halved, the checkbox box |
+| radius-small | 8px | Small embedded details: the four MD3 chip variants, the inner corners of connected and split buttons, and, halved, the checkbox box |
 | radius-tile | 12px | Icon tiles, thumbnails and compact controls |
 | radius-control | 16px | Fields and other compact surfaces |
 | radius-card | 24px | Default cards and containers |
 | radius-feature | 32px | Large feature surfaces whose size justifies a wider corner |
 | radius-dialog | 32px | Dialogs and sheets |
-| radius-pill | 999px | Buttons, chips, segmented selectors and rounded navigation |
+| radius-pill | 999px | Buttons, the base chip, tab pills, segmented selectors and rounded navigation |
 
 `radius-card` moved from 40px to 24px in this direction, and `radius-card-compact` moved from 32px to 24px; it is now an alias of `radius-card`. The old 40px default read as a soft capsule rather than a panel: at ordinary card widths it ate the corners of the content, forced extra padding to keep text clear of the curve, and left the page looking rounder than the approved direction, whose surfaces are square-shouldered rounded rectangles with pill shapes reserved for controls. The consequence is intentional and visible: the default card silhouette is tighter than in 1.3. A surface that genuinely wants the wider corner should ask for `radius-feature`.
 
@@ -116,7 +118,7 @@ Content maximum width is 1200px; reading width is 720px; desktop sidebar width i
 
 ## Elevation
 
-Depth comes from the surface step, spacing and a selective 1px edge. Fills are solid. There are no gradients, glows, blurs, glass effects, neumorphic treatments or moving backgrounds; the one gradient in the system is a scrim ramp that keeps a caption legible over an image, which is legibility rather than decoration.
+Depth comes from the surface step, spacing and a selective 1px edge. Fills are solid. There are no decorative gradients, glows, blurs, glass effects, neumorphic treatments or moving backgrounds. The stylesheets use `linear-gradient` in exactly two places, and neither is decoration: a scrim ramp that keeps a carousel caption legible over an image, and the hard-stop bands that mark the selected range on a two-thumb slider, which read as two solid fills rather than a ramp.
 
 Shadows are reserved for surfaces that genuinely float above the page. Three composites cover every such case, and `styles/base.css` assembles each one from the generated elevation primitives:
 
@@ -154,7 +156,7 @@ Hover, focus, press and drag feedback is a translucent layer in the control's ow
 | `--qm-state-pressed` | 0.12 | Press, and the ripple's own opacity |
 | `--qm-state-dragged` | 0.16 | Drag |
 
-Because the layer uses `currentColor`, the same rule works on a black-on-white primary button and on a white-on-graphite container. A state layer never replaces the selection treatment or the focus ring; it sits alongside them.
+Because the layer uses `currentColor`, the same rule works on a black-on-white primary button and on a white-on-graphite container. A state layer never replaces the selection treatment or the focus ring; it sits alongside them. Hover, focus and press are wired into the shipped components; `--qm-state-dragged` is defined for products that build a draggable control, and no component in this repository consumes it yet.
 
 ## Icons and imagery
 
