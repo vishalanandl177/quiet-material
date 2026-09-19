@@ -191,3 +191,75 @@ document.addEventListener('qm:search',event=>{
     });results.append(result);
   }
 });
+
+// Showcase page. Every fixture is static markup in index.html: nothing is fetched, scanned, stored or timed.
+const showcaseMatches=(text,query)=>query.trim().toLowerCase().split(/\s+/).filter(Boolean).every(word=>text.toLowerCase().includes(word));
+const showcaseSingleChoice=(buttons,chosen)=>buttons.forEach(button=>button.setAttribute('aria-pressed',String(button===chosen)));
+const showcaseTileSearch=document.querySelector('#showcase-tile-search');
+const showcaseTiles=[...document.querySelectorAll('#showcase-tile-grid [data-showcase-tile]')];
+function filterShowcaseTiles() {
+  let total=0;
+  for(const tile of showcaseTiles){tile.hidden=!showcaseMatches(tile.dataset.showcaseTile,showcaseTileSearch.value);if(!tile.hidden)total++;}
+  document.querySelector('#showcase-tile-status').textContent=total?`${total} of ${showcaseTiles.length} example tiles shown.`:'No example tile matches that search.';
+}
+showcaseTileSearch.addEventListener('input',filterShowcaseTiles);
+document.querySelector('#showcase-tile-clear').addEventListener('click',()=>{showcaseTileSearch.value='';filterShowcaseTiles();showcaseTileSearch.focus();});
+filterShowcaseTiles();
+
+const showcaseDirectorySearch=document.querySelector('#showcase-directory-search');
+const showcaseEntries=[...document.querySelectorAll('#showcase-directory-groups [data-showcase-entry]')];
+const showcaseGroups=[...document.querySelectorAll('#showcase-directory-groups [data-showcase-group]')];
+const showcaseFilters=[...document.querySelectorAll('#showcase-directory-filters [data-showcase-filter]')];
+let showcaseCategory='all';
+function filterShowcaseDirectory() {
+  let total=0;
+  for(const entry of showcaseEntries) {
+    const inCategory=showcaseCategory==='all'||entry.dataset.showcaseCategory===showcaseCategory;
+    entry.hidden=!(inCategory&&showcaseMatches(`${entry.dataset.showcaseEntry} ${entry.dataset.showcaseCategory}`,showcaseDirectorySearch.value));
+    if(!entry.hidden)total++;
+  }
+  for(const group of showcaseGroups)group.hidden=![...group.querySelectorAll('[data-showcase-entry]')].some(entry=>!entry.hidden);
+  showcaseFilters.forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.showcaseFilter===showcaseCategory)));
+  document.querySelector('#showcase-directory-status').textContent=`${total} of ${showcaseEntries.length} example entries shown.`;
+  document.querySelector('#showcase-directory-empty').hidden=total>0;
+}
+showcaseDirectorySearch.addEventListener('input',filterShowcaseDirectory);
+document.querySelector('#showcase-directory-filters').addEventListener('qm:chip-change',event=>{
+  const button=event.target.closest('[data-showcase-filter]');if(!button)return;
+  showcaseCategory=button.dataset.showcaseFilter;filterShowcaseDirectory();
+});
+filterShowcaseDirectory();
+
+const showcaseResultsSearch=document.querySelector('#showcase-results-search');
+const showcaseResults=[...document.querySelectorAll('#showcase-results-list [data-showcase-result]')];
+function filterShowcaseResults() {
+  const query=showcaseResultsSearch.value.trim();let total=0;
+  for(const row of showcaseResults){row.hidden=!showcaseMatches(row.dataset.showcaseResult,showcaseResultsSearch.value);if(!row.hidden)total++;}
+  document.querySelector('#showcase-results-status').textContent=query?`${total} example ${total===1?'result':'results'} for “${query}”.`:`${showcaseResults.length} example results.`;
+  document.querySelector('#showcase-results-empty').hidden=total>0;
+}
+showcaseResultsSearch.addEventListener('input',filterShowcaseResults);filterShowcaseResults();
+
+const showcaseDays=[...document.querySelectorAll('#showcase-date-strip [data-showcase-day]')];
+document.querySelector('#showcase-date-strip').addEventListener('qm:chip-change',event=>{
+  const chip=event.target.closest('[data-showcase-day]');if(!chip)return;
+  showcaseSingleChoice(showcaseDays,chip);
+  document.querySelector('#showcase-date-status').textContent=`${chip.dataset.showcaseDay} chosen in this example.`;
+});
+document.querySelector('#showcase-text-size').addEventListener('qm:segmented-change',event=>{
+  const chosen=event.currentTarget.querySelector('button[aria-checked="true"]');
+  document.querySelector('#showcase-text-size-status').textContent=`${chosen?chosen.textContent.trim():event.detail.value} chosen in this example.`;
+});
+const showcaseShapes=[...document.querySelectorAll('#showcase-shape-row [data-showcase-shape]')];
+document.querySelector('#showcase-shape-row').addEventListener('qm:chip-change',event=>{
+  const button=event.target.closest('[data-showcase-shape]');if(!button)return;
+  showcaseSingleChoice(showcaseShapes,button);
+  document.querySelector('#showcase-shape-preview').dataset.showcaseShape=button.dataset.showcaseShape;
+  document.querySelector('#showcase-shape-status').textContent=`${button.textContent.trim()} corners chosen in this example.`;
+});
+// A current row is the graphite container treatment, never the white selection fill.
+const showcaseRows=[...document.querySelectorAll('#showcase-section-list [data-showcase-row]')];
+showcaseRows.forEach(row=>row.addEventListener('click',()=>{
+  showcaseRows.forEach(other=>{if(other===row)other.setAttribute('aria-current','true');else other.removeAttribute('aria-current');});
+  document.querySelector('#showcase-section-status').textContent=`${row.dataset.showcaseRow} is the current example row.`;
+}));

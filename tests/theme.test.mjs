@@ -54,7 +54,8 @@ test('component stylesheets take every corner radius and stacking tier from the 
 
     const layers = [...withoutForcedColors(css).matchAll(/z-index:\s*([^;}]+)/g)]
       .map((match) => match[1].trim())
-      .filter((value) => !value.startsWith('var('));
+      // A negated tier such as calc(var(--qm-layer-raised) * -1) is still token-driven.
+      .filter((value) => !/var\(--qm-layer-/.test(value));
     assert.deepEqual(layers, [], `${name} must use layer tokens, found: ${layers.join(' | ')}`);
   }
 });

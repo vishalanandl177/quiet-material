@@ -4,6 +4,24 @@ public enum QuietButtonKind: Equatable { case filled, tonal, outlined, text, ele
 public enum QuietChipKind: Equatable { case assist, suggestion, filter, input }
 public enum QuietCardKind: Equatable { case filled, outlined, elevated }
 
+/// Graphite marks the current destination or row; white marks the one chosen option.
+/// Selection is never signalled by hue, only by this fill and label pair.
+enum QuietSelectionEmphasis {
+    case destination, choice
+    var fill: Color {
+        switch self {
+        case .destination: return QuietTokens.colorPrimaryContainer
+        case .choice: return QuietTokens.colorPrimary
+        }
+    }
+    var label: Color {
+        switch self {
+        case .destination: return QuietTokens.colorOnPrimaryContainer
+        case .choice: return QuietTokens.colorOnPrimary
+        }
+    }
+}
+
 public struct QuietAction: Identifiable {
     public let id: String
     public let label: String
@@ -45,18 +63,43 @@ private struct QuietVariantButtonStyle: ButtonStyle {
     @Environment(\.accessibilityReduceMotion) private var reduced
     func makeBody(configuration: Configuration) -> some View {
         configuration.label.font(.headline).fixedSize(horizontal: false, vertical: true)
-            .padding(.horizontal, 24).padding(.vertical, 12)
-            .frame(minWidth: 48, minHeight: 48)
-            .foregroundStyle(kind == .filled ? QuietTokens.colorOnAction : QuietTokens.colorText)
-            .background(kind == .filled ? QuietTokens.colorAction :
-                        kind == .text || kind == .outlined ? Color.clear : QuietTokens.colorSurfaceHigh,
-                        in: Capsule())
-            .overlay(Capsule().stroke(kind == .outlined ? QuietTokens.colorOutline : Color.clear))
-            .overlay(Capsule().fill(QuietTokens.colorText)
-                .opacity(configuration.isPressed && enabled ? 0.10 : 0).allowsHitTesting(false))
-            .opacity(enabled ? 1 : 0.38)
+            .padding(.horizontal, QuietTokens.space6).padding(.vertical, QuietTokens.space3)
+            .frame(minWidth: QuietTokens.sizeTouchTarget, minHeight: QuietTokens.sizeTouchTarget)
+            .foregroundStyle(enabled ? labelColor : QuietTokens.colorDisabled)
+            .background(enabled ? fillColor : disabledFill, in: Capsule())
+            .overlay(Capsule().stroke(kind == .outlined
+                ? (enabled ? QuietTokens.colorOutline : QuietTokens.colorDisabled) : Color.clear,
+                lineWidth: QuietTokens.borderWidth))
+            .overlay(Capsule().fill(labelColor)
+                .opacity(configuration.isPressed && enabled ? QuietTokens.statePressed : 0).allowsHitTesting(false))
+            .contentShape(Capsule())
+            .shadow(color: kind == .elevated ? QuietTokens.elevationLevel1Color : Color.clear,
+                radius: QuietTokens.elevationLevel1Blur / 2, y: QuietTokens.elevationLevel1OffsetY)
             .animation(QuietMotion.animation(.standard, milliseconds: QuietTokens.durationShort3,
                 reduceMotion: reduced), value: configuration.isPressed)
+    }
+    // Filled carries the strong white action, tonal the graphite step; text and outlined stay quiet.
+    private var fillColor: Color {
+        switch kind {
+        case .filled: return QuietTokens.colorAction
+        case .tonal: return QuietTokens.colorPrimaryContainer
+        case .elevated: return QuietTokens.colorSurfaceLow
+        case .outlined, .text: return Color.clear
+        }
+    }
+    private var labelColor: Color {
+        switch kind {
+        case .filled: return QuietTokens.colorOnAction
+        case .tonal: return QuietTokens.colorOnPrimaryContainer
+        case .elevated, .outlined, .text: return QuietTokens.colorText
+        }
+    }
+    // A quiet action stays quiet when it is inactive; a filled one drops to the recessed surface.
+    private var disabledFill: Color {
+        switch kind {
+        case .outlined, .text: return Color.clear
+        case .filled, .tonal, .elevated: return QuietTokens.colorSurfaceLow
+        }
     }
 }
 
@@ -68,7 +111,11 @@ public struct QuietIconButton: View {
         self.label = label; image = systemImage; self.action = action
     }
     public var body: some View {
-        Button(action: action) { Image(systemName: image).frame(minWidth: 48, minHeight: 48) }
+        Button(action: action) {
+            Image(systemName: image)
+                .frame(minWidth: QuietTokens.sizeTouchTarget, minHeight: QuietTokens.sizeTouchTarget)
+                .contentShape(Capsule())
+        }
             .buttonStyle(.plain).accessibilityLabel(label).help(label)
     }
 }
@@ -84,11 +131,14 @@ public struct QuietFab: View {
     }
     public var body: some View {
         Button(action: action) {
-            HStack { Image(systemName: image); if extended { Text(label) } }
-                .padding(16).frame(minWidth: 56, minHeight: 56)
-                .background(QuietTokens.colorPrimaryContainer,
-                            in: RoundedRectangle(cornerRadius: 16))
+            HStack(spacing: QuietTokens.space3) { Image(systemName: image); if extended { Text(label) } }
+                .padding(QuietTokens.space4)
+                .frame(minWidth: 56, minHeight: 56) // 56pt - standard FAB geometry, no spacing step matches
                 .foregroundStyle(QuietTokens.colorOnPrimaryContainer)
+                .background(QuietTokens.colorPrimaryContainer,
+                            in: RoundedRectangle(cornerRadius: QuietTokens.radiusControl, style: .continuous))
+                .shadow(color: QuietTokens.elevationLevel3Color,
+                        radius: QuietTokens.elevationLevel3Blur / 2, y: QuietTokens.elevationLevel3OffsetY)
         }.buttonStyle(.plain).accessibilityLabel(label)
     }
 }
@@ -98,8 +148,8 @@ public struct QuietButtonGroup: View {
     public init(_ actions: [QuietAction]) { self.actions = actions }
     public var body: some View {
         ViewThatFits(in: .horizontal) {
-            HStack { buttons }
-            VStack(alignment: .leading) { buttons }
+            HStack(spacing: QuietTokens.space2) { buttons }
+            VStack(alignment: .leading, spacing: QuietTokens.space2) { buttons }
         }
     }
     private var buttons: some View {
@@ -117,7 +167,8 @@ public struct QuietMenu: View {
                 if let image = item.systemImage { Label(item.label, systemImage: image) }
                 else { Text(item.label) }
             }.disabled(!item.enabled)
-        } }.frame(minWidth: 48, minHeight: 48)
+        } }.frame(minWidth: QuietTokens.sizeTouchTarget, minHeight: QuietTokens.sizeTouchTarget)
+            .tint(QuietTokens.colorPrimary)
     }
 }
 
@@ -130,8 +181,8 @@ public struct QuietSplitButton: View {
     }
     public var body: some View {
         ViewThatFits(in: .horizontal) {
-            HStack(spacing: 4) { primaryButton; QuietMenu(menuLabel, actions: actions) }
-            VStack(alignment: .leading) { primaryButton; QuietMenu(menuLabel, actions: actions) }
+            HStack(spacing: QuietTokens.space1) { primaryButton; QuietMenu(menuLabel, actions: actions) }
+            VStack(alignment: .leading, spacing: QuietTokens.space1) { primaryButton; QuietMenu(menuLabel, actions: actions) }
         }
     }
     private var primaryButton: some View {
@@ -144,8 +195,9 @@ public struct QuietFabMenu: View {
     private let actions: [QuietAction]
     public init(_ label: String, actions: [QuietAction]) { self.label = label; self.actions = actions }
     public var body: some View {
-        QuietMenu(label, actions: actions).padding(.horizontal, 16)
-            .background(QuietTokens.colorPrimaryContainer, in: RoundedRectangle(cornerRadius: 16))
+        QuietMenu(label, actions: actions).padding(.horizontal, QuietTokens.space4)
+            .background(QuietTokens.colorPrimaryContainer,
+                        in: RoundedRectangle(cornerRadius: QuietTokens.radiusControl, style: .continuous))
     }
 }
 
@@ -157,9 +209,23 @@ public struct QuietSegments: View {
         self.label = label; self.choices = choices; _selection = selection
     }
     public var body: some View {
-        Picker(label, selection: $selection) {
-            ForEach(choices) { Text($0.label).tag($0.id) }
-        }.pickerStyle(.segmented).frame(minHeight: 48)
+        HStack(spacing: QuietTokens.space0) {
+            ForEach(choices) { item in
+                let chosen = selection == item.id
+                Button { selection = item.id } label: {
+                    Text(item.label).font(.subheadline)
+                        .padding(.horizontal, QuietTokens.space4)
+                        .frame(maxWidth: .infinity, minHeight: QuietTokens.sizeTouchTarget)
+                        .foregroundStyle(chosen ? QuietTokens.colorOnPrimary : QuietTokens.colorText)
+                        .background(chosen ? QuietTokens.colorPrimary : Color.clear, in: Capsule())
+                        .contentShape(Capsule())
+                }.buttonStyle(.plain).accessibilityAddTraits(chosen ? .isSelected : [])
+            }
+        }.frame(minHeight: QuietTokens.sizeTouchTarget)
+            .background(QuietTokens.colorSurfaceLow, in: Capsule())
+            // The track edge identifies the control, so it takes the functional outline.
+            .overlay(Capsule().stroke(QuietTokens.colorOutline, lineWidth: QuietTokens.borderWidth))
+            .accessibilityElement(children: .contain).accessibilityLabel(label)
     }
 }
 
@@ -177,16 +243,19 @@ public struct QuietChip: View {
         self.removeLabel = removeLabel; remove = onRemove; self.action = action
     }
     public var body: some View {
-        HStack(spacing: 0) {
+        HStack(spacing: QuietTokens.space0) {
             Button(action: action) {
-                HStack { if selected { Image(systemName: "checkmark") }; Text(label) }
-                    .padding(.horizontal, 12).frame(minHeight: 48)
+                HStack(spacing: QuietTokens.space2) { if selected { Image(systemName: "checkmark") }; Text(label) }
+                    .padding(.horizontal, QuietTokens.space4).frame(minHeight: QuietTokens.sizeTouchTarget)
+                    .contentShape(Capsule())
             }.buttonStyle(.plain).accessibilityAddTraits(selected ? .isSelected : [])
             if kind == .input, let remove {
                 QuietIconButton(removeLabel + " " + label, systemImage: "xmark", action: remove)
             }
-        }.background(selected ? QuietTokens.colorPrimaryContainer : QuietTokens.colorSurface,
-                     in: RoundedRectangle(cornerRadius: 12))
+        }.foregroundStyle(selected ? QuietTokens.colorOnPrimary : QuietTokens.colorTextMuted)
+        .background(selected ? QuietTokens.colorPrimary : Color.clear, in: Capsule())
+        .overlay(Capsule().stroke(selected ? Color.clear : QuietTokens.colorOutline,
+                                 lineWidth: QuietTokens.borderWidth))
     }
 }
 
@@ -198,9 +267,10 @@ public struct QuietBadge<Content: View>: View {
     }
     public var body: some View {
         content.overlay(alignment: .topTrailing) {
-            if let text { Text(text).font(.caption2).padding(4)
+            if let text { Text(text).font(.caption2).padding(QuietTokens.space1)
                 .background(QuietTokens.colorDanger, in: Capsule()).foregroundStyle(QuietTokens.colorDangerContainer) }
-            else { Circle().fill(QuietTokens.colorDanger).frame(width: 6, height: 6) }
+            else { Circle().fill(QuietTokens.colorDanger)
+                .frame(width: 6, height: 6) } // 6pt - badge dot glyph geometry, no spacing step matches
         }
     }
 }
@@ -216,16 +286,19 @@ public struct QuietProgress: View {
     public var body: some View {
         Group {
             if circular {
+                // 4pt stroke and a 40pt dial are indicator geometry; no spacing step matches either.
                 if let value { ZStack { Circle().stroke(QuietTokens.colorSurfaceHigh, lineWidth: 4)
                     Circle().trim(from: 0, to: min(1, max(0, value))).stroke(QuietTokens.colorPrimary,
                         style: StrokeStyle(lineWidth: 4, lineCap: .round)).rotationEffect(.degrees(-90))
                 }.frame(width: 40, height: 40).accessibilityValue(Text(value, format: .percent)) }
-                else if reduced { Image(systemName: "hourglass").frame(width: 40, height: 40) }
+                else if reduced { Image(systemName: "hourglass").foregroundStyle(QuietTokens.colorText)
+                    .frame(width: 40, height: 40) }
                 else { ProgressView().progressViewStyle(.circular) }
             } else if value == nil && reduced {
-                RoundedRectangle(cornerRadius: 2).fill(QuietTokens.colorPrimary).frame(height: 4)
+                Capsule().fill(QuietTokens.colorPrimary)
+                    .frame(height: 4) // 4pt - indicator bar thickness, no spacing step matches
             } else { ProgressView(value: value).progressViewStyle(.linear) }
-        }.accessibilityLabel(label)
+        }.tint(QuietTokens.colorPrimary).accessibilityLabel(label)
     }
 }
 
@@ -256,7 +329,7 @@ public struct QuietLoadingIndicator: View {
                 }
                 path.closeSubpath(); drawing.fill(path, with: .color(QuietTokens.colorPrimary))
             }.onChange(of: tick.date) { now in advance(now) }
-        }.frame(width: 48, height: 48).accessibilityLabel(label)
+        }.frame(width: QuietTokens.sizeControl, height: QuietTokens.sizeControl).accessibilityLabel(label)
             .onChange(of: reduced) { _ in last = nil }
             .onChange(of: scenePhase) { _ in last = nil }
             .onAppear { last = nil }
@@ -293,14 +366,20 @@ public struct QuietSnackbar: View {
         self.message = message; self.action = action; self.dismiss = dismiss
     }
     public var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(message)
-            HStack {
+        VStack(alignment: .leading, spacing: QuietTokens.space2) {
+            Text(message).foregroundStyle(QuietTokens.colorText)
+            HStack(spacing: QuietTokens.space4) {
                 if let action { Button(action.label, action: action.perform).disabled(!action.enabled) }
                 Spacer()
                 Button(dismiss.label, action: dismiss.perform)
-            }.frame(minHeight: 48)
-        }.padding(16).background(QuietTokens.colorSurfaceHigh, in: RoundedRectangle(cornerRadius: 16))
+            }.frame(minHeight: QuietTokens.sizeTouchTarget).tint(QuietTokens.colorPrimary)
+        }.padding(QuietTokens.space4)
+        .background(QuietTokens.colorSurfaceHigh,
+                    in: RoundedRectangle(cornerRadius: QuietTokens.radiusCard, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: QuietTokens.radiusCard, style: .continuous)
+            .stroke(QuietTokens.colorOutlineVariant, lineWidth: QuietTokens.borderWidth))
+        .shadow(color: QuietTokens.elevationLevel2Color,
+                radius: QuietTokens.elevationLevel2Blur / 2, y: QuietTokens.elevationLevel2OffsetY)
     }
 }
 
@@ -312,17 +391,21 @@ public struct QuietRichTooltip<Content: View>: View {
         self.title = title; _presented = isPresented; self.content = content()
     }
     public var body: some View {
-        Button(title) { presented.toggle() }.frame(minHeight: 48)
+        Button(title) { presented.toggle() }.frame(minHeight: QuietTokens.sizeTouchTarget)
+            .tint(QuietTokens.colorPrimary)
             .popover(isPresented: $presented) {
-                QuietTheme { VStack(alignment: .leading, spacing: 12) { Text(title).font(.headline); content }
-                    .padding(24).frame(idealWidth: 280) }
+                QuietTheme { VStack(alignment: .leading, spacing: QuietTokens.space3) {
+                    Text(title).font(.headline).foregroundStyle(QuietTokens.colorText); content }
+                    .padding(QuietTokens.space6)
+                    .frame(idealWidth: 280) // 280pt - tooltip reading width, no spacing step matches
+                    .background(QuietTokens.colorSurfaceHigh) }
             }
     }
 }
 
 public struct QuietDivider: View {
     public init() {}
-    public var body: some View { Divider().overlay(QuietTokens.colorOutline) }
+    public var body: some View { Divider().overlay(QuietTokens.colorOutlineVariant) }
 }
 
 public struct QuietListItem: View {
@@ -333,13 +416,16 @@ public struct QuietListItem: View {
         self.title = title; self.supporting = supporting; image = systemImage
     }
     public var body: some View {
-        HStack(spacing: 16) {
+        HStack(spacing: QuietTokens.space4) {
             if let image { Image(systemName: image).accessibilityHidden(true) }
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title); if let supporting { Text(supporting).font(.subheadline).foregroundStyle(QuietTokens.colorTextMuted) }
+            VStack(alignment: .leading, spacing: QuietTokens.space1) {
+                Text(title).foregroundStyle(QuietTokens.colorText)
+                if let supporting { Text(supporting).font(.subheadline).foregroundStyle(QuietTokens.colorTextMuted) }
             }
             Spacer(minLength: 0)
-        }.padding(16).frame(minHeight: 56).background(QuietTokens.colorSurface)
+        }.padding(.vertical, QuietTokens.space2).padding(.horizontal, QuietTokens.space4)
+        .frame(minHeight: 56) // 56pt - one-line row height, no spacing step matches
+        .background(QuietTokens.colorSurface)
     }
 }
 
@@ -347,7 +433,8 @@ public struct QuietCarousel<Content: View>: View {
     private let content: Content
     public init(@ViewBuilder content: () -> Content) { self.content = content() }
     public var body: some View {
-        ScrollView(.horizontal) { HStack(alignment: .top, spacing: 12) { content }.padding(.vertical, 8) }
+        ScrollView(.horizontal) { HStack(alignment: .top, spacing: QuietTokens.space3) { content }
+            .padding(.vertical, QuietTokens.space2) }
     }
 }
 
@@ -355,8 +442,10 @@ public struct QuietToolbar<Content: View>: View {
     private let content: Content
     public init(@ViewBuilder content: () -> Content) { self.content = content() }
     public var body: some View {
-        ScrollView(.horizontal) { HStack(spacing: 8) { content }.padding(8) }
-            .background(QuietTokens.colorSurface, in: Capsule())
+        ScrollView(.horizontal) { HStack(spacing: QuietTokens.space2) { content }.padding(QuietTokens.space2) }
+            .background(QuietTokens.colorSurfaceHigh, in: Capsule())
+            .shadow(color: QuietTokens.elevationLevel2Color,
+                    radius: QuietTokens.elevationLevel2Blur / 2, y: QuietTokens.elevationLevel2OffsetY)
     }
 }
 
@@ -365,15 +454,18 @@ public struct QuietCheckbox: View {
     @Binding private var checked: Bool
     public init(_ label: String, isOn: Binding<Bool>) { self.label = label; _checked = isOn }
     public var body: some View {
-        Toggle(isOn: $checked) { Text(label) }.toggleStyle(QuietCheckboxStyle()).frame(minHeight: 48)
+        Toggle(isOn: $checked) { Text(label) }.toggleStyle(QuietCheckboxStyle())
+            .frame(minHeight: QuietTokens.sizeTouchTarget)
     }
 }
 private struct QuietCheckboxStyle: ToggleStyle {
     func makeBody(configuration: Configuration) -> some View {
         Button { configuration.isOn.toggle() } label: {
-            HStack { Image(systemName: configuration.isOn ? "checkmark.square.fill" : "square")
-                configuration.label }
-        }.buttonStyle(.plain).frame(minHeight: 48)
+            HStack(spacing: QuietTokens.space3) {
+                Image(systemName: configuration.isOn ? "checkmark.square.fill" : "square")
+                    .foregroundStyle(configuration.isOn ? QuietTokens.colorPrimary : QuietTokens.colorOutline)
+                configuration.label.foregroundStyle(QuietTokens.colorText) }
+        }.buttonStyle(.plain).frame(minHeight: QuietTokens.sizeTouchTarget)
             .accessibilityValue(configuration.isOn ? "Checked" : "Unchecked")
     }
 }
@@ -387,7 +479,7 @@ public struct QuietRadioGroup: View {
     }
     public var body: some View {
         Picker(label, selection: $selection) { ForEach(choices) { Text($0.label).tag($0.id) } }
-            .frame(minHeight: 48)
+            .tint(QuietTokens.colorPrimary).frame(minHeight: QuietTokens.sizeTouchTarget)
     }
 }
 
@@ -405,14 +497,14 @@ public struct QuietRangeSlider: View {
         self.bounds = bounds; self.step = step
     }
     public var body: some View {
-        VStack {
+        VStack(spacing: QuietTokens.space3) {
             Slider(value: Binding(get: { lower }, set: { lower = min($0, upper) }), in: bounds, step: step) {
                 Text(lowerLabel)
             }.accessibilityLabel(lowerLabel)
             Slider(value: Binding(get: { upper }, set: { upper = max($0, lower) }), in: bounds, step: step) {
                 Text(upperLabel)
             }.accessibilityLabel(upperLabel)
-        }
+        }.tint(QuietTokens.colorPrimary)
     }
 }
 
@@ -423,14 +515,16 @@ public struct QuietDatePicker: View {
     public init(_ label: String, selection: Binding<Date>, in range: ClosedRange<Date> = Date.distantPast...Date.distantFuture) {
         self.label = label; _date = selection; self.range = range
     }
-    public var body: some View { DatePicker(label, selection: $date, in: range, displayedComponents: .date).frame(minHeight: 48) }
+    public var body: some View { DatePicker(label, selection: $date, in: range, displayedComponents: .date)
+        .tint(QuietTokens.colorPrimary).frame(minHeight: QuietTokens.sizeTouchTarget) }
 }
 
 public struct QuietTimePicker: View {
     private let label: String
     @Binding private var date: Date
     public init(_ label: String, selection: Binding<Date>) { self.label = label; _date = selection }
-    public var body: some View { DatePicker(label, selection: $date, displayedComponents: .hourAndMinute).frame(minHeight: 48) }
+    public var body: some View { DatePicker(label, selection: $date, displayedComponents: .hourAndMinute)
+        .tint(QuietTokens.colorPrimary).frame(minHeight: QuietTokens.sizeTouchTarget) }
 }
 
 public struct QuietDateRangePicker: View {
@@ -442,10 +536,10 @@ public struct QuietDateRangePicker: View {
         self.startLabel = startLabel; self.endLabel = endLabel; _start = start; _end = end
     }
     public var body: some View {
-        VStack {
+        VStack(spacing: QuietTokens.space3) {
             DatePicker(startLabel, selection: $start, in: Date.distantPast...end, displayedComponents: .date)
             DatePicker(endLabel, selection: $end, in: start...Date.distantFuture, displayedComponents: .date)
-        }
+        }.tint(QuietTokens.colorPrimary)
     }
 }
 
@@ -457,7 +551,7 @@ public struct QuietSearch<Results: View>: View {
         self.label = label; _query = query; self.results = results()
     }
     public var body: some View {
-        VStack(alignment: .leading, spacing: 16) { QuietTextField(LocalizedStringKey(label), text: $query); results }
+        VStack(alignment: .leading, spacing: QuietTokens.space4) { QuietTextField(LocalizedStringKey(label), text: $query); results }
     }
 }
 
@@ -493,23 +587,19 @@ public struct QuietAdaptiveNavigation<Content: View>: View {
             let wide = geometry.size.width >= QuietTokens.breakpointMedium && !textSize.isAccessibilitySize
             content.frame(maxWidth: .infinity, maxHeight: .infinity)
                 .safeAreaInset(edge: .bottom, spacing: 0) {
-                    if !wide { ScrollView(.horizontal) { HStack(spacing: 8) { navigationItems } } }
+                    if !wide { ScrollView(.horizontal) { HStack(spacing: QuietTokens.space2) { navigationItems } } }
                 }
                 .safeAreaInset(edge: .leading, spacing: 0) {
                     if wide {
-                        ScrollView { VStack(alignment: .leading, spacing: 8) { navigationItems } }.frame(width: 180)
+                        ScrollView { VStack(alignment: .leading, spacing: QuietTokens.space2) { navigationItems } }
+                            .frame(width: 180) // 180pt - rail width, no spacing step matches
                     }
                 }
         }.background(QuietTokens.colorBackground)
     }
+    // One destination treatment for the rail, the bar and this shell.
     private var navigationItems: some View {
-        ForEach(choices) { item in
-            Button { selection = item.id } label: { Label(item.label, systemImage: item.systemImage)
-                .padding(12).frame(minHeight: 48)
-                .background(selection == item.id ? QuietTokens.colorSurfaceHigh : Color.clear,
-                            in: RoundedRectangle(cornerRadius: 24)) }
-                .buttonStyle(.plain).accessibilityAddTraits(selection == item.id ? .isSelected : [])
-        }
+        QuietNavigationItems(choices: choices, selection: $selection)
     }
 }
 
@@ -525,13 +615,17 @@ public struct QuietField: View {
         self.supporting = supporting; self.error = error
     }
     public var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(label).font(.subheadline).accessibilityHidden(true)
-            TextField(label, text: $text).textFieldStyle(.plain).padding(16).frame(minHeight: 56)
-                .background(filled ? QuietTokens.colorSurfaceHigh : QuietTokens.colorBackground,
-                            in: RoundedRectangle(cornerRadius: 12))
-                .overlay(RoundedRectangle(cornerRadius: 12)
-                    .stroke(error == nil ? QuietTokens.colorOutline : QuietTokens.colorDanger))
+        VStack(alignment: .leading, spacing: QuietTokens.space2) {
+            Text(label).font(.subheadline).foregroundStyle(QuietTokens.colorTextMuted).accessibilityHidden(true)
+            TextField(label, text: $text).textFieldStyle(.plain)
+                .foregroundStyle(QuietTokens.colorText).tint(QuietTokens.colorPrimary)
+                .padding(QuietTokens.space4)
+                .frame(minHeight: 56) // 56pt - field control geometry, no spacing step matches
+                .background(filled ? QuietTokens.colorSurfaceHigh : QuietTokens.colorSurfaceLow,
+                            in: RoundedRectangle(cornerRadius: QuietTokens.radiusControl, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: QuietTokens.radiusControl, style: .continuous)
+                    .stroke(error == nil ? QuietTokens.colorOutline : QuietTokens.colorDanger,
+                            lineWidth: QuietTokens.borderWidth))
                 .accessibilityHint(error ?? supporting ?? "")
             if let message = error ?? supporting {
                 Text(message).font(.caption).foregroundStyle(error == nil ? QuietTokens.colorTextMuted : QuietTokens.colorDanger)
@@ -547,10 +641,18 @@ public struct QuietSurfaceCard<Content: View>: View {
         self.kind = kind; self.content = content()
     }
     public var body: some View {
-        QuietCard { content }
-            .overlay(RoundedRectangle(cornerRadius: QuietTokens.radiusCardCompact)
-                .stroke(kind == .outlined ? QuietTokens.colorOutline : Color.clear))
-            .shadow(color: .black.opacity(kind == .elevated ? 0.3 : 0), radius: 3, y: 1)
+        QuietCard(fill: fill) { content }
+            .shadow(color: kind == .elevated ? QuietTokens.elevationLevel1Color : Color.clear,
+                    radius: QuietTokens.elevationLevel1Blur / 2, y: QuietTokens.elevationLevel1OffsetY)
+    }
+    // Filled sits on the default surface, outlined lets the canvas show through its grouping edge,
+    // elevated steps down a surface and lifts instead.
+    private var fill: Color {
+        switch kind {
+        case .filled: return QuietTokens.colorSurface
+        case .outlined: return Color.clear
+        case .elevated: return QuietTokens.colorSurfaceLow
+        }
     }
 }
 
@@ -564,8 +666,10 @@ public struct QuietSlider: View {
         self.label = label; _value = value; self.bounds = bounds; self.step = step
     }
     public var body: some View {
-        VStack(alignment: .leading) { Text(label)
-            Slider(value: $value, in: bounds, step: step) { Text(label) }.frame(minHeight: 48)
+        VStack(alignment: .leading, spacing: QuietTokens.space2) {
+            Text(label).foregroundStyle(QuietTokens.colorText)
+            Slider(value: $value, in: bounds, step: step) { Text(label) }
+                .tint(QuietTokens.colorPrimary).frame(minHeight: QuietTokens.sizeTouchTarget)
         }
     }
 }
@@ -578,8 +682,8 @@ public struct QuietTabs<Content: View>: View {
         self.choices = choices; _selection = selection; self.content = content()
     }
     public var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            QuietNavigationBar(choices: choices, selection: $selection)
+        VStack(alignment: .leading, spacing: QuietTokens.space4) {
+            QuietNavigationBar(choices: choices, selection: $selection, emphasis: .choice)
             content
         }
     }
@@ -588,9 +692,16 @@ public struct QuietTabs<Content: View>: View {
 public struct QuietNavigationBar: View {
     private let choices: [QuietChoice]
     @Binding private var selection: String
-    public init(choices: [QuietChoice], selection: Binding<String>) { self.choices = choices; _selection = selection }
+    private let emphasis: QuietSelectionEmphasis
+    public init(choices: [QuietChoice], selection: Binding<String>) {
+        self.choices = choices; _selection = selection; emphasis = .destination
+    }
+    init(choices: [QuietChoice], selection: Binding<String>, emphasis: QuietSelectionEmphasis) {
+        self.choices = choices; _selection = selection; self.emphasis = emphasis
+    }
     public var body: some View {
-        ScrollView(.horizontal) { HStack { QuietNavigationItems(choices: choices, selection: $selection) } }
+        ScrollView(.horizontal) { HStack(spacing: QuietTokens.space1) {
+            QuietNavigationItems(choices: choices, selection: $selection, emphasis: emphasis) } }
             .background(QuietTokens.colorBackground)
     }
 }
@@ -600,7 +711,9 @@ public struct QuietNavigationRail: View {
     @Binding private var selection: String
     public init(choices: [QuietChoice], selection: Binding<String>) { self.choices = choices; _selection = selection }
     public var body: some View {
-        ScrollView { VStack(alignment: .leading) { QuietNavigationItems(choices: choices, selection: $selection) } }
+        ScrollView { VStack(alignment: .leading, spacing: QuietTokens.space1) {
+            QuietNavigationItems(choices: choices, selection: $selection) } }
+            // 80/160/240pt - rail widths, no spacing step matches
             .frame(minWidth: 80, idealWidth: 160, maxWidth: 240).background(QuietTokens.colorBackground)
     }
 }
@@ -608,13 +721,17 @@ public struct QuietNavigationRail: View {
 private struct QuietNavigationItems: View {
     let choices: [QuietChoice]
     @Binding var selection: String
+    var emphasis: QuietSelectionEmphasis = .destination
     var body: some View {
         ForEach(choices) { item in
+            let current = selection == item.id
             Button { selection = item.id } label: {
-                Label(item.label, systemImage: item.systemImage).padding(12).frame(minHeight: 48)
-                    .background(selection == item.id ? QuietTokens.colorSurfaceHigh : Color.clear,
-                                in: Capsule())
-            }.buttonStyle(.plain).accessibilityAddTraits(selection == item.id ? .isSelected : [])
+                Label(item.label, systemImage: item.systemImage)
+                    .padding(QuietTokens.space3).frame(minHeight: QuietTokens.sizeTouchTarget)
+                    .foregroundStyle(current ? emphasis.label : QuietTokens.colorTextMuted)
+                    .background(current ? emphasis.fill : Color.clear, in: Capsule())
+                    .contentShape(Capsule())
+            }.buttonStyle(.plain).accessibilityAddTraits(current ? .isSelected : [])
         }
     }
 }
@@ -627,7 +744,8 @@ public struct QuietNavigationDrawer: View {
         self.title = title; self.choices = choices; _selection = selection
     }
     public var body: some View {
-        VStack(alignment: .leading) { Text(title).font(.title2).padding(16)
+        VStack(alignment: .leading, spacing: QuietTokens.space2) {
+            Text(title).font(.title2).foregroundStyle(QuietTokens.colorText).padding(QuietTokens.space4)
             QuietNavigationRail(choices: choices, selection: $selection) }
     }
 }
@@ -640,9 +758,12 @@ public struct QuietAppBar<Actions: View>: View {
     }
     public var body: some View {
         ViewThatFits(in: .horizontal) {
-            HStack { Text(title).font(.title2); Spacer(); actions }
-            VStack(alignment: .leading) { Text(title).font(.title2); HStack { actions } }
-        }.padding(16).frame(minHeight: 64).background(QuietTokens.colorBackground)
+            HStack(spacing: QuietTokens.space2) { Text(title).font(.title2); Spacer(); actions }
+            VStack(alignment: .leading, spacing: QuietTokens.space2) {
+                Text(title).font(.title2); HStack(spacing: QuietTokens.space2) { actions } }
+        }.foregroundStyle(QuietTokens.colorText).padding(QuietTokens.space4)
+        .frame(minHeight: 64) // 64pt - app bar height, no spacing step matches
+        .background(QuietTokens.colorBackground)
     }
 }
 
@@ -651,7 +772,8 @@ public struct QuietSideSheet<Content: View>: View {
     private let content: Content
     public init(@ViewBuilder content: () -> Content) { self.content = content() }
     public var body: some View {
-        ScrollView { content.padding(24) }.frame(idealWidth: 360, maxWidth: 400)
+        ScrollView { content.padding(QuietTokens.space6) }
+            .frame(idealWidth: 360, maxWidth: 400) // 360/400pt - supporting pane widths, no spacing step matches
             .background(QuietTokens.colorSurface)
     }
 }
@@ -661,8 +783,9 @@ public struct QuietStandardBottomSheet<Content: View>: View {
     private let content: Content
     public init(@ViewBuilder content: () -> Content) { self.content = content() }
     public var body: some View {
-        content.padding(24).frame(maxWidth: .infinity)
-            .background(QuietTokens.colorSurface, in: RoundedRectangle(cornerRadius: 28))
+        content.padding(QuietTokens.space6).frame(maxWidth: .infinity)
+            .background(QuietTokens.colorSurfaceHigh,
+                        in: RoundedRectangle(cornerRadius: QuietTokens.radiusDialog, style: .continuous))
     }
 }
 

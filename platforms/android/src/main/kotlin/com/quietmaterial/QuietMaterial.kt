@@ -1,5 +1,6 @@
 package com.quietmaterial
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -19,10 +20,14 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
@@ -31,25 +36,36 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 
+/**
+ * Every Material 3 colour role resolves to a generated Quiet token, so no component can fall back to
+ * the toolkit's purple/blue baseline. Selection is carried by the white primary pair; the graphite
+ * container pair carries "you are here" highlights. The semantic mint/yellow/red tokens stay
+ * available for genuine status but are no longer wired to ordinary roles.
+ */
 private val QuietColors = darkColorScheme(
     primary = QuietTokens.colorPrimary,
     onPrimary = QuietTokens.colorOnPrimary,
     primaryContainer = QuietTokens.colorPrimaryContainer,
     onPrimaryContainer = QuietTokens.colorOnPrimaryContainer,
+    // inversePrimary paints actions on the inverted (white) snackbar surface, so it must be black.
+    inversePrimary = QuietTokens.colorOnPrimary,
     secondary = QuietTokens.colorSecondary,
     onSecondary = QuietTokens.colorOnSecondary,
-    secondaryContainer = QuietTokens.colorSuccessContainer,
-    onSecondaryContainer = QuietTokens.colorSuccess,
-    tertiary = QuietTokens.colorWarning,
-    onTertiary = QuietTokens.colorWarningContainer,
-    tertiaryContainer = QuietTokens.colorWarningContainer,
-    onTertiaryContainer = QuietTokens.colorWarning,
+    // secondaryContainer drives navigation indicators, filter chips and picker ranges - graphite, never mint.
+    secondaryContainer = QuietTokens.colorPrimaryContainer,
+    onSecondaryContainer = QuietTokens.colorOnPrimaryContainer,
+    // tertiary carried the warning yellow and leaked into the time picker period selector - neutral now.
+    tertiary = QuietTokens.colorPrimary,
+    onTertiary = QuietTokens.colorOnPrimary,
+    tertiaryContainer = QuietTokens.colorPrimaryContainer,
+    onTertiaryContainer = QuietTokens.colorOnPrimaryContainer,
     background = QuietTokens.colorBackground,
     onBackground = QuietTokens.colorText,
     surface = QuietTokens.colorSurface,
     onSurface = QuietTokens.colorText,
     surfaceVariant = QuietTokens.colorSurfaceHigh,
     onSurfaceVariant = QuietTokens.colorTextMuted,
+    // surfaceTint equals surface, so surfaceColorAtElevation composites surface over surface: no tonal tint.
     surfaceTint = QuietTokens.colorSurface,
     surfaceDim = QuietTokens.colorBackground,
     surfaceBright = QuietTokens.colorSurfaceHigh,
@@ -60,14 +76,67 @@ private val QuietColors = darkColorScheme(
     surfaceContainerHighest = QuietTokens.colorSurfaceHigh,
     inverseSurface = QuietTokens.colorText,
     inverseOnSurface = QuietTokens.colorBackground,
-    inversePrimary = QuietTokens.colorOnPrimary,
     error = QuietTokens.colorDanger,
     onError = QuietTokens.colorDangerContainer,
     errorContainer = QuietTokens.colorDangerContainer,
     onErrorContainer = QuietTokens.colorDanger,
     outline = QuietTokens.colorOutline,
-    outlineVariant = QuietTokens.colorOutline,
-    scrim = QuietTokens.colorBackground,
+    // outlineVariant is the decorative grouping edge only; control boundaries pass colorOutline explicitly.
+    outlineVariant = QuietTokens.colorOutlineVariant,
+    scrim = QuietTokens.colorScrim,
+)
+
+/* Shared corner geometry. No radius is hardcoded: each surface takes the step its size earns. */
+internal val QuietTileShape = RoundedCornerShape(QuietTokens.radiusTile.dp)
+internal val QuietControlShape = RoundedCornerShape(QuietTokens.radiusControl.dp)
+internal val QuietCardShape = RoundedCornerShape(QuietTokens.radiusCard.dp)
+internal val QuietDialogShape = RoundedCornerShape(QuietTokens.radiusDialog.dp)
+internal val QuietPillShape = RoundedCornerShape(QuietTokens.radiusPill.dp)
+internal val QuietSheetShape = RoundedCornerShape(topStart = QuietTokens.radiusDialog.dp,
+    topEnd = QuietTokens.radiusDialog.dp, bottomEnd = QuietTokens.space0.dp, bottomStart = QuietTokens.space0.dp)
+internal val QuietSideSheetShape = RoundedCornerShape(topStart = QuietTokens.radiusDialog.dp,
+    topEnd = QuietTokens.space0.dp, bottomEnd = QuietTokens.space0.dp, bottomStart = QuietTokens.radiusDialog.dp)
+
+/* A decorative edge groups a surface; a control edge identifies something you can operate. */
+internal val QuietDecorativeBorder = BorderStroke(QuietTokens.borderWidth.dp, QuietTokens.colorOutlineVariant)
+internal val QuietControlBorder = BorderStroke(QuietTokens.borderWidth.dp, QuietTokens.colorOutline)
+
+/** Outlined field colours: functional outline, muted support text, grey reserved for inactive controls. */
+@Composable
+internal fun quietOutlinedFieldColors(): TextFieldColors = OutlinedTextFieldDefaults.colors(
+    focusedTextColor = QuietTokens.colorText, unfocusedTextColor = QuietTokens.colorText,
+    disabledTextColor = QuietTokens.colorDisabled, errorTextColor = QuietTokens.colorText,
+    focusedContainerColor = QuietTokens.colorSurfaceLow, unfocusedContainerColor = QuietTokens.colorSurfaceLow,
+    disabledContainerColor = QuietTokens.colorSurfaceLow, errorContainerColor = QuietTokens.colorSurfaceLow,
+    cursorColor = QuietTokens.colorPrimary, errorCursorColor = QuietTokens.colorDanger,
+    focusedBorderColor = QuietTokens.colorPrimary, unfocusedBorderColor = QuietTokens.colorOutline,
+    disabledBorderColor = QuietTokens.colorDisabled, errorBorderColor = QuietTokens.colorDanger,
+    focusedLeadingIconColor = QuietTokens.colorText, unfocusedLeadingIconColor = QuietTokens.colorTextMuted,
+    focusedTrailingIconColor = QuietTokens.colorText, unfocusedTrailingIconColor = QuietTokens.colorTextMuted,
+    focusedLabelColor = QuietTokens.colorText, unfocusedLabelColor = QuietTokens.colorTextMuted,
+    disabledLabelColor = QuietTokens.colorDisabled, errorLabelColor = QuietTokens.colorDanger,
+    focusedPlaceholderColor = QuietTokens.colorTextMuted, unfocusedPlaceholderColor = QuietTokens.colorTextMuted,
+    focusedSupportingTextColor = QuietTokens.colorTextMuted, unfocusedSupportingTextColor = QuietTokens.colorTextMuted,
+    errorSupportingTextColor = QuietTokens.colorDanger,
+)
+
+/** Filled field colours; the indicator, not a box, is this control's functional boundary. */
+@Composable
+internal fun quietFilledFieldColors(): TextFieldColors = TextFieldDefaults.colors(
+    focusedTextColor = QuietTokens.colorText, unfocusedTextColor = QuietTokens.colorText,
+    disabledTextColor = QuietTokens.colorDisabled, errorTextColor = QuietTokens.colorText,
+    focusedContainerColor = QuietTokens.colorSurfaceHigh, unfocusedContainerColor = QuietTokens.colorSurfaceHigh,
+    disabledContainerColor = QuietTokens.colorSurfaceLow, errorContainerColor = QuietTokens.colorSurfaceHigh,
+    cursorColor = QuietTokens.colorPrimary, errorCursorColor = QuietTokens.colorDanger,
+    focusedIndicatorColor = QuietTokens.colorPrimary, unfocusedIndicatorColor = QuietTokens.colorOutline,
+    disabledIndicatorColor = QuietTokens.colorDisabled, errorIndicatorColor = QuietTokens.colorDanger,
+    focusedLeadingIconColor = QuietTokens.colorText, unfocusedLeadingIconColor = QuietTokens.colorTextMuted,
+    focusedTrailingIconColor = QuietTokens.colorText, unfocusedTrailingIconColor = QuietTokens.colorTextMuted,
+    focusedLabelColor = QuietTokens.colorText, unfocusedLabelColor = QuietTokens.colorTextMuted,
+    disabledLabelColor = QuietTokens.colorDisabled, errorLabelColor = QuietTokens.colorDanger,
+    focusedPlaceholderColor = QuietTokens.colorTextMuted, unfocusedPlaceholderColor = QuietTokens.colorTextMuted,
+    focusedSupportingTextColor = QuietTokens.colorTextMuted, unfocusedSupportingTextColor = QuietTokens.colorTextMuted,
+    errorSupportingTextColor = QuietTokens.colorDanger,
 )
 
 /** Native Material 3 behavior with shared Quiet Material colors and shapes. */
@@ -77,17 +146,21 @@ fun QuietTheme(content: @Composable () -> Unit) {
         colorScheme = QuietColors,
         typography = Typography(), // Semantic sp styles follow the user's font scale.
         shapes = Shapes(
-            extraSmall = RoundedCornerShape(QuietTokens.radiusSmall.dp),
-            small = RoundedCornerShape(QuietTokens.radiusControl.dp),
-            medium = RoundedCornerShape(QuietTokens.radiusControl.dp),
-            large = RoundedCornerShape(QuietTokens.radiusCardCompact.dp),
-            extraLarge = RoundedCornerShape(QuietTokens.radiusCard.dp),
+            extraSmall = RoundedCornerShape(QuietTokens.radiusSmall.dp), // Small embedded details.
+            small = QuietTileShape, // Compact controls and small inline chips.
+            medium = QuietControlShape, // Fields, menu items, compact surfaces.
+            large = QuietCardShape, // Default cards and floating action surfaces.
+            extraLarge = QuietDialogShape, // Dialogs and sheet tops.
         ),
         content = content,
     )
 }
 
-/** Apply inner padding once in content; preserve system bars, cutouts and back behavior. */
+/**
+ * Apply inner padding once in content; preserve system bars, cutouts and back behavior.
+ * The app-owned window canvas and its safe areas are black; OS keyboards, permission dialogs and
+ * other system surfaces stay under the platform's control.
+ */
 @Composable
 fun QuietScaffold(
     modifier: Modifier = Modifier,
@@ -117,10 +190,12 @@ fun QuietButton(
         onClick = onClick,
         modifier = modifier.heightIn(min = QuietTokens.sizeTouchTarget.dp),
         enabled = enabled,
-        shape = RoundedCornerShape(50),
+        shape = QuietPillShape,
         colors = ButtonDefaults.buttonColors(
             containerColor = QuietTokens.colorAction,
             contentColor = QuietTokens.colorOnAction,
+            disabledContainerColor = QuietTokens.colorSurfaceLow,
+            disabledContentColor = QuietTokens.colorDisabled,
         ),
         contentPadding = PaddingValues(horizontal = QuietTokens.space6.dp,
             vertical = QuietTokens.space3.dp),
@@ -134,9 +209,11 @@ fun QuietCard(
 ) {
     Card(
         modifier = modifier,
-        shape = RoundedCornerShape(QuietTokens.radiusCardCompact.dp),
-        colors = CardDefaults.cardColors(containerColor = QuietTokens.colorSurface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        shape = QuietCardShape,
+        colors = CardDefaults.cardColors(containerColor = QuietTokens.colorSurface,
+            contentColor = QuietTokens.colorText),
+        elevation = CardDefaults.cardElevation(defaultElevation = QuietTokens.space0.dp),
+        border = QuietDecorativeBorder, // A grouping edge, not a control boundary.
     ) {
         Column(
             modifier = Modifier.fillMaxWidth().padding(QuietTokens.space6.dp),
@@ -165,7 +242,24 @@ fun QuietSwitch(
         horizontalArrangement = Arrangement.spacedBy(QuietTokens.space4.dp),
     ) {
         Text(label, modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
-        Switch(checked = checked, onCheckedChange = null, enabled = enabled)
+        // ON is the single-choice indicator: white track, black thumb. Thumb travel is unchanged.
+        Switch(checked = checked, onCheckedChange = null, enabled = enabled,
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = QuietTokens.colorOnPrimary,
+                checkedTrackColor = QuietTokens.colorPrimary,
+                checkedBorderColor = QuietTokens.colorPrimary,
+                checkedIconColor = QuietTokens.colorPrimary,
+                uncheckedThumbColor = QuietTokens.colorTextMuted,
+                uncheckedTrackColor = QuietTokens.colorSurface,
+                uncheckedBorderColor = QuietTokens.colorOutline,
+                uncheckedIconColor = QuietTokens.colorSurface,
+                disabledCheckedThumbColor = QuietTokens.colorSurface,
+                disabledCheckedTrackColor = QuietTokens.colorDisabled,
+                disabledCheckedBorderColor = QuietTokens.colorDisabled,
+                disabledUncheckedThumbColor = QuietTokens.colorDisabled,
+                disabledUncheckedTrackColor = QuietTokens.colorSurfaceLow,
+                disabledUncheckedBorderColor = QuietTokens.colorDisabled,
+            ))
     }
 }
 
@@ -187,6 +281,7 @@ fun QuietTextField(
         enabled = enabled,
         isError = isError,
         supportingText = supportingText,
-        shape = RoundedCornerShape(QuietTokens.radiusControl.dp),
+        shape = QuietControlShape,
+        colors = quietOutlinedFieldColors(),
     )
 }

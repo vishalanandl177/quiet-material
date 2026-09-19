@@ -1,6 +1,8 @@
 # Quiet Material for Flutter
 
-A source package for Flutter 3.35+ / Dart 3.9+. It themes stock Material 3 widgets and supplies a reusable component catalog and adaptive shell. Its intended targets are Android, iOS, web, macOS, Windows and Linux through Flutter; Flutter platform host builds and device testing have not been run for this delivery. Flutter analysis and all nine unit/widget tests pass CI. This is not a published pub.dev package or a promise that every widget has identical platform behavior.
+A source package for Flutter 3.35+ / Dart 3.9+. It themes stock Material 3 widgets and supplies a reusable component catalog and adaptive shell. Its intended targets are Android, iOS, web, macOS, Windows and Linux through Flutter; Flutter platform host builds and device testing have not been run for this delivery. This is not a published pub.dev package or a promise that every widget has identical platform behavior.
+
+The adapter carries 13 unit/widget tests. The Flutter SDK was not available where the current visual-language pass was written, so `flutter analyze` and `flutter test` were **not** re-run for it; see [Validation](#validation) for the exact commands a maintainer must run.
 
 ## Integrate
 
@@ -22,7 +24,7 @@ The token generator in the repository root writes `lib/src/quiet_tokens.dart`. R
 
 | API | Purpose |
 | --- | --- |
-| `quietMaterialTheme(reduceMotion: …)` | Black canvas/scaffold, charcoal surfaces, rounded Material widgets, standard density and padded targets |
+| `quietMaterialTheme(reduceMotion: …)` | Black canvas/scaffold, charcoal surface steps, token corners, neutral selection and padded targets; every colour role resolves to `QuietTokens` |
 | `QuietRoot` | Observes the OS motion preference below `MaterialApp.builder`; preserves locale, direction and text scaling |
 | `QuietAdaptiveScaffold` | Controlled navigation, scrolling content and optional supporting pane; two to five destinations |
 | `quietWindowClass(width)` | Compact `<600`, medium `<840`, expanded `<1200`, wide `>=1200` logical pixels |
@@ -31,6 +33,26 @@ The token generator in the repository root writes `lib/src/quiet_tokens.dart`. R
 | `showQuietModal` | MD3 fade with separate 400 ms enter / 150 ms exit timings, native modal route and focus handling |
 | `QuietCurves` / `quietSpring` | All seven MD3 curves, exact emphasized path and standard/expressive spatial/effects springs |
 | `QuietTokens` | Generated constants, including native `Color` values and millisecond duration integers |
+
+## Visual language
+
+Pure black canvas, four charcoal steps above it, one white action pair. No gradient, glow, blur or coloured surface tint; depth comes from the surface step, spacing and a selective one-unit edge.
+
+| Role | Token |
+| --- | --- |
+| Page canvas / scaffold | `colorBackground` |
+| Recessed grouping, fields, dial | `colorSurfaceLow` |
+| Default card and container | `colorSurface` |
+| Dialogs, sheets, menus, snackbars, search view | `colorSurfaceHigh` |
+| Tonal fill, current-location container | `colorPrimaryContainer` |
+| Primary text / supporting text | `colorText` / `colorTextMuted` |
+| Genuinely inactive controls only | `colorDisabled` |
+
+`ColorScheme` is built role by role from those tokens, so no Material default accent can reach a widget: `primary`/`onPrimary` are the white/black action pair, `primaryContainer` is graphite, `secondaryContainer` and `tertiaryContainer` are graphite as well (they drive navigation indicators, selected chips, date ranges and the time picker period selector, which previously inherited the mint and yellow status tokens), `outline` is the functional control boundary, `outlineVariant` the decorative grouping edge, `scrim` the modal backdrop, and `surfaceTint` is fully transparent so elevation never tints a surface. `success`, `warning` and `danger` keep their values and stay available through `QuietTokens` for genuine status.
+
+Selection follows one rule everywhere. A single choice - selected segment, selected chip, checked checkbox or radio, switch ON track, chosen calendar day, chosen hour or period - takes the **white** fill with **black** content. A current location - active navigation destination, current list row, pointed-at menu option - takes the **graphite** container with white content. Focus stays visually distinct: the ring is `colorFocus` at `borderFocus`, and on a white-filled control it flips to `colorFocusContrast` so it reads against the fill it sits on. Every `aria`-equivalent programmatic state, checkmark and thumb travel is the framework's own.
+
+Corners come from the declared steps only: pill for buttons, chips and navigation indicators; `radiusControl` for fields, menu items, toolbars and the FAB; `radiusCard` for cards, menus, popups and snackbars; `radiusDialog` for dialogs and sheet tops. Shadows are limited to the three shipped composites, mapped to Flutter's single elevation number by each composite's token offset: `elevationLevel1OffsetY` for locally raised, `elevationLevel2OffsetY` for menus and popovers, `elevationLevel3OffsetY` for dialogs, sheets and the FAB.
 
 Keep selection and draft data above the adaptive layout so rotating/resizing never loses it. Compact mode uses three labeled destinations at most; larger menus or large text switch to a drawer. Medium windows use a rail; expanded windows can expose a supporting pane. Use the catalog below or stock Material widgets inside this theme to retain their platform input and accessibility behavior.
 
@@ -80,7 +102,15 @@ Do not use `OpenContainer` or the package's private transition defaults as evide
 
 ## Validation
 
-Flutter 3.35.0 dependency resolution, analysis and all 9 unit/widget tests passed in GitHub Actions. Run `flutter pub get`, `flutter analyze` and `flutter test` in this directory when changing the adapter; see the [validation record](../../docs/validation.md). The included widget tests cover background colors, window class boundaries, navigation reflow and motion preferences. Then run the example on each supported target; web browser evidence elsewhere in this repository does not validate native builds.
+An earlier revision of this adapter resolved dependencies, analysed and passed its 9 unit/widget tests in GitHub Actions on Flutter 3.35.0. The current visual-language pass has **not** been analysed, tested or built: no Flutter or Dart SDK was installed where it was written, and its correctness was confirmed by inspection only. A maintainer must run, from this directory:
+
+```sh
+flutter pub get
+flutter analyze
+flutter test
+```
+
+and then `flutter run` the example on each supported target. See the [validation record](../../docs/validation.md). The 13 included tests cover the colour-role mapping, the selection rule, surface corners and untinted elevation, background colors, window class boundaries, navigation reflow, motion preferences and the catalog behaviours below. Web browser evidence elsewhere in this repository does not validate native builds.
 
 Current API references: [ThemeData](https://api.flutter.dev/flutter/material/ThemeData-class.html), [CardThemeData](https://api.flutter.dev/flutter/material/CardThemeData-class.html), [MediaQuery.disableAnimationsOf](https://api.flutter.dev/flutter/widgets/MediaQuery/disableAnimationsOf.html), [adaptive layout guidance](https://docs.flutter.dev/ui/adaptive-responsive/general).
 
@@ -117,4 +147,4 @@ QuietSplitButton(
 
 The loading indicator is a real CustomPainter/Ticker seven-contour morph with the shared 650 ms targets, stiffness 200/damping ratio 0.6 and compound rotation. It stops for `MediaQuery.disableAnimations` and muted `TickerMode`, and disposes its ticker when removed. Its artwork is Quiet-specific, not identical to Android's rounded polygons. Progress exposes a numeric percentage only for actual determinate values; the static reduced-motion busy representation does not announce invented progress.
 
-Stable connected button groups/FAB menus/split buttons/toolbars supply their action contracts without claiming expressive connected-shape morphing. Rich help is an interactive MenuAnchor popup rather than a noninteractive Tooltip text span. The five added catalog widget tests cover independent split actions, controlled segmentation, chip removal, reduced-motion loading and narrow-window text reflow. They passed in the remote Flutter 3.35.0 CI job alongside the four existing foundation/layout tests.
+Stable connected button groups/FAB menus/split buttons/toolbars supply their action contracts without claiming expressive connected-shape morphing. Rich help is an interactive MenuAnchor popup rather than a noninteractive Tooltip text span. The six catalog widget tests cover independent split actions, controlled segmentation, the tonal command's graphite step, chip removal, reduced-motion loading and narrow-window text reflow. Five of them passed in the remote Flutter 3.35.0 CI job alongside the four original foundation/layout tests; the tonal-step test and the three added theme tests have not been run yet.

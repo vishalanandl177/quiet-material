@@ -69,7 +69,8 @@ try {
     for (const size of SIZES) {
       const context = await browser.newContext({
         viewport: { width: size.width, height: size.height },
-        deviceScaleFactor: 2, colorScheme: 'dark', reducedMotion: 'reduce',
+        // 1x keeps the committed evidence small. Set SCALE=2 for retina captures locally.
+        deviceScaleFactor: Number(process.env.SCALE ?? 1), colorScheme: 'dark', reducedMotion: 'reduce',
       });
       const page = await context.newPage();
       for (const name of PAGES) {

@@ -58,7 +58,7 @@ fun QuietLoadingIndicator(label: String, modifier: Modifier = Modifier, reduceMo
             }
         }
     }
-    Canvas(modifier.size(48.dp).semantics {
+    Canvas(modifier.size(QuietTokens.sizeControl.dp).semantics {
         contentDescription = label; progressBarRangeInfo = ProgressBarRangeInfo.Indeterminate
     }) {
         val whole = floor(position).toInt(); val fraction = position - floor(position)

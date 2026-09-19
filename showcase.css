@@ -1,0 +1,72 @@
+/* Showcase page - composition and layout only. Every colour, corner, edge and motion value comes from the token layer. */
+.showcase-sections {display:grid;gap:var(--qm-space-6);}
+.showcase-example {display:grid;gap:var(--qm-space-5);align-content:start;min-width:0;}
+.showcase-example-heading {display:grid;gap:var(--qm-space-3);}
+.showcase-example-heading .eyebrow {margin:0;}
+.showcase-example-heading h2 {margin:0;}
+.showcase-lede {margin:0;max-width:72ch;} /* 72ch - reading measure, not a spacing step */
+.showcase-note {margin:0;}
+
+/* The example layer. Plain black by default, with a recessed variant for grouped content. No image, no wallpaper, no bezel. */
+.showcase-stage {display:grid;gap:var(--qm-space-5);min-width:0;padding:var(--qm-space-4);border:var(--qm-border-width) solid var(--qm-color-outline-variant);border-radius:var(--qm-radius-card);background:var(--qm-color-background);} /* decorative grouping edge - it frames the example, it does not identify a control */
+.showcase-stage--recessed {background:var(--qm-color-surface-low);}
+
+/* 01 - a sparse home-style composition. */
+.showcase-greeting {display:grid;gap:var(--qm-space-2);}
+.showcase-greeting .eyebrow {margin:0;}
+.showcase-greeting h3 {margin:0;}
+.showcase-greeting p {margin:0;}
+.showcase-tiles {display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:var(--qm-space-3);} /* 88px - icon tile track, no spacing step matches */
+.showcase-tile {flex-direction:column;gap:var(--qm-space-2);min-height:88px;padding:var(--qm-space-3) var(--qm-space-2);border-radius:var(--qm-radius-tile);font-weight:var(--qm-font-regular);text-align:center;} /* 88px - icon tile height, no spacing step matches */
+.showcase-tile > span {min-width:0;overflow-wrap:anywhere;}
+
+/* 02 - a searchable, alphabetically grouped directory. */
+.showcase-groups {display:grid;gap:var(--qm-space-5);}
+.showcase-group {display:grid;gap:var(--qm-space-3);min-width:0;}
+.showcase-group-heading {margin:0;padding-bottom:var(--qm-space-2);border-bottom:var(--qm-border-width) solid var(--qm-color-outline-variant);color:var(--qm-color-text-muted);font-size:var(--qm-type-label);font-weight:var(--qm-font-bold);letter-spacing:.08em;} /* decorative grouping edge under an alphabetical heading */
+
+/* 03 - readable result rows. */
+.showcase-results {margin:0;}
+.showcase-result-tile {display:grid;place-items:center;flex-shrink:0;width:var(--qm-size-control);height:var(--qm-size-control);border-radius:var(--qm-radius-tile);background:var(--qm-color-surface-high);color:var(--qm-color-text);}
+.showcase-empty {margin:0;color:var(--qm-color-text-muted);}
+
+/* 04 - compact information cards. */
+.showcase-cards {grid-template-columns:repeat(auto-fit,minmax(200px,1fr));align-items:start;} /* 200px - compact card track, no spacing step matches */
+.showcase-info-card {display:grid;gap:var(--qm-space-4);align-content:start;min-width:0;padding:var(--qm-space-4);border-radius:var(--qm-radius-control);}
+.showcase-info-card h3 {margin:0;font-size:var(--qm-type-label);color:var(--qm-color-text-muted);letter-spacing:.06em;text-transform:uppercase;}
+.showcase-info-card p {margin:0;}
+.showcase-date-strip {display:flex;flex-wrap:wrap;gap:var(--qm-space-2);}
+.showcase-metric {display:flex;align-items:baseline;gap:var(--qm-space-1);color:var(--qm-color-text);font-size:var(--qm-type-headline);line-height:var(--qm-line-height-tight);letter-spacing:-.03em;}
+.showcase-metric span {color:var(--qm-color-text-muted);font-size:var(--qm-type-title);}
+
+/* 05 - a settings view that shows selection exactly one way. */
+.showcase-settings {gap:var(--qm-space-6);}
+.showcase-setting-block {display:grid;gap:var(--qm-space-3);min-width:0;}
+.showcase-setting-block h3 {margin:0;font-size:var(--qm-type-title);}
+.showcase-setting-block p {margin:0;}
+.showcase-segmented {display:flex;width:100%;}
+.showcase-choices {display:grid;gap:var(--qm-space-5);}
+.showcase-fieldset {border:0;padding:0;margin:0;min-width:0;}
+.showcase-fieldset legend {margin-bottom:var(--qm-space-2);padding:0;color:var(--qm-color-text-muted);font-size:var(--qm-type-label);}
+.showcase-shape-preview {margin:0;gap:var(--qm-space-3);}
+.showcase-shape-preview span {width:var(--qm-space-12);height:var(--qm-space-12);}
+.showcase-shape-preview[data-showcase-shape='detail'] span {border-radius:var(--qm-radius-small);}
+.showcase-shape-preview[data-showcase-shape='tile'] span {border-radius:var(--qm-radius-tile);}
+.showcase-shape-preview[data-showcase-shape='round'] span {border-radius:50%;} /* 50% - a circle, not a step on the shape scale */
+.showcase-rows {margin:0;}
+.showcase-rows li {min-width:0;}
+.showcase-rows .qm-list__item {width:100%;}
+
+@media (min-width:600px) {
+  .showcase-sections {gap:var(--qm-space-8);}
+  .showcase-stage {gap:var(--qm-space-6);padding:var(--qm-space-6);}
+  .showcase-tiles {grid-template-columns:repeat(auto-fill,minmax(104px,1fr));} /* 104px - icon tile track once the rail appears, no spacing step matches */
+  .showcase-info-card {padding:var(--qm-space-5);}
+}
+@media (min-width:840px) {
+  .showcase-choices {grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--qm-space-6);}
+}
+@media (forced-colors:active) {
+  .showcase-stage, .showcase-result-tile, .showcase-shape-preview span {border:var(--qm-border-width) solid CanvasText;}
+  .showcase-group-heading {border-bottom-color:CanvasText;}
+}

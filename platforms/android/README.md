@@ -59,13 +59,29 @@ Import the usual Compose layout, `Modifier`, Material3 and `dp` symbols for this
 | Shared colors, spacing, radii, motion, breakpoints | Generated `QuietTokens.kt`; dimensions are logical `Float` values, append `.dp` |
 | MD3 easing and springs | `QuietEasing` evaluates all seven curves; `QuietMotion.timed` and `springSpec` use generated tokens |
 | Content transitions | `QuietContentChange` supplies fade through and shared axis X/Y/Z, including reverse direction and RTL |
-| Color / typography / shapes | `QuietTheme` wraps native `MaterialTheme`; static dark colors, semantic scalable typography |
+| Color / typography / shapes | `QuietTheme` wraps native `MaterialTheme`; every M3 color role resolves to a generated token, tonal elevation tinting is disabled, semantic scalable typography |
 | Root surface | `QuietScaffold`; canvas stays `#000000` |
 | Action / surface / switch / field | `QuietButton`, `QuietCard`, `QuietSwitch`, `QuietTextField` |
 | Full catalog | `QuietCatalog.kt`: action variants/FABs/segments/menus, communication, containment, navigation, selection and fields |
 | Loading indicator | `QuietLoadingIndicator.kt`: seven branded morphing contours with the MD3 timing/spring/rotation recipe |
 
-Other Material 3 components inherit the color scheme. Pass `containerColor = QuietTokens.colorBackground` to app navigation surfaces that must stay black. The adapter does not turn every native surface black: the canvas is black and content cards remain charcoal. Brand colors remain stable because dynamic wallpaper colors are not selected.
+Other Material 3 components inherit the color scheme. Pass `containerColor = QuietTokens.colorBackground` to app navigation surfaces that must stay black. The adapter does not turn every native surface black: the canvas is black and content cards remain charcoal. Brand colors remain stable because dynamic wallpaper colors are not selected. The adapter styles app-owned surfaces only; OS keyboards, permission dialogs and other system surfaces stay under the platform's control.
+
+## Selection, surfaces and depth
+
+| Role | Treatment |
+| --- | --- |
+| Page canvas / safe areas | `colorBackground`; `QuietScaffold` and `QuietAdaptiveScaffold` set it |
+| Recessed grouping | `colorSurfaceLow`: unselected segmented rows and chips, field fills |
+| Default card | `colorSurface` with a `colorOutlineVariant` grouping edge |
+| Elevated panel | `colorSurfaceHigh`: menus, dialogs, sheets, snackbars, rich tooltips, toolbar |
+| Single-choice chosen state | White `colorPrimary` fill with black `colorOnPrimary` content: chosen segment, selected filter/input chip, switch ON track, checked checkbox/radio, chosen calendar day, chosen hour/minute/period |
+| Current destination or row | Graphite `colorPrimaryContainer` with `colorOnPrimaryContainer`: navigation bar/rail indicator, selected drawer item, date range fill |
+| Control boundary | `colorOutline` on outlined buttons, fields, chips, segmented buttons and the switch track |
+| Decorative edge | `colorOutlineVariant` on cards, dividers, menus and the toolbar |
+| Depth | Solid fills; shadows only on genuinely floating surfaces, from `elevationLevel1Blur`/`elevationLevel2Blur`/`elevationLevel3Blur` |
+
+`secondaryContainer` and the whole `tertiary` family are mapped to the neutral graphite pair, so mint and yellow no longer reach navigation indicators, filter chips or the time picker's period selector. `surfaceTint` equals `surface`, which makes `surfaceColorAtElevation` a no-op and keeps every surface at its exact token value. Mint, yellow and red stay available through `QuietTokens.colorSuccess`, `colorWarning` and `colorDanger` (plus their containers) for genuine status, and through the Material `error` roles.
 
 ## MD3 motion
 
@@ -108,7 +124,7 @@ The sample uses available window constraints, never the physical device category
 
 Buttons and toggle rows reserve at least 48 dp. `QuietSwitch` exposes one switch node for the entire labeled row. Native Material controls preserve their built-in role, input, focus and press behavior, as described in [Compose accessibility defaults](https://developer.android.com/develop/ui/compose/accessibility/api-defaults). Loading and indeterminate progress animate only while explicitly mounted for pending work; do not leave them visible as decoration. The loading canvas observes Android animator duration scale and its explicit `reduceMotion` parameter. Compose controls use platform animation infrastructure; custom animations added by the app must respect [MotionDurationScale](https://developer.android.com/reference/kotlin/androidx/compose/ui/MotionDurationScale). Do not replace native ripples with looping GIFs.
 
-Localize the example's English strings before product use. Verify TalkBack, switch state announcements, keyboard/D-pad focus, 200% text, RTL, 320 dp windows, tablet split-screen, rotation, soft keyboard, system animation disabled and dialog dismissal in your consuming app. Build it with that app's `./gradlew :app:assembleDebug` and run on devices/emulators. The standalone Android library has passed `assembleDebug` in GitHub Actions. Device and TalkBack review remains product-specific; see the [validation record](../../docs/validation.md).
+Localize the example's English strings before product use. Verify TalkBack, switch state announcements, keyboard/D-pad focus, 200% text, RTL, 320 dp windows, tablet split-screen, rotation, soft keyboard, system animation disabled and dialog dismissal in your consuming app. Build it with that app's `./gradlew :app:assembleDebug` and run on devices/emulators. The standalone Android library has passed `assembleDebug` in GitHub Actions; the current visual-direction restyle of the Kotlin sources was reviewed by inspection only and still needs `gradle -p platforms/android assembleDebug` on a machine with the Android SDK. Device and TalkBack review remains product-specific; see the [validation record](../../docs/validation.md).
 
 See [Material 3 theming](https://developer.android.com/develop/ui/compose/designsystems/material3), [Compose setup](https://developer.android.com/develop/ui/compose/setup), and [adaptive display size guidance](https://developer.android.com/develop/ui/compose/layouts/adaptive/support-different-display-sizes). Edit shared tokens in `tokens/quiet-material.tokens.json` and run `npm run build` at the repository root; copy regenerated `QuietTokens.kt` alongside the adapters.
 
