@@ -19,9 +19,9 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.14117647,
-            0.14117647,
-            0.14117647
+            0.0627451,
+            0.0627451,
+            0.0627451
           ],
           "alpha": 1
         }
@@ -31,21 +31,34 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.17647059,
-            0.17647059,
-            0.17647059
+            0.09411765,
+            0.09411765,
+            0.09411765
           ],
           "alpha": 1
         }
+      },
+      "graphite": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.14117647,
+            0.14117647,
+            0.14117647
+          ],
+          "alpha": 1
+        },
+        "$description": "Neutral tonal step for selections and decorative separation."
       },
       "charcoalLow": {
         "$type": "color",
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.09019608,
-            0.09019608,
-            0.09019608
+            0.03137255,
+            0.03137255,
+            0.03137255
           ],
           "alpha": 1
         }
@@ -69,7 +82,7 @@
           "components": [
             0.71764706,
             0.71764706,
-            0.74117647
+            0.71764706
           ],
           "alpha": 1
         }
@@ -189,7 +202,7 @@
           "components": [
             0.50980392,
             0.50980392,
-            0.5372549
+            0.50980392
           ],
           "alpha": 1
         }
@@ -201,10 +214,49 @@
           "components": [
             0.46666667,
             0.46666667,
-            0.49019608
+            0.46666667
           ],
           "alpha": 1
         }
+      },
+      "shadowSoft": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "alpha": 0.6
+        },
+        "$description": "Shadow ink for close-range elevation."
+      },
+      "shadowStrong": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "alpha": 0.8
+        },
+        "$description": "Shadow ink for detached overlays."
+      },
+      "scrim": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "alpha": 0.8
+        },
+        "$description": "Modal scrim over the black canvas."
       }
     },
     "background": {
@@ -233,27 +285,27 @@
     },
     "primary": {
       "$type": "color",
-      "$value": "{color.palette.blue}"
+      "$value": "{color.palette.white}"
     },
     "onPrimary": {
       "$type": "color",
-      "$value": "{color.palette.blueDark}"
+      "$value": "{color.palette.black}"
     },
     "primaryContainer": {
       "$type": "color",
-      "$value": "{color.palette.blueContainer}"
+      "$value": "{color.palette.graphite}"
     },
     "onPrimaryContainer": {
       "$type": "color",
-      "$value": "{color.palette.blue}"
+      "$value": "{color.palette.white}"
     },
     "secondary": {
       "$type": "color",
-      "$value": "{color.palette.mint}"
+      "$value": "{color.palette.muted}"
     },
     "onSecondary": {
       "$type": "color",
-      "$value": "{color.palette.mintContainer}"
+      "$value": "{color.palette.black}"
     },
     "success": {
       "$type": "color",
@@ -283,9 +335,19 @@
       "$type": "color",
       "$value": "{color.palette.outline}"
     },
+    "outlineVariant": {
+      "$type": "color",
+      "$value": "{color.palette.graphite}",
+      "$description": "Decorative container separation. Never use for a boundary that identifies a control."
+    },
     "focus": {
       "$type": "color",
-      "$value": "{color.palette.blue}"
+      "$value": "{color.palette.white}"
+    },
+    "focusContrast": {
+      "$type": "color",
+      "$value": "{color.palette.black}",
+      "$description": "Separation ring drawn inside a light-filled control so the focus ring reads on both edges."
     },
     "disabled": {
       "$type": "color",
@@ -298,6 +360,11 @@
     "onAction": {
       "$type": "color",
       "$value": "{color.palette.black}"
+    },
+    "scrim": {
+      "$type": "color",
+      "$value": "{color.palette.scrim}",
+      "$description": "Dimming layer behind modal surfaces."
     }
   },
   "space": {
@@ -401,6 +468,14 @@
         "unit": "px"
       }
     },
+    "tile": {
+      "$type": "dimension",
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      },
+      "$description": "Icon tiles and compact controls."
+    },
     "control": {
       "$type": "dimension",
       "$value": {
@@ -411,9 +486,17 @@
     "card": {
       "$type": "dimension",
       "$value": {
-        "value": 40,
+        "value": 24,
         "unit": "px"
       }
+    },
+    "feature": {
+      "$type": "dimension",
+      "$value": {
+        "value": 32,
+        "unit": "px"
+      },
+      "$description": "Large feature surfaces whose size justifies a wider corner."
     },
     "dialog": {
       "$type": "dimension",
@@ -431,8 +514,8 @@
     },
     "cardCompact": {
       "$type": "dimension",
-      "$value": "{radius.dialog}",
-      "$description": "Card corner radius for compact layouts; roomy layouts keep radius.card."
+      "$value": "{radius.card}",
+      "$description": "Card corner radius for compact layouts; kept as an alias so existing consumers stay valid."
     }
   },
   "font": {
@@ -837,6 +920,14 @@
         "value": 3,
         "unit": "px"
       }
+    },
+    "focusOffset": {
+      "$type": "dimension",
+      "$value": {
+        "value": 2,
+        "unit": "px"
+      },
+      "$description": "Gap between a control edge and its focus ring so the ring reads on filled controls."
     }
   },
   "breakpoint": {
@@ -1168,6 +1259,123 @@
           "easingPath": "easing.emphasized"
         }
       }
+    }
+  },
+  "elevation": {
+    "$description": "Restrained shadow primitives. The black canvas carries depth through surface steps and edges; shadows only detach genuinely floating surfaces.",
+    "level1": {
+      "offsetY": {
+        "$type": "dimension",
+        "$value": {
+          "value": 1,
+          "unit": "px"
+        }
+      },
+      "blur": {
+        "$type": "dimension",
+        "$value": {
+          "value": 2,
+          "unit": "px"
+        }
+      },
+      "color": {
+        "$type": "color",
+        "$value": "{color.palette.shadowSoft}"
+      }
+    },
+    "level2": {
+      "offsetY": {
+        "$type": "dimension",
+        "$value": {
+          "value": 2,
+          "unit": "px"
+        }
+      },
+      "blur": {
+        "$type": "dimension",
+        "$value": {
+          "value": 8,
+          "unit": "px"
+        }
+      },
+      "color": {
+        "$type": "color",
+        "$value": "{color.palette.shadowSoft}"
+      }
+    },
+    "level3": {
+      "offsetY": {
+        "$type": "dimension",
+        "$value": {
+          "value": 8,
+          "unit": "px"
+        }
+      },
+      "blur": {
+        "$type": "dimension",
+        "$value": {
+          "value": 24,
+          "unit": "px"
+        }
+      },
+      "color": {
+        "$type": "color",
+        "$value": "{color.palette.shadowStrong}"
+      }
+    }
+  },
+  "layer": {
+    "$type": "number",
+    "$description": "Stacking order for overlapping surfaces, lowest to highest.",
+    "base": {
+      "$type": "number",
+      "$value": 0,
+      "$description": "Ordinary in-flow content."
+    },
+    "raised": {
+      "$type": "number",
+      "$value": 1,
+      "$description": "Locally raised item inside its own group."
+    },
+    "sticky": {
+      "$type": "number",
+      "$value": 10,
+      "$description": "Sticky app bars and persistent navigation."
+    },
+    "floating": {
+      "$type": "number",
+      "$value": 20,
+      "$description": "Floating action surfaces anchored to the viewport."
+    },
+    "overlay": {
+      "$type": "number",
+      "$value": 30,
+      "$description": "Snackbars and transient regions above floating surfaces."
+    },
+    "popover": {
+      "$type": "number",
+      "$value": 40,
+      "$description": "Menus, dropdowns and rich tooltips anchored to a trigger."
+    }
+  },
+  "state": {
+    "$type": "number",
+    "$description": "State-layer opacities drawn over a control in its own content color.",
+    "hover": {
+      "$type": "number",
+      "$value": 0.08
+    },
+    "focus": {
+      "$type": "number",
+      "$value": 0.12
+    },
+    "pressed": {
+      "$type": "number",
+      "$value": 0.12
+    },
+    "dragged": {
+      "$type": "number",
+      "$value": 0.16
     }
   }
 }

@@ -124,7 +124,7 @@ test('typography remains relative on the web and responsive tokens use the agree
     flat.breakpointMedium, flat.breakpointExpanded, flat.breakpointWide,
     flat.layoutPagePaddingCompact, flat.layoutPagePaddingMedium, flat.layoutPagePaddingExpanded,
     flat.radiusCardCompact, flat.sizeTouchTarget,
-  ], [600, 840, 1200, 20, 32, 48, 32, 48]);
+  ], [600, 840, 1200, 20, 32, 48, 24, 48]);
   assert.equal(flat.colorBackground, '#000000');
 });
 
