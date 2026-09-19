@@ -1,14 +1,16 @@
 # Scope and governance
 
-## v1.3 scope
+## v1.4 scope
 
-Quiet Material is an independent mobile-first implementation of Material Design 3 component families, using the approved black-and-charcoal visual language. It is not an official Google library or a replacement for native Android or iOS SDKs. The [family matrix](md3-components.md) names all 36 official catalog families and records the implementation and variants supplied here.
+Quiet Material is an independent mobile-first implementation of Material Design 3 component families, using the approved black direction. It is not an official Google library or a replacement for native Android or iOS SDKs. The [family matrix](md3-components.md) names all 36 official catalog families and records the implementation and variants supplied here.
 
-The repository owns semantic design tokens, generated CSS and native values, framework-independent component styles, progressive JavaScript behaviors, native toolkit adapters, a component workbench and written usage contracts. The approved aesthetic is black pages, charcoal containers, generous rounded shapes, large white typography, restrained blue/mint accents and interaction-driven motion.
+The repository owns semantic design tokens, generated CSS and native values, framework-independent component styles, progressive JavaScript behaviors, native toolkit adapters, a component workbench and written usage contracts. The approved aesthetic is black pages, near-black container steps with a graphite tonal step, a declared corner step for each surface size, large white typography, neutral selection, and interaction-driven motion. Mint and blue remain exported palette entries for genuine status and as documented optional accents; they are not the default selection, link, button or icon color. The 1.4 release migrated the visual direction only: the package identity, exports, component APIs, the 36-family inventory and the framework-independent architecture are unchanged.
 
-Motion foundations now include MD3’s full curve/duration vocabulary, standard and expressive spring parameters, and the four web transition families. Pinned source versions and implementation/validation boundaries are recorded in [the MD3 audit](md3-motion-audit.md). Native system-owned transitions and unimplemented SDK variants are not represented as identical cross-platform motion.
+Motion foundations now include MD3’s full curve/duration vocabulary, standard and expressive spring parameters, and the four web transition families. The 1.4 migration changed no motion value, binding or API: the duration slots, easing families and both spring schemes are unchanged. Pinned source versions and implementation/validation boundaries are recorded in [the MD3 audit](md3-motion-audit.md). Native system-owned transitions and unimplemented SDK variants are not represented as identical cross-platform motion.
 
-The source package is private and unpublished. No public license grant is supplied. Distribution, package publication and licensing require the repository owner's separate decision. The approved concept image is a visual reference; do not assume it is a source of reusable third-party icons, fonts or brand assets.
+The source package is private and unpublished: `package.json` declares `"private": true` and `"license": "UNLICENSED"`, and it is unchanged by this release, so its version field still reads 1.3.0 until the owner decides to cut the documented 1.4 release. Nothing was published, no release tag was created and no publishing workflow was enabled. No public license grant is supplied. Distribution, package publication and licensing require the repository owner's separate decision.
+
+The [approved visual reference](../assets/reference/) records the black direction with its provenance. It is a reference, not an inventory: its device bezels, wallpaper, footer imagery, wordmark, app names, third-party app icons and on-screen keyboard are illustration only, and they are not tokens, components or features of this system. Token values are deliberate design choices, not sampled pixels. Do not assume the reference is a source of reusable third-party icons, fonts or brand assets. `assets/approved-concept.png` is retained as the historical reference for the 1.0-1.3 charcoal appearance.
 
 ## Coverage and product scope
 
@@ -19,7 +21,7 @@ The 36-family list tracks the official MD3 catalog reviewed for this release. Up
 ## Explicit limits
 
 - Web styles are framework-independent; dedicated React/Angular/Vue wrapper packages are not included.
-- Android Compose, Apple SwiftUI and Flutter source adapters and component catalogs are included. Android and Apple SDK builds plus Flutter analysis/tests passed in CI; device review remains pending. Stock toolkit controls, branded compositions and platform-specific fallbacks are identified in [platform coverage](platforms.md).
+- Android Compose, Apple SwiftUI and Flutter source adapters and component catalogs are included. Their sources were updated for the black direction and reviewed by inspection. No Android, Apple or Flutter SDK is installed in the authoring environment, so `gradle assembleDebug`, `swift build`, `xcodebuild` and `flutter analyze`/`flutter test` were not run there; they ran and passed on hosted CI machines for the commit carrying the native changes, as [validation](validation.md) records. A compiling, test-passing build is not a tested device experience, so device review remains pending. Stock toolkit controls, branded compositions and platform-specific fallbacks are identified in [platform coverage](platforms.md).
 - No editable Figma library has been created by this repository; the handoff document describes a future mapping.
 - No application authentication, persistence, backend, permissions or business logic is included.
 - Product-scale data grids with virtualization, general drag-and-drop and rich-text editors are outside this component catalog. Date/time pickers, search and keyboard menus are included; data services and product validation remain application-owned.

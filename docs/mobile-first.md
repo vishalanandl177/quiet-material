@@ -2,7 +2,7 @@
 
 Start with a usable 320 CSS-pixel viewport and the core task in one column. Add space, a second pane and persistent navigation only when the current window can support them. A tablet in split view can be compact; a desktop window can be narrow. Device names never determine layout.
 
-The full canvas remains black. Cards are charcoal, content remains legible, and larger windows earn whitespace rather than extra decoration.
+The full canvas remains pure black. Cards sit on the near-black surface steps, content remains legible, and larger windows earn whitespace rather than extra decoration.
 
 ## Window classes
 
@@ -22,7 +22,7 @@ At larger accessibility text sizes, fewer columns and a readable menu can be pre
 - Keep the primary task first in visual and accessibility reading order. Put secondary detail underneath on compact screens and beside it when space permits.
 - Use fluid widths and `min-width: 0` in flexible children. Wrap long labels, file names and translated strings. Do not silently truncate a primary action or error.
 - Buttons have a minimum height, not a fixed text-clipping height. Text may wrap while its target remains at least 48 × 48 logical units.
-- Card radii reduce from 40 to 32 on compact layouts; generous corners must still leave room for readable text.
+- The card radius is `radius-card` 24 at every width. `radius-card-compact` resolves to the same 24, so the card silhouette does not change between window classes. A large feature surface may still take `radius-feature` 32, and generous corners must leave room for readable text.
 - Forms stack on compact screens. Visible labels persist while typing; error messages expand their container. Do not rely on placeholders or color alone.
 - Data tables can keep genuine two-dimensional relationships in their own labeled scroll region. Prevent accidental horizontal overflow of the entire page. Offer a list view when row comparison is not essential.
 - Tabs represent a small set of related local views. Six tiny equal-width tabs are not a compact navigation strategy. Use a menu, a short primary set with overflow, or readable scrollable local tabs where appropriate.

@@ -2,6 +2,8 @@
 
 Seven authored studies illustrate Quiet Material's MD3 motion contract: press feedback, spatial and effects springs, and the four Material transition patterns. These are diagrams drawn from shared tokens, not screen recordings or native component certification. Black backgrounds, restrained color and a single cycle keep the motion easy to inspect.
 
+The 1.4 visual migration changed no motion value, binding or API, and these studies were not re-rendered for it: every GIF, poster and manifest entry is byte-identical to 1.3. They therefore still show that release’s charcoal surfaces and pale-blue accent, and the descriptions below describe the files as they stand. They remain valid evidence because they demonstrate timing, not palette. Regenerating them reads the current token values and changes only their colors and corner radii; the durations, springs and transition bindings in the tables below are unchanged.
+
 The images below are static posters. The explorer loads a GIF only after Play and provides Stop. System or product reduced-motion preferences keep the poster visible. Every state and explanation remains available without playing an animation.
 
 ## Press feedback

@@ -2,6 +2,8 @@
 
 Reviewed against official sources on **19 September 2026**. This audit defines what “follows MD3 motion” means for Quiet Material: complete foundation vocabulary, the four transition families, appropriate use, interruption handling and accessibility. It does not certify every application screen or every native operating-system animation.
 
+The 1.4 visual migration to the black direction preserved every duration, easing, spring and transition binding unchanged: the canonical motion group and the generated motion exports are byte-identical to 1.3, no motion value, binding or API changed, and the motion GIF posters remain valid because they demonstrate timing rather than palette. The source review below was therefore not repeated for 1.4; it still describes exactly what ships.
+
 ## Source baseline
 
 | Area | Primary source | What is checked |
@@ -41,10 +43,10 @@ Automated checks cover source bindings and animation contracts. The remaining de
 | Fade through | Web motion helper, independent page changes | Sequential opacity, .92 incoming scale and destination integration implemented and tested |
 | Fade appearance/disappearance | Dialog, sheet, menu and feedback bindings | Dialog/snackbar entry and decorative exits implemented; native menu exit snapshot and exact CSS entry opacity mapping supplied; rendered focus review pending |
 | Reduced motion | OS query, local preference, runtime cancellation and native guards | Tests pass for initial OS/local reduction and mid-flight runtime cancellation |
-| Animation GIFs | Motion gallery and reproducible generation script | Seven studies regenerated; manifest/recipe bindings, finite encoding and opt-in Play/Stop tests pass |
+| Animation GIFs | Motion gallery and reproducible generation script | Seven studies carried forward byte-identical from 1.3; manifest/recipe bindings, finite encoding and opt-in Play/Stop tests pass |
 | Native pattern coverage | Android/Flutter helpers and SwiftUI motion foundations | No complete native MD3 container-transform route; SwiftUI system navigation remains Apple motion. See each platform README. |
-| Native compilation and behavior | Android, Apple and Flutter component adapters | Android/macOS/iOS simulator builds and Flutter analysis/tests passed in v1.3 CI; device/assistive-technology checks remain |
-| Real rendered motion quality | Representative phone, tablet and desktop environments | Pending visual/device checks; automated source tests cannot establish frame pacing |
+| Native compilation and behavior | Android, Apple and Flutter component adapters | Android/macOS/iOS simulator builds and Flutter analysis/tests passed on hosted CI machines for the commit carrying the 1.4 native changes; no native SDK runs in the authoring environment, and device/assistive-technology checks remain |
+| Real rendered motion quality | Representative phone, tablet and desktop environments | Pending visual/device checks; the 1.4 screenshots were captured in headless Chromium with reduced motion requested, and automated source tests cannot establish frame pacing |
 
 ## Component mapping review
 

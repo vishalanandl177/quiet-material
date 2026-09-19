@@ -2,6 +2,8 @@
 
 Quiet Material provides a black, mobile-first theme, semantic tokens, reusable components across the 36 MD3 catalog families, and progressive interactions. It is a private, unpublished source package. Use this checkout directly or integrate it as a local workspace package. The [family matrix](md3-components.md) records the exact variants and platform implementations.
 
+The web layer is framework-independent: generated CSS custom properties, plain `.qm-*` classes on semantic HTML, and progressive JavaScript that enhances markup which already exists. There is no React, Angular or Vue component package here, and none is required. Use the styles with static HTML, a template engine, a static-site generator or any framework's rendered output; the only integration contract is the class names, the documented `data-qm-*` hooks and one call to `initQuietMaterial`. If you are upgrading an existing product from 1.3, read [the 1.4 migration guide](migration-1.4.md) before you rebuild, because seven color roles keep their names and change meaning.
+
 ## Run the workbench
 
 Use Node.js 22.22.2+ in the 22.x line, 24.15.0+ in the 24.x line, or 26+. The supported engine range is `^22.22.2 || ^24.15.0 || >=26.0.0`. Run these commands from the repository root. `npm ci` installs the development test dependencies, including jsdom 30.1.0. The browser runtime and styles remain dependency-free; the token build does not need installed packages.
@@ -13,6 +15,8 @@ npm run dev
 ```
 
 Build generates styles/tokens.css from tokens/quiet-material.tokens.json. Open the local URL printed by the development server to view index.html.
+
+The workbench is one page with sections for foundations, the component library, motion, platforms, patterns, accessibility and, new in this release, Showcase. Showcase assembles five illustrative examples out of the same components as the catalog, so you can judge the black direction on a whole layout instead of on single controls: a sparse start screen, a tile grid with live filtering, a settings list, a media surface and a dialog flow. Everything there is static demo content inside the page, with no launcher, no live device, no accounts, no network requests and no reading of installed applications. Its layout-only stylesheet, `showcase.css`, sits beside `index.html` with `demo.css`; both are workbench styles and neither is part of the distributed `styles/` layer.
 
 ```sh
 npm test
@@ -92,7 +96,7 @@ showSnackbar('Item archived.', {
 
 A positive timeout is clamped to at least 5000ms and pauses on hover/focus. Only the latest snackbar is visible. `onAction` supplies a real application callback with a separate Dismiss action; successful completion dismisses the message. A rejected callback leaves it available and emits `qm:snackbar-action-error` so the application can display a specific recovery message. The example's `restoreArchivedItem` is an application function. Essential feedback needs a persistent location in the product.
 
-For system changes, edit the source token JSON and rebuild. In a consuming product, prefer semantic variables such as --qm-color-surface and --qm-space-6. Keep the approved black background and re-check contrast, focus and reduced motion for any override. The stylesheet includes global typography and element defaults, so review its effects when integrating with existing CSS.
+For system changes, edit the source token JSON and rebuild. In a consuming product, prefer semantic variables such as --qm-color-surface and --qm-space-6. Keep the approved black background and re-check contrast, focus and reduced motion for any override. Note the 1.4 meanings before you override anything: `--qm-color-primary`, `--qm-color-on-primary`, `--qm-color-primary-container`, `--qm-color-on-primary-container`, `--qm-color-secondary`, `--qm-color-on-secondary` and `--qm-color-focus` kept their names and are now neutral, `--qm-radius-card` is 24px, and a product that wants the former blue or mint accent must reference `--qm-color-palette-blue` or `--qm-color-palette-mint` explicitly. The stylesheet includes global typography and element defaults, so review its effects when integrating with existing CSS.
 
 Before shipping a product, review [component contracts](components.md), the [accessibility checks](accessibility.md) and [scope](governance.md). An editable design-tool library and native platform SDK installations are not included.
 

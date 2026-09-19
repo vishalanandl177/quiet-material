@@ -1,6 +1,6 @@
 # Platforms and implementation contracts
 
-Quiet Material shares one visual language across platforms: a black application background, charcoal content surfaces, clear typography, generous rounded shapes and brief interaction-driven motion. The portable contract is the token source plus component behavior and accessibility rules. CSS is the web implementation; native apps consume generated values through their own UI toolkit.
+Quiet Material shares one visual language across platforms: a pure black application background, near-black content surfaces stepping through #080808, #101010 and #181818, one graphite #242424 tonal step, clear white typography with neutral-gray supporting text, neutral selection, a declared corner step for each surface size, and brief interaction-driven motion. The portable contract is the token source plus component behavior and accessibility rules. CSS is the web implementation; native apps consume generated values through their own UI toolkit.
 
 ## What is supplied
 
@@ -11,7 +11,7 @@ Quiet Material shares one visual language across platforms: a black application 
 | iOS / iPadOS | [SwiftUI package and component catalog](../platforms/apple/) plus generated Swift tokens | iOS simulator library build passed in CI; device verification remains pending |
 | macOS | SwiftUI adapter, Flutter adapter, or responsive web | Swift package build passed in CI; desktop accessibility verification remains pending |
 | Windows / Linux desktop | [Flutter source package and example](../platforms/flutter/) or responsive web | Flutter host apps must be created and validated on supported build hosts |
-| Shared Flutter application | Theme, component wrappers and explicit Material aliases, adaptive shell, motion helpers and generated Dart tokens | Flutter analysis and all 9 unit/widget tests passed; platform host builds remain pending |
+| Shared Flutter application | Theme, component wrappers and explicit Material aliases, adaptive shell, motion helpers and generated Dart tokens | Flutter analysis clean and all 13 widget tests passed in CI; platform host builds remain pending |
 | Other UI stacks | Canonical JSON design tokens and contracts in this documentation | Requires a platform adapter and validation by the consuming team |
 
 Flutter targets Android, iOS, web and desktop operating systems; supported OS versions depend on the Flutter SDK selected for the product. A framework's supported-platform list is not evidence that this repository has been tested on those devices. Consult [Flutter's platform matrix](https://docs.flutter.dev/reference/supported-platforms) when setting a minimum OS.
@@ -86,7 +86,24 @@ Use the current [Compose component catalog](https://developer.android.com/develo
 
 Numeric layout values express design intent in each toolkit's logical units; they are not physical-device pixel counts. Fonts use the native system stack unless the consuming app bundles an appropriately licensed font. Keep font scaling enabled and verify scripts with different character widths. Generate platform values from canonical tokens instead of introducing separate platform palettes.
 
-Black belongs to the application's canvas and safe-area background. Charcoal belongs to cards, dialogs and controls. System-owned keyboards, permission dialogs and OS surfaces retain the platform's presentation; the application theme does not control their entire appearance.
+Black belongs to the application's canvas and safe-area background. The near-black surface steps belong to cards, sheets, dialogs and menus, and the graphite step carries a tonal selection or a current-location highlight. System-owned keyboards, permission dialogs and OS surfaces retain the platform's presentation; the application theme does not control their entire appearance, and this repository does not restyle or simulate them.
+
+### Colour scheme mapping
+
+Each adapter builds its scheme from the generated tokens so nothing falls back to a toolkit default accent. The names differ per toolkit; the token behind them does not.
+
+| Role | Token | Compose `ColorScheme` | SwiftUI | Flutter `ColorScheme` |
+| --- | --- | --- | --- | --- |
+| Canvas | `colorBackground` | `background`, window background | window and safe-area background | `surface`, `scaffoldBackgroundColor` |
+| Container steps | `colorSurfaceLow`, `colorSurface`, `colorSurfaceHigh` | `surface`, `surfaceContainer*`, `surfaceVariant` | surface fills | `surfaceContainer*` |
+| Primary action and single-choice selection | `colorPrimary` / `colorOnPrimary` | `primary` / `onPrimary` | tint and label | `primary` / `onPrimary` |
+| Tonal selection and current location | `colorPrimaryContainer` / `colorOnPrimaryContainer` | `primaryContainer` / `onPrimaryContainer` | container fill and label | `primaryContainer` / `onPrimaryContainer` |
+| Functional control boundary | `colorOutline` | `outline` | control stroke | `outline` |
+| Decorative grouping edge, dividers | `colorOutlineVariant` | `outlineVariant` | separator | `outlineVariant` |
+| Modal dimming | `colorScrim` | `scrim` | presentation background | `scrim`, `Drawer` `scrimColor` |
+| Error | `colorDanger` / `colorDangerContainer` | `error` / `errorContainer` | error label | `error` / `errorContainer` |
+
+Two toolkit defaults are overridden deliberately. Material tonal elevation would tint a surface as it rises, which would break the exact surface ladder, so surface tint is disabled on every themed surface: Compose sets its tint to transparent, and the Flutter theme sets `surfaceTintColor` to a transparent value on the Card, AppBar, Dialog, BottomSheet, NavigationBar, Menu and Drawer themes. A platform accent would otherwise colour toggles, pickers and selection controls, so each adapter sets the accent from `colorPrimary` rather than leaving the system default in place.
 
 ## Interaction contract
 

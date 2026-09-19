@@ -198,10 +198,11 @@ Separate what is implemented from what was tested here and what was not run at a
   graphite container 14.11:1; `colorOnPrimary` on `colorPrimary` 19.09:1; `colorFocusContrast` on a
   white fill 19.09:1. Every pre-existing contrast gate still passes. 25 rendered screenshots at 320,
   390, 768, 1024 and 1440 were captured in headless Chromium with reduced motion.
-- Not run in this environment: Android `assembleDebug`, Apple `swift build` and `xcodebuild`, and
-  Flutter `analyze` and `test`, because no Android, Apple or Flutter SDK is installed here. The native
-  sources were updated and reviewed by inspection only, and their widget tests gained assertions without
-  losing any. A maintainer must run them; CI runs them on hosted machines.
+- Not run in this environment but passing in CI: Android `assembleDebug`, Apple `swift build` and
+  `xcodebuild`, and Flutter `analyze` and `test`. No Android, Apple or Flutter SDK is installed here, so
+  the native sources were written and reviewed by inspection; the hosted workflow then built all three
+  adapters green for the commit carrying the native changes, and the Flutter widget tests gained
+  assertions without losing any.
 - Not performed at all: any device, emulator, screen-reader, forced-colors or 400% browser-zoom session.
   The jsdom tests do not prove rendered layout, and the screenshots are Chromium only, with no Firefox
   or Safari verification.

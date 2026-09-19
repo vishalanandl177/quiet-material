@@ -4,7 +4,7 @@ Use these compositions to keep interfaces calm as they grow. They are design gui
 
 ## Page structure
 
-Use a black page, one clear title, one short context sentence and a primary action only when the task needs one. Group related controls in a charcoal surface. Keep most content unboxed; do not put every paragraph into a card. Make the primary reading path obvious through type size and spacing before introducing color.
+Use a black page, one clear title, one short context sentence and a primary action only when the task needs one. Group related controls on a near-black surface step, and keep the graphite container for a deliberate tonal emphasis rather than for ordinary grouping. Keep most content unboxed; do not put every paragraph into a card. Make the primary reading path obvious through type size and spacing: the palette is neutral, so hierarchy cannot be delegated to an accent color.
 
 Desktop pages may use a navigation rail and a main column. Compact screens collapse to one content column; critical actions stay in normal reading order. Avoid a fixed bottom bar that covers focused content. Use a narrow prose measure for documentation and a wider content region for tables or galleries.
 
@@ -41,9 +41,11 @@ Skeletons should resemble the content footprint and never masquerade as real dat
 
 Use an inline status for task-local feedback. Use a snackbar for brief supplementary confirmation. Use a dialog only for a decision that must interrupt the current task. Badges summarize unread or outstanding counts; they are not a substitute for accessible notification text. Avoid continuous movement and repeated live announcements.
 
+Status color is never the only signal. The success, warning and danger tokens keep their mint, yellow and red hues, so pair each one with a word or a symbol and let the text carry the meaning. In a neutral interface a lone colored dot reads as decoration, and it disappears under monochrome rendering, forced colors and color-vision differences.
+
 ## Navigation and data
 
-Links navigate; buttons change state. Tabs switch related views in the same context. Breadcrumbs communicate hierarchy and use aria-current="page" on the current location. Pagination changes a collection's page with clear labels and a persistent current-page state. Tables remain semantic tables; sorting requires explicit buttons in headers and aria-sort updates in the consuming product.
+Links navigate; buttons change state. Tabs switch related views in the same context. Breadcrumbs communicate hierarchy and use aria-current="page" on the current location. Pagination changes a collection's page with clear labels and a persistent current-page state. Keep the two selection treatments distinct: one chosen option is a white fill with black content, while a current location such as the active destination, the current page or the current row is the graphite container with white content. Neither treatment replaces the structural signal, so the indicator, the checkmark and the ARIA state stay in place. Tables remain semantic tables; sorting requires explicit buttons in headers and aria-sort updates in the consuming product.
 
 ## Content voice
 

@@ -62,6 +62,19 @@ This is a visual-language comparison, not a pixel-perfect reproduction of a conc
 
 What the screenshots do not establish: they are Chromium only, at default zoom and default text size, on no real device. A 320 px capture shows that the layout reflows, and nothing about scaled text, a forced palette or an assistive technology.
 
+### Rendered behaviour checks
+
+Four behaviours were checked by reading computed values and layout metrics out of the same headless Chromium, rather than by looking at a still frame. Each is a browser measurement, not a device or assistive-technology session.
+
+| Check | Method | Result |
+| --- | --- | --- |
+| Reduced motion collapses the vocabulary | `reducedMotion: 'reduce'`, read the computed custom properties on the root | `--qm-duration-short`, `-medium`, `-long`, `--qm-motion-enter-duration` and `--qm-spring-standard-fast-spatial-duration` all compute to `0ms` |
+| The override is conditional, not a blanket zero | `reducedMotion: 'no-preference'`, same properties | `--qm-duration-short` `150ms`, `--qm-motion-enter-duration` `500ms` |
+| Reflow at 320 CSS px | Compare `documentElement.scrollWidth` with `clientWidth` on the showcase, components and foundations pages | 320 against 320 on all three; no horizontal page overflow |
+| Right-to-left layout | Set `dir="rtl"` at 390 px and re-measure | No horizontal overflow; the logical-property layout holds |
+
+The reduced-motion result is a token measurement. It shows the durations an animation would read, not that every transition visibly stops over time, and it says nothing about a real operating-system reduced-motion setting.
+
 ## Native validation status
 
 No Android, Apple or Flutter SDK is installed in the authoring environment, so none of the native commands below was run here. The native sources for this migration were written and reviewed by inspection here, and built on GitHub-hosted machines by [`.github/workflows/native.yml`](../.github/workflows/native.yml).

@@ -1,25 +1,26 @@
 # Quiet Material
 
-A mobile-first design system for web and native apps: pure black pages, charcoal cards, large readable type, pill controls, restrained blue/mint accents and purposeful interaction motion.
+A mobile-first design system for web and native apps: pure black pages, matte near-black surfaces, one graphite tonal step, large readable type, pill controls, neutral white selection and purposeful interaction motion.
 
-Quiet Material is an independent, customizable implementation of Material Design 3 component families. The black-and-charcoal theme, native platform adapters and shared motion foundations follow one design contract. It is not an official Google library. See the [36-family coverage matrix](docs/md3-components.md) for exact variants and implementation status.
+Quiet Material is an independent, customizable implementation of Material Design 3 component families. The black direction, native platform adapters and shared motion foundations follow one design contract. It is not an official Google library. See the [36-family coverage matrix](docs/md3-components.md) for exact variants and implementation status.
 
 ![Quiet Material across phone, tablet and desktop](assets/platforms/adaptive-family.png)
 
-Illustrative concept, not an implementation screenshot. [Phone concept](assets/platforms/mobile-focus.png) · [Original direction](assets/approved-concept.png)
+Illustrative concept, not an implementation screenshot. It was drawn for an earlier release and predates the 1.4 retune; for what the current build renders, see the [rendered screenshots](docs/screenshots/). [Phone concept](assets/platforms/mobile-focus.png) · [Approved visual reference](assets/reference/black-direction-2026-09.webp) and its [provenance](assets/reference/README.md) · [Historical 1.0-1.3 charcoal reference](assets/approved-concept.png)
 
 ## What is included
 
-- 169 canonical design tokens with deterministic CSS, JSON, TypeScript, Kotlin, Swift, and Dart exports.
+- 198 canonical design tokens with deterministic CSS, JSON, TypeScript, Kotlin, Swift, and Dart exports.
+- The black direction as tokens: pure black canvas, #080808/#101010/#181818 surface steps, a graphite #242424 tonal container, white selection with black content, two distinct boundary roles, three elevation composites, six stacking layers and four state-layer opacities. 1.4 retuned 21 values and added 29 tokens without removing a single public name; blue and mint stay exported for status and as an optional accent. See [the 1.4 migration guide](docs/migration-1.4.md).
 - Mobile-first 320px baseline, 600/840/1200 window classes, safe-area support, scalable type, and accessible target sizes.
-- Android Compose, Apple SwiftUI, and Flutter source adapters, component catalogs and adaptive examples. Android and Apple library builds and Flutter analysis/widget tests pass CI; application integration and device review remain pending.
+- Android Compose, Apple SwiftUI, and Flutter source adapters, component catalogs and adaptive examples. Android and Apple library builds and Flutter analysis/widget tests pass on hosted CI machines; no native SDK is installed in this repository’s authoring environment, and application integration and device review remain pending.
 - All 16 MD3 duration slots, seven easing families, and standard/expressive spring definitions with pinned official source references.
 - Web APIs for container transform, shared axis X/Y/Z, fade through, fade, and spring motion.
 - Framework-independent components across all 36 families in the official MD3 catalog, plus supporting patterns such as avatars, tables and empty states.
 - Filled/outlined fields; all four chip types; single/range sliders; date/time pickers; menus and searchable results; circular/linear progress and a loading indicator.
 - FABs and FAB menus, button groups, split/segmented buttons, adaptive navigation, app bars, toolbars, sheets, dialogs, lists and carousels.
 - Progressive interactions with keyboard contracts, reduced motion, explicit cleanup and real snackbar action callbacks.
-- A responsive component workbench with platform guides, two additional device concepts, and seven small, opt-in motion GIFs.
+- A responsive component workbench with a Showcase page of illustrative local examples, platform guides, two additional device concepts, and seven small, opt-in motion GIFs.
 - Foundations, accessibility rules, component contracts, motion recipes, patterns and design-tool handoff guidance.
 - A dependency-free token build and development-only jsdom tests for DOM behavior.
 
@@ -34,6 +35,10 @@ Illustrative concept, not an implementation screenshot. [Phone concept](assets/p
 | Another toolkit | [Resolved tokens](exports/quiet-material.tokens.resolved.json) and [platform contracts](docs/platforms.md) |
 
 The adapters preserve native semantics and navigation. Platform compatibility is a shared design contract, not a claim that all devices have been tested.
+
+## Screenshots
+
+[`docs/screenshots/`](docs/screenshots/README.md) holds 25 rendered captures of the workbench: the showcase, foundations, components, platforms and motion pages at 320, 390, 768, 1024 and 1440 CSS px. They were captured by `node scripts/capture-screenshots.mjs` in headless Chromium with reduced motion, dark color scheme and `deviceScaleFactor` 1; set `SCALE=2` for retina. Playwright is located on the machine rather than added as a dependency, so `package.json` is unchanged. These captures are Chromium only, at default zoom and default text size, on no real device. [Validation](docs/validation.md) records what they do and do not establish.
 
 ## See the motion
 
@@ -140,6 +145,8 @@ The web helper handles ordinary DOM views. It does not capture live video, canva
 | [Getting started](docs/getting-started.md) | Commands, imports and integration lifecycle |
 | [Platforms](docs/platforms.md) | Android, Apple, Flutter, desktop coverage and native component mappings |
 | [Mobile first](docs/mobile-first.md) | Window classes, safe areas, text scaling, touch, keyboard and RTL |
+| [Migrating to 1.4](docs/migration-1.4.md) | Every retuned and added token, names whose meaning changed, and what to check in a product |
+| [Screenshots](docs/screenshots/README.md) | Rendered captures of five workbench pages at five widths |
 | [Motion gallery](docs/motion-gallery.md) | Seven small GIFs, static posters, timings and reproducible generator |
 | [Foundations](docs/foundations.md) | Principles, exact colors, type, spacing, shape and token architecture |
 | [Components](docs/components.md) | Catalog, states, markup, keyboard contracts and JavaScript lifecycle |

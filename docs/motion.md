@@ -4,6 +4,8 @@ Quiet Material adopts Material Design 3 (MD3/M3) motion foundations and the four
 
 The system includes both the duration/easing model and spring definitions. These are complementary tools, not a requirement to animate every element. The default spring scheme is **standard**, appropriate to recurring, utilitarian interactions; expressive springs remain available for deliberate emphasis. Android's [MotionScheme reference](https://developer.android.com/reference/kotlin/androidx/compose/material3/MotionScheme) distinguishes these schemes and separates spatial motion from effects.
 
+The 1.4 visual migration to the black direction preserved every duration, easing, spring and transition binding unchanged, so the generated motion exports are byte-identical to 1.3 and the motion GIF posters remain valid because they demonstrate timing rather than palette.
+
 The [motion audit](md3-motion-audit.md) records coverage and remaining validation. This is a documented implementation profile, not a claim of Google certification or identical behavior from every native widget.
 
 ## Foundation tokens
@@ -115,7 +117,7 @@ System-owned navigation, keyboard, permission and window animations retain platf
 
 ## Visual studies and verification
 
-The [motion gallery](motion-gallery.md) contains posters and short, opt-in GIF studies. They illustrate timing and relationships; they are not recorded proof of native widget conformance. Reduced-motion users receive posters. Review the live interaction alongside the illustrated sequence.
+The [motion gallery](motion-gallery.md) contains posters and short, opt-in GIF studies. They illustrate timing and relationships; they are not recorded proof of native widget conformance. They were drawn from the token values of an earlier release and were not re-rendered for 1.4, so their surface and accent colors show the previous palette while the timing they demonstrate is current. Reduced-motion users receive posters. Review the live interaction alongside the illustrated sequence.
 
 Every motion change must update its recipe or platform binding, include forward and return states, and record automated versus visual/device evidence in the [motion audit](md3-motion-audit.md) and [validation record](validation.md).
 
