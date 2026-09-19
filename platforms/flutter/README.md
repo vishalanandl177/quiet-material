@@ -1,6 +1,6 @@
 # Quiet Material for Flutter
 
-A source package for Flutter 3.35+ / Dart 3.9+. It themes stock Material 3 widgets and supplies an adaptive shell. Its intended targets are Android, iOS, web, macOS, Windows and Linux through Flutter; native compilation and device testing have not been run for this delivery. This is not a published pub.dev package or a promise that every widget has identical platform behavior.
+A source package for Flutter 3.35+ / Dart 3.9+. It themes stock Material 3 widgets and supplies a reusable component catalog and adaptive shell. Its intended targets are Android, iOS, web, macOS, Windows and Linux through Flutter; native compilation and device testing have not been run for this delivery. This is not a published pub.dev package or a promise that every widget has identical platform behavior.
 
 ## Integrate
 
@@ -32,7 +32,7 @@ The token generator in the repository root writes `lib/src/quiet_tokens.dart`. R
 | `QuietCurves` / `quietSpring` | All seven MD3 curves, exact emphasized path and standard/expressive spatial/effects springs |
 | `QuietTokens` | Generated constants, including native `Color` values and millisecond duration integers |
 
-Keep selection and draft data above the adaptive layout so rotating/resizing never loses it. Compact mode uses three labeled destinations at most; larger menus or large text switch to a drawer. Medium windows use a rail; expanded windows can expose a supporting pane. Reuse stock `TextField`, `SwitchListTile`, `CheckboxListTile`, `Slider`, `AlertDialog` and other widgets inside this theme to retain their platform input and accessibility behavior.
+Keep selection and draft data above the adaptive layout so rotating/resizing never loses it. Compact mode uses three labeled destinations at most; larger menus or large text switch to a drawer. Medium windows use a rail; expanded windows can expose a supporting pane. Use the catalog below or stock Material widgets inside this theme to retain their platform input and accessibility behavior.
 
 ## MD3 motion
 
@@ -87,3 +87,34 @@ Current API references: [ThemeData](https://api.flutter.dev/flutter/material/The
 ## Distribution
 
 This package remains private and unpublished (`publish_to: none`). Platform portability and public permission to reuse are separate questions. The repository currently has no public license grant; do not publish it or claim open-source availability without the owner's licensing decision.
+
+
+## Component catalog
+
+`lib/quiet_material.dart` exports `quiet_catalog.dart` along with tokens, theme, motion and layout. Import Flutter Material as usual for native state objects, icons and constructor types.
+
+| Category | Public APIs |
+| --- | --- |
+| Actions | `QuietButton` (filled/tonal/outlined/text/elevated), `QuietIconButton`, `QuietFab` (compact/extended), `QuietButtonGroup`, `QuietSplitButton`, `QuietFabMenu`, `QuietSegments<T>` (single/multiple) |
+| Communication | `QuietBadge`, `QuietProgress`, `QuietLoadingIndicator`, `showQuietSnackbar`, `QuietTooltip`, `QuietRichTooltip` |
+| Containment | `QuietCard` (filled/outlined/elevated), `QuietCarousel`, `QuietDivider`, `QuietListItem`, `showQuietBottomSheet`, `showQuietStandardBottomSheet`, `showQuietFullScreenDialog`, `showQuietSideSheet` |
+| Selection/input | `QuietChip` (assist/suggestion/filter/input), `QuietRangeSlider`, `showQuietDatePicker`, `showQuietDateRangePicker`, `showQuietTimePicker` (dial/input), `QuietMenu`, `QuietField` (filled/outlined), `QuietSearch` |
+| Navigation | `QuietToolbar`, existing `QuietAdaptiveScaffold`, plus explicit native aliases below |
+
+The following exported aliases are the actual stock Material widget types, with their complete constructor/state/semantics APIs: `QuietTopAppBar = AppBar`, `QuietBottomAppBar = BottomAppBar`, `QuietNavigationBar = NavigationBar`, `QuietNavigationRail = NavigationRail`, `QuietNavigationDrawer = NavigationDrawer`, `QuietTabs = TabBar`, `QuietTabView = TabBarView`, `QuietDialog = AlertDialog`, `QuietCheckbox = CheckboxListTile`, `QuietRadio<T> = RadioListTile<T>`, `QuietSwitch = SwitchListTile`, `QuietSlider = Slider`. Supply native tab controllers and navigation state in the host. This avoids maintaining duplicate wrappers for mature, already themed controls.
+
+```dart
+QuietSplitButton(
+  primary: QuietAction(label: 'Save', onPressed: save),
+  menuLabel: 'More save options',
+  actions: [QuietAction(label: 'Save copy', onPressed: saveCopy)],
+)
+```
+
+`save` and `saveCopy` are app callbacks. A null `QuietAction.onPressed` disables the command. MenuAnchor supplies keyboard navigation, focus and dismissal; the split primary action and menu actions remain separate. `QuietSegments` is controlled by a selected set. Input-chip removal has its own callback and localized `deleteLabel`. Field/Search controllers are app-owned and must be disposed by their owner. `QuietSearch` wraps Material `SearchAnchor.bar` and accepts a suggestions builder, preserving native search-view behavior.
+
+`QuietCarousel` uses stock `CarouselView` with item snapping. Give text-heavy items enough height and test text scaling. Date/time helpers return nullable results: cancellation must leave the previously committed value unchanged. Range and date validation are available through their native controls; initial values must be inside bounds. Snackbars expose real action callbacks and a dismiss button. Modal side sheets use a focus-contained dialog route; include an explicit close action in the supplied content.
+
+The loading indicator is a real CustomPainter/Ticker seven-contour morph with the shared 650 ms targets, stiffness 200/damping ratio 0.6 and compound rotation. It stops for `MediaQuery.disableAnimations` and muted `TickerMode`, and disposes its ticker when removed. Its artwork is Quiet-specific, not identical to Android's rounded polygons. Progress exposes a numeric percentage only for actual determinate values; the static reduced-motion busy representation does not announce invented progress.
+
+Stable connected button groups/FAB menus/split buttons/toolbars supply their action contracts without claiming expressive connected-shape morphing. Rich help is an interactive MenuAnchor popup rather than a noninteractive Tooltip text span. The five added catalog widget tests cover independent split actions, controlled segmentation, chip removal, reduced-motion loading and narrow-window text reflow. **They must still be run with `flutter test`; the authoring environment has no Flutter SDK.**

@@ -1,8 +1,8 @@
-# Validation record — v1.2
+# Validation record — v1.3
 
 ## Completed automated checks
 
-On 2026-09-19, `npm run check` passed all **56 tests**:
+On 2026-09-19, `npm run check` passed all **105 tests**:
 
 - Canonical token validation, alias/cycle checks, deterministic generation and parity across CSS, JSON, JavaScript, TypeScript, Kotlin, Swift and Dart.
 - All 16 MD3 durations, seven easing families, exact emphasized segments, standard/expressive physical spring values, component ripple timings and current themed transition bindings. Emphasized CSS sampling stays within 0.0001 of the exact source path.
@@ -11,8 +11,12 @@ On 2026-09-19, `npm run check` passed all **56 tests**:
 - DOM interaction checks for tabs including RTL/vertical cases, disabled items, repeated setup/cleanup, chips, tooltips, snackbars and reduced-motion ripple suppression.
 - Opt-in GIF playback, replay, stop, one-study-at-a-time behavior, reduced-motion prevention, and timer cleanup. Asset dimensions, sizes, single-cycle encoding and manifest paths/durations are checked.
 - Explorer IDs, labels, ARIA references, local resources and enhancement targets.
+- All 36 official catalog families resolve to working showcase examples and component guides. The actual explorer module initializes without duplicate generated IDs; category/search filtering, real snackbar Undo, progress updates and mixed-checkbox state are exercised together.
+- Segmented controls, form reset/submission, removable chips, range bounds/steps, adaptive navigation, toolbar focus, sheets and carousel interruption.
+- Keyboard menus/submenus and disabled states; combobox input and search submission; date leap years/ranges/min-max/year limits; time midnight/noon/12-24-hour conversion and pointer/keyboard input; draft/cancel/commit isolation.
+- Circular/linear progress recipes and semantics, reduced-motion loading, and rich-tooltip dismissal/focus.
 
-JavaScript syntax, self-contained preview generation and `git diff --check` passed. The preview embeds the concepts, all seven posters/GIFs, the motion runtime and generated contract; the combined module parses with no external imports. HTTP smoke checks passed for the explorer, module, GIF, concept PNG, resolved tokens and native guide; Git metadata paths returned 404.
+JavaScript syntax, self-contained preview generation and `git diff --check` passed. The preview embeds the concepts, all seven posters/GIFs, every component module and stylesheet, the motion runtime and generated contract; the combined module parses with no external imports. HTTP smoke checks passed for the explorer, module, GIF, concept PNG, resolved tokens and native guide; Git metadata paths returned 404.
 
 The motion generator was run, its seven static posters visually inspected, and byte-identical regeneration verified. Both additional generated device concepts were visually reviewed. These are illustrative references and motion studies, not screenshots or recordings of a tested application.
 
@@ -22,13 +26,13 @@ The [GitHub Actions workflow](https://github.com/vishalanandl177/quiet-material/
 
 | Adapter | Completed here | Still required |
 | --- | --- | --- |
-| Android Compose | Source/API review, MD3 helper review and generated token-reference checks | Android SDK compilation, application integration, device/emulator and TalkBack review |
-| Apple SwiftUI | Source/API review, MD3 helper review and generated token-reference checks | Xcode/Swift package compilation, iPhone/iPad/Mac integration and VoiceOver review |
-| Flutter | Source/API review, complete semantic color mapping and token-reference checks; widget tests supplied | `flutter analyze`, `flutter test`, host builds and device/desktop assistive-technology review |
+| Android Compose | Expanded component source/API review, MD3 helper review and generated token-reference checks | Android SDK compilation, application integration, device/emulator and TalkBack review |
+| Apple SwiftUI | Expanded component source/API review, MD3 helper review and generated token-reference checks | Xcode/Swift package compilation, iPhone/iPad/Mac integration and VoiceOver review |
+| Flutter | Expanded component source/API review, complete semantic color mapping and token-reference checks; widget interaction tests supplied | `flutter analyze`, `flutter test`, host builds and device/desktop assistive-technology review |
 
 Native starters do not include a complete MD3 container-transform route; SwiftUI navigation remains system-owned Apple motion. The shared foundation and web default patterns are implemented, while full native conformance is not claimed. See the [MD3 audit](md3-motion-audit.md).
 
-The corresponding native SDKs were unavailable in this environment. Source adapters have not been represented as compiled or production-verified packages.
+The corresponding native SDKs were unavailable in the local creation environment. The new `Verify native adapters` GitHub Actions workflow compiles the Android library and Apple package/iOS simulator target, then analyzes and tests Flutter. Its first remote run is pending at this snapshot; no native compilation result is claimed until that run passes. A compiler pass does not replace device, visual or assistive-technology review.
 
 ## Remaining browser and device checks
 

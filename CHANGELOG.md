@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.3.0 — 2026-09-19
+
+- Expand the reusable web catalog to all 36 families in the current MD3 catalog and publish an explicit family/variant/platform matrix.
+- Add FABs, extended FABs and FAB menus; button groups, segmented and split buttons; filled/elevated/outlined/text buttons; toggle icon buttons; filled/outlined/elevated cards; all four chip types; floating-label fields; and two-thumb range sliders.
+- Add reusable app bars, adaptive navigation bars/rails/drawers, primary/secondary tabs, toolbars, standard/modal bottom and side sheets, full-screen dialogs, lists, dividers and carousels.
+- Add date/time pickers, keyboard menus, search, linear/circular progress, loading indicators, navigation badges and rich tooltips. Preserve native input semantics, narrow-screen layouts, cleanup and reduced-motion behavior.
+- Add real asynchronous snackbar action callbacks with separate dismissal, single-message replacement and action-error events. Existing `actionLabel`-only dismissal remains compatible.
+- Expand native source catalogs and document platform compositions separately from native compilation and device validation.
+- Keep `styles/quiet-material.css` as the public entry point, now importing the complete base/component stylesheet set. Integrations must retain the entire `styles/` directory.
+
 ## 1.2.0 — 2026-09-19
 
 - Replace the partial custom motion vocabulary with all 16 MD3 durations, seven easing families, exact emphasized path data, and both six-role spring schemes. Add pinned official source provenance and deterministic browser motion exports.

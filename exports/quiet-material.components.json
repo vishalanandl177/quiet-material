@@ -1,0 +1,296 @@
+{
+  "version": "1.3.0",
+  "catalogSource": "https://m3.material.io/components",
+  "reviewed": "2026-09-19",
+  "scope": "Web family availability. Variant and native-validation boundaries are in docs/md3-components.md.",
+  "families": [
+    {
+      "id": "button-groups",
+      "name": "Button groups",
+      "specification": "https://m3.material.io/components/button-groups/overview",
+      "guide": "docs/components-actions.md",
+      "example": "index.html#component-button-groups",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "buttons",
+      "name": "Buttons",
+      "specification": "https://m3.material.io/components/buttons/overview",
+      "guide": "docs/components-actions.md",
+      "example": "index.html#component-buttons",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "extended-fab",
+      "name": "Extended FABs",
+      "specification": "https://m3.material.io/components/extended-fab/overview",
+      "guide": "docs/components-actions.md",
+      "example": "index.html#component-extended-fab",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "fab-menu",
+      "name": "FAB menu",
+      "specification": "https://m3.material.io/components/fab-menu/overview",
+      "guide": "docs/components-actions.md",
+      "example": "index.html#component-fab-menu",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "floating-action-button",
+      "name": "Floating action buttons",
+      "specification": "https://m3.material.io/components/floating-action-button/overview",
+      "guide": "docs/components-actions.md",
+      "example": "index.html#component-floating-action-button",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "icon-buttons",
+      "name": "Icon buttons",
+      "specification": "https://m3.material.io/components/icon-buttons/overview",
+      "guide": "docs/components-actions.md",
+      "example": "index.html#component-icon-buttons",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "segmented-buttons",
+      "name": "Segmented buttons",
+      "specification": "https://m3.material.io/components/segmented-buttons/overview",
+      "guide": "docs/components-actions.md",
+      "example": "index.html#component-segmented-buttons",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "split-button",
+      "name": "Split buttons",
+      "specification": "https://m3.material.io/components/split-button",
+      "guide": "docs/components-actions.md",
+      "example": "index.html#component-split-button",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "date-pickers",
+      "name": "Date pickers",
+      "specification": "https://m3.material.io/components/date-pickers/overview",
+      "guide": "docs/components-input.md",
+      "example": "index.html#component-date-pickers",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "time-pickers",
+      "name": "Time pickers",
+      "specification": "https://m3.material.io/components/time-pickers/overview",
+      "guide": "docs/components-input.md",
+      "example": "index.html#component-time-pickers",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "loading-indicator",
+      "name": "Loading indicator",
+      "specification": "https://m3.material.io/components/loading-indicator/overview",
+      "guide": "docs/components-communication.md",
+      "example": "index.html#component-loading-indicator",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "progress-indicators",
+      "name": "Progress indicators",
+      "specification": "https://m3.material.io/components/progress-indicators/overview",
+      "guide": "docs/components-communication.md",
+      "example": "index.html#component-progress-indicators",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "navigation-bar",
+      "name": "Navigation bar",
+      "specification": "https://m3.material.io/components/navigation-bar/overview",
+      "guide": "docs/components-navigation.md",
+      "example": "index.html#component-navigation-bar",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "navigation-drawer",
+      "name": "Navigation drawer",
+      "specification": "https://m3.material.io/components/navigation-drawer/overview",
+      "guide": "docs/components-navigation.md",
+      "example": "index.html#component-navigation-drawer",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "navigation-rail",
+      "name": "Navigation rail",
+      "specification": "https://m3.material.io/components/navigation-rail/overview",
+      "guide": "docs/components-navigation.md",
+      "example": "index.html#component-navigation-rail",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "bottom-sheets",
+      "name": "Bottom sheets",
+      "specification": "https://m3.material.io/components/bottom-sheets/overview",
+      "guide": "docs/components-navigation.md",
+      "example": "index.html#component-bottom-sheets",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "side-sheets",
+      "name": "Side sheets",
+      "specification": "https://m3.material.io/components/side-sheets/overview",
+      "guide": "docs/components-navigation.md",
+      "example": "index.html#component-side-sheets",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "app-bars",
+      "name": "App bars",
+      "specification": "https://m3.material.io/components/app-bars/overview",
+      "guide": "docs/components-navigation.md",
+      "example": "index.html#component-app-bars",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "badges",
+      "name": "Badges",
+      "specification": "https://m3.material.io/components/badges/overview",
+      "guide": "docs/components-communication.md",
+      "example": "index.html#component-badges",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "cards",
+      "name": "Cards",
+      "specification": "https://m3.material.io/components/cards/overview",
+      "guide": "docs/components-actions.md",
+      "example": "index.html#component-cards",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "carousel",
+      "name": "Carousel",
+      "specification": "https://m3.material.io/components/carousel/overview",
+      "guide": "docs/components-navigation.md",
+      "example": "index.html#component-carousel",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "checkbox",
+      "name": "Checkbox",
+      "specification": "https://m3.material.io/components/checkbox/overview",
+      "guide": "docs/components-actions.md",
+      "example": "index.html#component-checkbox",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "chips",
+      "name": "Chips",
+      "specification": "https://m3.material.io/components/chips/overview",
+      "guide": "docs/components-actions.md",
+      "example": "index.html#component-chips",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "dialogs",
+      "name": "Dialogs",
+      "specification": "https://m3.material.io/components/dialogs/overview",
+      "guide": "docs/components-navigation.md",
+      "example": "index.html#component-dialogs",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "divider",
+      "name": "Divider",
+      "specification": "https://m3.material.io/components/divider/overview",
+      "guide": "docs/components-navigation.md",
+      "example": "index.html#component-divider",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "lists",
+      "name": "Lists",
+      "specification": "https://m3.material.io/components/lists/overview",
+      "guide": "docs/components-navigation.md",
+      "example": "index.html#component-lists",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "menus",
+      "name": "Menus",
+      "specification": "https://m3.material.io/components/menus/overview",
+      "guide": "docs/components-input.md",
+      "example": "index.html#component-menus",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "radio-button",
+      "name": "Radio button",
+      "specification": "https://m3.material.io/components/radio-button/overview",
+      "guide": "docs/components-actions.md",
+      "example": "index.html#component-radio-button",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "search",
+      "name": "Search",
+      "specification": "https://m3.material.io/components/search/overview",
+      "guide": "docs/components-input.md",
+      "example": "index.html#component-search-example",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "sliders",
+      "name": "Sliders",
+      "specification": "https://m3.material.io/components/sliders/overview",
+      "guide": "docs/components-actions.md",
+      "example": "index.html#component-sliders",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "snackbar",
+      "name": "Snackbar",
+      "specification": "https://m3.material.io/components/snackbar/overview",
+      "guide": "docs/components-communication.md",
+      "example": "index.html#component-snackbar",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "switch",
+      "name": "Switch",
+      "specification": "https://m3.material.io/components/switch/overview",
+      "guide": "docs/components-actions.md",
+      "example": "index.html#component-switch",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "tabs",
+      "name": "Tabs",
+      "specification": "https://m3.material.io/components/tabs/overview",
+      "guide": "docs/components-navigation.md",
+      "example": "index.html#component-tabs",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "text-fields",
+      "name": "Text fields",
+      "specification": "https://m3.material.io/components/text-fields/overview",
+      "guide": "docs/components-actions.md",
+      "example": "index.html#component-text-fields",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "toolbars",
+      "name": "Toolbars",
+      "specification": "https://m3.material.io/components/toolbars/overview",
+      "guide": "docs/components-navigation.md",
+      "example": "index.html#component-toolbars",
+      "webImplementation": "implemented"
+    },
+    {
+      "id": "tooltips",
+      "name": "Tooltips",
+      "specification": "https://m3.material.io/components/tooltips/overview",
+      "guide": "docs/components-communication.md",
+      "example": "index.html#component-tooltips",
+      "webImplementation": "implemented"
+    }
+  ]
+}

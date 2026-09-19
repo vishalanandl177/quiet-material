@@ -1,0 +1,35 @@
+/* Communication variants. Repeating loaders are visible only while work is active. */
+.qm-badge-anchor { position: relative; display: inline-flex; }
+.qm-badge--small, .qm-badge--large { background: var(--qm-color-danger); color: var(--qm-color-danger-container); justify-content: center; line-height: 1; }
+.qm-badge--small { min-width: 6px; width: 6px; height: 6px; padding: 0; }
+.qm-badge--large { min-width: 16px; height: 16px; padding: 0 4px; font-size: 11px; }
+.qm-badge-anchor > .qm-badge { position: absolute; inset-block-start: 4px; inset-inline-end: 2px; pointer-events: none; }
+.qm-progress-circular { display: inline-flex; width: 48px; height: 48px; color: var(--qm-color-primary); }
+.qm-progress-circular svg { width: 100%; height: 100%; overflow: visible; }
+.qm-progress-circular__track { stroke: var(--qm-color-surface-high); }
+.qm-progress-circular__indicator { stroke: currentColor; stroke-linecap: round; }
+.qm-progress-linear { --qm-progress-fraction: .3; position: relative; height: 4px; width: 100%; border-radius: var(--qm-radius-pill); background: var(--qm-color-surface-high); overflow: hidden; }
+.qm-progress-linear__indicator { position: absolute; display: block; width: calc(var(--qm-progress-fraction, .3) * 100%); height: 100%; border-radius: inherit; background: var(--qm-color-primary); }
+.qm-progress-linear[data-value] .qm-progress-linear__secondary { display: none; }
+.qm-progress-linear[data-value] .qm-progress-linear__indicator { transition: width var(--qm-spring-standard-fast-effects-duration) var(--qm-spring-standard-fast-effects-easing); }
+.qm-loading-indicator { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; color: var(--qm-color-primary); }
+.qm-loading-indicator svg { width: 38px; height: 38px; fill: currentColor; }
+.qm-loading-indicator--contained { width: 64px; height: 48px; border-radius: var(--qm-radius-pill); background: var(--qm-color-primary-container); }
+.qm-rich-tooltip { position: fixed; z-index: 100; width: min(320px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); overflow-y: auto; padding: 16px; border-radius: 12px; background: var(--qm-color-surface-high); color: var(--qm-color-text); box-shadow: 0 4px 12px #0008; font-size: var(--qm-type-label); }
+.qm-rich-tooltip h3 { margin-block-end: 8px; font-size: var(--qm-type-title); }
+.qm-rich-tooltip p { margin-block-end: 12px; }
+.qm-snackbar { flex-wrap: wrap; }
+.qm-snackbar-action { display: inline-flex; align-items: center; justify-content: center; min-width: 48px; min-height: 48px; padding-inline: 12px; border: 0; border-radius: 24px; background: transparent; color: var(--qm-color-primary); }
+.qm-snackbar-action:disabled { color: var(--qm-color-disabled); }
+@media (prefers-reduced-motion: reduce) {
+  .qm-progress-linear__indicator { animation: none !important; transition: none !important; }
+}
+:root[data-qm-motion='reduced'] .qm-progress-linear__indicator { animation: none !important; transition: none !important; }
+@media (forced-colors: active) {
+  .qm-progress-circular__indicator { stroke: Highlight; }
+  .qm-progress-circular__track { stroke: CanvasText; }
+  .qm-loading-indicator svg { fill: Highlight; }
+  .qm-progress-linear { border: 1px solid CanvasText; }
+  .qm-progress-linear__indicator { background: Highlight; forced-color-adjust: none; }
+  .qm-rich-tooltip { border: 1px solid CanvasText; }
+}

@@ -1,42 +1,44 @@
 # Components
 
-Load styles/quiet-material.css and call initQuietMaterial() once after the document exists. Native HTML supplies most behavior; the optional module enhances tabs, dialog triggers, selectable chips, tooltips and interaction feedback. CSS classes alone do not add semantics or product business logic.
+Load `styles/quiet-material.css` with the entire styles directory intact and call `initQuietMaterial()` once after the document exists. The public module initializes action, navigation, input and communication enhancements. Native HTML supplies input and form semantics; CSS classes alone do not add product business logic.
+
+The [MD3 family matrix](md3-components.md) is the authoritative catalog: 36 official families, their implemented variants, reusable APIs and native mappings. This guide covers the shared contracts and compatible foundational markup. The component-specific guides linked from the matrix provide the expanded variants and mount APIs.
 
 ## Catalog and state contracts
 
-The catalog covers 27 primitives and compositions. “Product-owned” means styling or markup is available while application actions must be supplied by the consuming product. Default, hover, pressed, focus-visible and disabled states apply to interactive controls when meaningful.
+The quick reference below includes foundations and supporting patterns as well as MD3 families. It is not a count of official MD3 components. “Product-owned” means styling or markup is available while application actions must be supplied by the consuming product. Default, hover, pressed, focus-visible and disabled states apply to interactive controls when meaningful.
 
 | Component | Class or hook | States and variants | Keyboard and semantics |
 | --- | --- | --- | --- |
-| Button | `.qm-button` | Neutral, primary, tonal, ghost, danger; disabled | Native button; Enter/Space; type="button" unless submitting |
-| Icon button | `.qm-button--icon` | Same button states | Accessible name required; 48px target |
-| Card | `.qm-card` | Default, high, low | Structural container; a card is not inherently clickable |
-| Text field | `.qm-field`, `.qm-input` | Default, focused, invalid, disabled, read-only | Persistent label; native text editing; help/error described by ID |
+| Button | `.qm-button` | Filled, tonal, elevated, outlined, text; compatible neutral, primary, ghost, danger aliases | Native button; Enter/Space; type="button" unless submitting |
+| Icon button | `.qm-button--icon`, `[data-qm-icon-toggle]` | Filled, tonal, outlined, standard; optional toggle state | Accessible name required; 48px target; toggles expose aria-pressed |
+| Card | `.qm-card` | Filled, outlined, elevated; compatible high/low surfaces | Structural container; a card is not inherently clickable |
+| Text field | `.qm-text-field`, `[data-qm-text-field]`; compatible `.qm-field`, `.qm-input` | Filled/outlined floating labels; default, focused, invalid, disabled, read-only | Persistent label; native text editing; help/error described by ID |
 | Textarea | `.qm-textarea` | Field states; vertically resizable | Native multiline editing; do not trap Enter |
 | Select | `.qm-select` | Default, focused, invalid, disabled | Native select behavior varies by platform; label it |
 | Switch | `.qm-switch` | Checked, unchecked, disabled | Checkbox input with role="switch"; Space changes state |
 | Checkbox | `.qm-checkbox` | Checked, unchecked, disabled; native indeterminate when set by product | Space; fieldset and legend for a related group |
 | Radio | `.qm-radio` | Selected, unselected, disabled | Shared name; native arrow navigation within group |
-| Range slider | `.qm-range` | Value, focused, disabled | Native arrows/Home/End; visible label and understandable value |
-| Filter chip | `.qm-chip[aria-pressed]` | Pressed, unpressed, disabled | Button with aria-pressed; module toggles and emits change event |
-| Badge | `.qm-badge` | Neutral, info, success, warning, danger | Text status; no tab stop unless part of a separate action |
+| Slider | `.qm-range`, `[data-qm-slider]`, `[data-qm-range-slider]` | Single or two-thumb range; continuous/discrete steps; disabled | Native arrows/Home/End; both range thumbs labeled; values cannot cross |
+| Chips | `.qm-chip--assist`, `--filter`, `--input`, `--suggestion` | Action, selected/unselected, removable; disabled | Native buttons; filter aria-pressed; separate labeled input-chip removal |
+| Badge | `.qm-badge`, `.qm-badge--small`, `.qm-badge--large` | Dot/count or semantic tone | Include count meaning in the owning control's accessible name |
 | Avatar | `.qm-avatar` | Image or initials | Decorative with adjacent name; meaningful image needs alt |
-| Tabs | `[data-qm-tabs]`, `.qm-tabs`, `.qm-tab` | Selected, unselected, disabled | One tab stop, arrows, Home/End; labeled tablist and panels |
-| Dialog | `.qm-dialog` | Closed/open | Native dialog shown modally; focus inside, Escape, restore focus |
-| Bottom sheet | `.qm-dialog--sheet` | Closed/open; modal variant | Same contract as dialog; no drag gesture required |
-| Popover menu | `.qm-menu[popover]` | Open/closed | Native popover with ordinary links/buttons; Tab, Escape |
-| Tooltip | `.qm-tooltip-wrap`, `.qm-tooltip` | Hover/focus visible, dismissed | Description of a named trigger; Escape dismissal; no interactive child |
+| Tabs | `[data-qm-tabs]`, `.qm-tabs--primary`, `.qm-tabs--secondary`, `.qm-tabs--scrollable` | Primary/secondary, fixed/scrolling; selected, unselected, disabled | One tab stop, arrows, Home/End; labeled tablist and panels |
+| Dialog | `.qm-dialog`, `.qm-dialog--fullscreen` | Basic or full-screen; closed/open | Native dialog shown modally; focus inside, Escape, restore focus |
+| Bottom/side sheet | `.qm-sheet`, `.qm-dialog--sheet`, `.qm-dialog--side-sheet` | Standard and modal, expanded/collapsed | Keyboard handle/dismiss controls accompany gestures |
+| Menu | `.qm-menu[popover]` or enhanced keyboard menu | Simple native controls or full menu navigation | Use the documented enhanced hooks before adding menu semantics |
+| Tooltip | `.qm-tooltip-wrap`, `.qm-tooltip`, `[data-qm-rich-tooltip]` | Plain supplementary hint or rich interactive help | Plain hint uses role=tooltip; interactive rich help uses a nonmodal dialog |
 | Accordion | `.qm-accordion` | Open/closed | Native details/summary; Enter/Space on summary |
 | Inline alert | `.qm-alert` | Info, success, warning, danger | Ordinary text; live role only when a new dynamic message needs announcement |
-| Snackbar | `showSnackbar()` | Visible, dismissed; optional timed | Polite announcement; focusable Dismiss; persistent default |
-| Progress | `.qm-progress` | Determinate or native indeterminate | Native progress with accessible label; measured value only |
+| Snackbar | `showSnackbar()` | Visible, action pending/failed, dismissed; optional timed | Polite announcement; separate action and Dismiss; persistent default |
+| Progress | `.qm-progress`, `[data-qm-progress]`, `mountProgress()` | Linear/circular; determinate/indeterminate | Accessible progressbar; omit numeric value when indeterminate |
 | Skeleton | `.qm-skeleton` | Static | aria-hidden; content region owns aria-busy |
 | Table | `.qm-table`, `.qm-table-wrap` | Static rows; product-owned sort/filter | Native table, caption and scoped headers |
 | Breadcrumbs | `.qm-breadcrumbs` | Ancestors, current page | Labeled nav, links and aria-current="page" |
 | Pagination | `.qm-pagination` | Current, other pages, unavailable directions | Labeled navigation; native links/buttons; application owns page change |
 | Supporting text | `.qm-helper`, `.qm-muted` | Help, metadata, field error | Connect to control with aria-describedby when relevant |
 
-Badge and alert tones use `data-tone="info|success|warning|danger"`; omit it for the base style. The catalog does not promise a custom listbox, ARIA application menu, combobox, sortable grid or router.
+Badge and alert tones use `data-tone="info|success|warning|danger"`; omit it for the base style. Search and menu enhancements have their own focus and selection contracts. The system does not supply a sortable data grid, product router or remote search service.
 
 ## Buttons and cards
 
@@ -128,7 +130,7 @@ Keep panels inside their data-qm-tabs wrapper and IDs unique across the page. Th
 </dialog>
 ```
 
-Add qm-dialog--sheet for the bottom-sheet presentation. Escape and native modal focus behavior come from dialog; the enhancement restores focus to the invoker on close. Only one modal is opened at a time. Confirmation here returns a dialog result; it does not save data. The product listens for close and performs its intended action. Avoid nested modals. Provide a visible close or cancel action and follow the [WAI dialog pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/) for initial-focus decisions.
+Add `qm-dialog--sheet` for a modal bottom sheet, `qm-dialog--side-sheet` for a modal side sheet or `qm-dialog--fullscreen` for a full-screen dialog. Standard sheets use `.qm-sheet` in the page layout. Escape and native modal focus behavior come from dialog; the enhancement restores focus to the invoker on close. Only one modal is opened at a time. Confirmation here returns a dialog result; it does not save data. The product listens for close and performs its intended action. Avoid nested modals. Provide a visible close or cancel action and follow the [WAI dialog pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/) for initial-focus decisions.
 
 ## Menu, tooltip and accordion
 
@@ -150,7 +152,7 @@ Add qm-dialog--sheet for the bottom-sheet presentation. Escape and native modal 
 </details>
 ```
 
-The popover is a simple collection of native controls. Do not add role="menu" unless implementing its full arrow-key and focus contract. Native popovers require supporting browsers; provide an inline fallback if your browser policy includes older engines. Menu positioning relative to a trigger is product layout work. Tooltip content is supplementary, never the only source of an essential instruction; touch users still need a complete label. Accordion semantics and expanded state are native.
+This compatible popover example is a simple collection of native controls. The enhanced menu documented in the family matrix adds positioning, arrow-key navigation and managed focus; use that full markup contract when menu semantics are needed. Native popovers require supporting browsers; provide an inline fallback if your browser policy includes older engines. Plain tooltip content is supplementary, never the only source of an essential instruction; touch users still need a complete label. Rich interactive help uses the dedicated rich-tooltip trigger and dialog contract. Accordion semantics and expanded state are native.
 
 ## Feedback and loading
 
@@ -174,7 +176,7 @@ showSnackbar('Preview refreshed.', { duration: 6000 });
 // Call dismiss() when the original message no longer applies.
 ```
 
-The snackbar's actionLabel only renames its dismiss button; it does not wire an Undo action. It renders plain text, announces politely and pauses an optional timeout on hover/focus. Do not use it for essential errors or a sole recovery action. Alerts present from initial page load do not need role="alert". For urgent new errors the application can add an appropriate live announcement.
+Add `onAction` and `actionLabel` for a real asynchronous application action, alongside a separate `dismissLabel`. Without `onAction`, the existing `actionLabel`-only dismissal behavior remains compatible. A pending action cannot be submitted twice; a rejection keeps the message available and emits `qm:snackbar-action-error`. New messages replace the previous snackbar. Text is rendered as text, announced politely, and an optional timeout pauses on hover/focus. Do not use snackbars for essential errors or a sole recovery action. Alerts present from initial page load do not need role="alert". For urgent new errors the application can add an appropriate live announcement.
 
 Skeletons are static. Replace them with content when loading ends, and provide a labeled progress indicator when the loading state needs more explanation.
 
@@ -202,6 +204,8 @@ Example URLs are illustrative product routes. Only add a focusable table region 
 
 ## Lifecycle and integration
 
-initQuietMaterial(root = document) returns a cleanup function. Calling it repeatedly on the same root returns the existing cleanup rather than duplicating listeners. Clean up before removing an enhanced application root. Prefer a single root; nested independently initialized roots can duplicate event handling. Dynamically inserted tabs need initialization in an appropriately scoped new root or a documented application lifecycle strategy.
+`initQuietMaterial(root = document)` returns a cleanup function and composes the component initializers. Calling it repeatedly on the same root returns the existing cleanup rather than duplicating listeners. Clean up before removing an enhanced application root. Prefer a single root; nested independently initialized roots can duplicate event handling. Dynamically inserted scanned structures need initialization in an appropriately scoped new root, or cleanup and reinitialization after rendering.
+
+Explicit `mountDatePicker`, `mountTimePicker`, `mountSearch`, `mountProgress` and `mountLoadingIndicator` calls return component handles with a `destroy()` method. Keep those handles and destroy explicitly mounted instances before disposing their host. Declarative picker, search, progress and loading hosts are owned by `initQuietMaterial`; do not mount them again independently. Follow the [getting-started lifecycle](getting-started.md) and the individual API guides.
 
 The styles apply some global typography and element defaults. Review that boundary before placing the stylesheet into an existing application; a shadow-root or fully scoped CSS adapter is not supplied. Native controls remain useful without JavaScript; enhanced tabs and dialog triggers need the module. Supply a sensible no-script path if those contain essential tasks.

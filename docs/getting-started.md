@@ -1,6 +1,6 @@
 # Getting started
 
-Quiet Material provides a dark web theme, semantic tokens, component styles and optional progressive interactions. It is a private, unpublished source package. Use this checkout directly or integrate it as a local workspace package.
+Quiet Material provides a black, mobile-first theme, semantic tokens, reusable components across the 36 MD3 catalog families, and progressive interactions. It is a private, unpublished source package. Use this checkout directly or integrate it as a local workspace package. The [family matrix](md3-components.md) records the exact variants and platform implementations.
 
 ## Run the workbench
 
@@ -23,7 +23,7 @@ Test runs the repository tests. Check rebuilds tokens and runs those tests. Revi
 
 ## Add styles and interactions
 
-Serve the files over HTTP. Keep styles/quiet-material.css beside styles/tokens.css because the former imports the latter.
+Serve the files over HTTP. Keep the entire `styles/` directory together: `quiet-material.css` imports generated tokens, base styles, and the action, navigation, input and communication stylesheets. Also retain `src/` and `exports/`; JavaScript modules import their local helpers and generated motion data.
 
 ```html
 <link rel="stylesheet" href="./styles/quiet-material.css">
@@ -49,7 +49,7 @@ Serve the files over HTTP. Keep styles/quiet-material.css beside styles/tokens.c
 </script>
 ```
 
-The module does not initialize on import. Call initQuietMaterial after the markup exists. Native fields, buttons, details and popovers keep their browser behavior. Tabs, dialog trigger attributes, selectable chips, tooltip dismissal and ripples use the enhancement. Product actions, saving, validation, navigation and persistence remain application responsibilities.
+The module does not initialize on import. Call `initQuietMaterial` after the markup exists. It initializes tabs, dialog triggers, action groups, navigation, sheets, carousels, menus, tooltips, progress, declarative pickers/search and interaction feedback. Native fields, buttons and details keep their browser semantics. Date/time pickers and search also expose the explicit mount APIs described below. Product actions, saving, server validation, routing and persistence remain application responsibilities.
 
 For a local workspace that already resolves the package, use its exports:
 
@@ -58,7 +58,7 @@ import '@quiet-material/core/styles.css';
 import { initQuietMaterial, showSnackbar } from '@quiet-material/core';
 ```
 
-Your build tool must support CSS imports. No public npm installation is implied. The package additionally exports ./tokens.css and ./tokens.json, and ships TypeScript declarations for its JavaScript API.
+Your build tool must support CSS imports. No public npm installation is implied. The package additionally exports `./tokens.css`, `./tokens.json` and the machine-readable `./components.json` family inventory, and ships TypeScript declarations for its JavaScript API.
 
 ## Initialization lifecycle
 
@@ -81,19 +81,44 @@ The import is safe without a DOM, but calling these functions requires an actual
 
 ```js
 const dismiss = showSnackbar('Settings saved.'); // Persistent by default.
-showSnackbar('Preview updated.', { duration: 6000 });
-// dismiss() removes the first message when it is no longer relevant.
+// Call dismiss() when that message no longer applies.
+
+showSnackbar('Item archived.', {
+  actionLabel: 'Undo',
+  onAction: async () => restoreArchivedItem(),
+  dismissLabel: 'Dismiss',
+});
 ```
 
-A positive timeout is clamped to at least 5000ms and pauses on hover/focus. actionLabel changes only the dismiss-button text; it does not install an Undo handler. Essential feedback needs a persistent location in the product.
+A positive timeout is clamped to at least 5000ms and pauses on hover/focus. Only the latest snackbar is visible. `onAction` supplies a real application callback with a separate Dismiss action; successful completion dismisses the message. A rejected callback leaves it available and emits `qm:snackbar-action-error` so the application can display a specific recovery message. The example's `restoreArchivedItem` is an application function. Essential feedback needs a persistent location in the product.
 
 For system changes, edit the source token JSON and rebuild. In a consuming product, prefer semantic variables such as --qm-color-surface and --qm-space-6. Keep the approved black background and re-check contrast, focus and reduced motion for any override. The stylesheet includes global typography and element defaults, so review its effects when integrating with existing CSS.
 
-Before shipping a product, review [component contracts](components.md), the [accessibility checks](accessibility.md) and [scope limitations](governance.md). An editable design-tool library and native mobile SDKs are not included.
+Before shipping a product, review [component contracts](components.md), the [accessibility checks](accessibility.md) and [scope](governance.md). An editable design-tool library and native platform SDK installations are not included.
+
+## Mount a composed component
+
+The main module exports `mountDatePicker`, `mountTimePicker`, `mountSearch`, `mountProgress`, `setProgress` and `mountLoadingIndicator`. Use explicit mounts for callback/options control, or use the documented declarative hooks with `initQuietMaterial`.
+
+```js
+import { initQuietMaterial, mountDatePicker } from './src/quiet-material.js';
+
+const root = document.querySelector('#booking-view');
+const cleanup = initQuietMaterial(root);
+const picker = mountDatePicker(root.querySelector('#travel-date'), {
+  label: 'Travel date',
+});
+
+// Before replacing the view, destroy explicit mounts and clean up enhancements.
+picker.destroy();
+cleanup();
+```
+
+The example expects an ordinary empty element with `id="travel-date"`, without a declarative mount attribute. See the component guides linked from [the family matrix](md3-components.md) for options, change events and examples. Keep one owner for each component instance; do not explicitly mount a host that is already owned by a declaratively initialized root. Listen for selection events to update application state instead of reading decorative animation frames.
 
 ## Native applications
 
-For native toolkits, use the [platform starters and coverage matrix](platforms.md). `npm run build` regenerates all six token formats from the same source. [Mobile-first rules](mobile-first.md) apply to available window size, not device names.
+For native toolkits, use the [platform adapters and coverage matrix](platforms.md). `npm run build` regenerates all six token formats from the same source. [Mobile-first rules](mobile-first.md) apply to available window size, not device names.
 
 ## MD3 motion API
 

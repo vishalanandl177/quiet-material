@@ -36,6 +36,25 @@ Associate every field with a persistent label. Use autocomplete and an appropria
 
 Announce routine feedback through a polite status region. Reserve alert/assertive announcements for urgent interruptions. A snackbar must never be the only place to find an error or a time-sensitive action; provide a persistent equivalent. Loading skeletons are decorative and hidden from assistive technology; the affected content region communicates busy state.
 
+## Expanded component contracts
+
+| Component | Required behavior |
+| --- | --- |
+| Segmented controls | Single selection exposes a labeled radio group with one tab stop; multiple selection exposes separately toggled buttons. Disabled choices are skipped. |
+| FAB menu and split button | Primary and secondary actions have distinct names. The disclosure exposes expanded state, closes with Escape and restores focus. A split button must not hide the primary action inside the menu. |
+| Toolbars and menus | Use each enhanced component's documented roving focus and arrow keys. Ordinary site navigation remains native links; do not assign menu roles to every navigation region. |
+| Navigation bar, rail and drawer | Preserve current destination and focus across responsive layouts. Modal drawers use the dialog focus contract; permanent navigation does not trap focus. |
+| Standard sheets and carousels | Provide visible buttons for every drag or swipe action. Carousels do not auto-advance; announce user-requested position changes without repeatedly reading all slides. |
+| Date/time pickers | Label every field and calendar/time control. Keep typed input available, describe invalid values, and retain a predictable focus return path on dismissal. Test locale, 12/24-hour choices and range selection with assistive technology. |
+| Search | Label the input and results, expose expanded/active-option state, and keep keyboard selection coherent when results change. Announce a useful result count; loading and error content must remain understandable. |
+| Range sliders | Give each thumb a distinct label and expose its current bounds. Keep the order stable, prevent crossing, and provide understandable units with visible values or aria-valuetext. |
+| Input chips | Removal is a separate labeled action. After removal, move focus to an appropriate surviving item or the associated input; never leave focus on a detached node. |
+| Rich tooltips | Interactive help is a nonmodal dialog with a name and explicit dismissal. Plain role=tooltip hints contain no interactive controls. |
+| Progress and loading | Name the operation. Indeterminate progress omits a numeric value; completion updates the content's busy state. Reduced motion uses a static meaningful state instead of repeated movement. |
+| Snackbar actions | Pending actions prevent duplicate invocation. Failed actions leave recovery available and must produce a product-owned, persistent error when necessary. Dismissal is separate from Undo or Retry. |
+
+See [the component family matrix](md3-components.md) for the implementation and individual keyboard contracts. These are acceptance requirements for integrations; [validation](validation.md) records the evidence actually collected.
+
 ## Motion and sensory needs
 
 Honor prefers-reduced-motion automatically. A product may expose an additional reduction setting, but cannot use it to override an OS request for less motion. State updates remain immediate and understandable without movement. Do not use flashing, looping promotional animation or moving backgrounds. Reduced-motion support also implements our design policy inspired by [WCAG interaction-animation guidance](https://www.w3.org/WAI/WCAG22/Understanding/animation-from-interactions.html), which is a Level AAA criterion.

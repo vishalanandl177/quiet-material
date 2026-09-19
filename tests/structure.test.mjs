@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { access, readFile } from 'node:fs/promises';
+import { access, readFile, readdir } from 'node:fs/promises';
 import { JSDOM } from 'jsdom';
 
 const indexURL = new URL('../index.html', import.meta.url);
@@ -90,7 +90,8 @@ test('initial tabs have reciprocal panel labels and one visible selected panel p
 
 test('component CSS references only declared Quiet Material variables', async () => {
   const tokens = await readFile(new URL('../styles/tokens.css', import.meta.url), 'utf8');
-  const components = await readFile(new URL('../styles/quiet-material.css', import.meta.url), 'utf8');
+  const styleFiles = (await readdir(new URL('../styles/', import.meta.url))).filter(name => name.endsWith('.css'));
+  const components = (await Promise.all(styleFiles.map(name => readFile(new URL(`../styles/${name}`, import.meta.url),'utf8')))).join('\n');
   const declared = new Set([...`${tokens}\n${components}`.matchAll(/(--qm-[a-z0-9-]+)\s*:/g)].map((match) => match[1]));
   const used = new Set([...components.matchAll(/var\(\s*(--qm-[a-z0-9-]+)/g)].map((match) => match[1]));
   for (const name of used) assert.ok(declared.has(name), `Component CSS references undeclared token ${name}`);

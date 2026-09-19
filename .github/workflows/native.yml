@@ -1,0 +1,64 @@
+name: Verify native adapters
+on:
+  push:
+    paths:
+      - 'platforms/**'
+      - '.github/workflows/native.yml'
+  pull_request:
+    paths:
+      - 'platforms/**'
+      - '.github/workflows/native.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          gradle-version: '8.11.1'
+      - name: Compile Compose library
+        working-directory: platforms/android
+        run: gradle assembleDebug --no-daemon --stacktrace
+  apple:
+    runs-on: macos-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Compile macOS Swift package
+        run: swift build --package-path platforms/apple
+      - name: Compile iOS simulator library
+        working-directory: platforms/apple
+        run: xcodebuild -scheme QuietMaterial -destination 'generic/platform=iOS Simulator' -sdk iphonesimulator CODE_SIGNING_ALLOWED=NO build
+  flutter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.0'
+          channel: stable
+          cache: true
+      - name: Resolve Flutter package
+        working-directory: platforms/flutter
+        run: flutter pub get
+      - name: Analyze Flutter source
+        working-directory: platforms/flutter
+        run: flutter analyze
+      - name: Verify Flutter interactions
+        working-directory: platforms/flutter
+        run: flutter test

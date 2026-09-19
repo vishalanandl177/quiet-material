@@ -1,12 +1,20 @@
 /** Quiet Material: optional, dependency-free progressive enhancement. */
 import {transitionView, cancelMotion} from './motion.js';
+import {initActionComponents} from './components-actions.js';
+import {initNavigationComponents} from './components-navigation.js';
+import {initInputComponents} from './components-input.js';
+import {initCommunicationComponents} from './components-communication.js';
+export {mountDatePicker, mountTimePicker, mountSearch} from './components-input.js';
+export {mountProgress, setProgress, mountLoadingIndicator} from './components-communication.js';
 const instances = new WeakMap();
 const notifications = new WeakMap();
 
 /** Close semantics immediately; only a noninteractive visual snapshot fades out. */
 export function closeQuietDialog(dialog, result = '') {
   if (!dialog?.open) return;
-  return transitionView({from: dialog, to: null, pattern: 'fade', update: () => dialog.close(result)});
+  const side = dialog.matches('.qm-dialog--side-sheet, .qm-dialog--drawer');
+  const vertical = dialog.matches('.qm-dialog--sheet, .qm-dialog--fullscreen');
+  return transitionView({from: dialog, to: null, pattern: side || vertical ? 'shared-axis' : 'fade', axis: side ? 'x' : 'y', reverse: true, update: () => dialog.close(result)});
 }
 
 function elements(root, selector) {
@@ -28,6 +36,7 @@ export function initQuietMaterial(root = document) {
   if (instances.has(root)) return instances.get(root);
   const doc = root.nodeType === 9 ? root : root.ownerDocument;
   const win = doc.defaultView;
+  const componentCleanups = [initActionComponents(root), initNavigationComponents(root), initInputComponents(root), initCommunicationComponents(root)];
   const listeners = [];
   const ripples = new Map();
   const pendingTouches = new Map();
@@ -139,7 +148,7 @@ export function initQuietMaterial(root = document) {
 
   listen(root, 'pointerdown', (event) => {
     if (event.button !== 0) return;
-    const button = closest(event, 'button.qm-button, button.qm-chip');
+    const button = closest(event, 'button.qm-button, button.qm-chip, button.qm-fab, [data-qm-segmented] button');
     if (!button) return;
     if (event.pointerType === 'touch') {
       const previous = pendingTouches.get(button);
@@ -204,7 +213,9 @@ export function initQuietMaterial(root = document) {
       if (dialog.classList.contains('qm-dialog--sheet')) dialog.showModal();
       else {
         if (!dialog.hasAttribute('data-qm-motion-enhanced')) {dialog.setAttribute('data-qm-motion-enhanced', ''); ownedDialogMotion.add(dialog);}
-        transitionView({from: null, to: dialog, pattern: 'fade', update: () => dialog.showModal()});
+        const side = dialog.matches('.qm-dialog--side-sheet, .qm-dialog--drawer');
+        const full = dialog.classList.contains('qm-dialog--fullscreen');
+        transitionView({from: null, to: dialog, pattern: side || full ? 'shared-axis' : 'fade', axis: side ? 'x' : 'y', update: () => dialog.showModal()});
       }
       return;
     }
@@ -263,7 +274,7 @@ export function initQuietMaterial(root = document) {
     }
 
     if (!event.repeat && (event.key === 'Enter' || event.key === ' ')) {
-      const button = closest(event, 'button.qm-button, button.qm-chip');
+      const button = closest(event, 'button.qm-button, button.qm-chip, button.qm-fab, [data-qm-segmented] button');
       if (button) ripple(button, event);
     }
   });
@@ -276,6 +287,7 @@ export function initQuietMaterial(root = document) {
   // The native operation proceeds immediately; only this inert copy fades out.
   for (const menu of elements(root, '.qm-menu[popover]')) {
     listen(menu, 'beforetoggle', event => {
+      if (menu.hasAttribute('data-qm-input-motion')) return;
       if (event.newState === 'closed') transitionView({from: menu, to: null, pattern: 'fade', update() {}});
     });
   }
@@ -298,6 +310,7 @@ export function initQuietMaterial(root = document) {
   const cleanup = () => {
     if (disposed) return;
     disposed = true;
+    for (const cleanupComponent of componentCleanups) cleanupComponent();
     for (const remove of listeners) remove();
     clearFeedback();
     motionObserver.disconnect();
@@ -342,6 +355,7 @@ export function showSnackbar(message, options = {}) {
     notifications.set(doc, state);
   }
 
+  state.dismiss?.();
   const previousFocus = doc.activeElement;
   const snackbar = doc.createElement('div');
   snackbar.className = 'qm-snackbar';
@@ -351,8 +365,15 @@ export function showSnackbar(message, options = {}) {
   const button = doc.createElement('button');
   button.className = 'qm-snackbar-dismiss';
   button.type = 'button';
-  button.textContent = options.actionLabel || 'Dismiss';
+  button.textContent = options.dismissLabel || (options.onAction ? 'Dismiss' : options.actionLabel) || 'Dismiss';
   snackbar.append(content, button);
+  let actionButton = null;
+  if (typeof options.onAction === 'function') {
+    actionButton = doc.createElement('button');
+    actionButton.className = 'qm-snackbar-action'; actionButton.type = 'button';
+    actionButton.textContent = options.actionLabel || 'Undo';
+    snackbar.insertBefore(actionButton, button);
+  }
   transitionView({from: null, to: snackbar, pattern: 'fade', update: () => state.region.append(snackbar)});
   win.clearTimeout(state.announceTimer);
   state.live.textContent = '';
@@ -365,10 +386,12 @@ export function showSnackbar(message, options = {}) {
   let started = 0;
   let hovered = false;
   let focused = false;
+  let pending = false;
 
   const dismiss = () => {
     if (dismissed) return;
     dismissed = true;
+    if (state.dismiss === dismiss) {state.dismiss = null; win.clearTimeout(state.announceTimer);}
     win.clearTimeout(timer);
     const restoreFocus = snackbar.contains(doc.activeElement);
     transitionView({from: snackbar, to: null, pattern: 'fade', update: () => snackbar.remove()});
@@ -383,11 +406,23 @@ export function showSnackbar(message, options = {}) {
     remaining = Math.max(1, remaining - (win.performance.now() - started));
   };
   const resume = () => {
-    if (dismissed || hovered || focused || !remaining || timer !== null) return;
+    if (dismissed || hovered || focused || pending || !remaining || timer !== null) return;
     started = win.performance.now();
     timer = win.setTimeout(dismiss, remaining);
   };
   button.addEventListener('click', dismiss);
+  actionButton?.addEventListener('click', async () => {
+    if (pending || dismissed) return;
+    pending = true; pause(); actionButton.disabled = true;
+    try { await options.onAction(); dismiss(); }
+    catch (error) {
+      if (!dismissed) {
+        win.clearTimeout(state.announceTimer);
+        state.live.textContent = options.actionErrorMessage || 'The action could not be completed. Try again.';
+        snackbar.dispatchEvent(new win.CustomEvent('qm:snackbar-action-error', {bubbles:true, detail:{error}}));
+      }
+    } finally {pending = false; actionButton.disabled = false; resume();}
+  });
   snackbar.addEventListener('pointerenter', () => { hovered = true; pause(); });
   snackbar.addEventListener('pointerleave', () => { hovered = false; resume(); });
   snackbar.addEventListener('focusin', () => { focused = true; pause(); });
@@ -396,5 +431,6 @@ export function showSnackbar(message, options = {}) {
     if (!focused) resume();
   });
   resume();
+  state.dismiss = dismiss;
   return dismiss;
 }

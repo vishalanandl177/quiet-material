@@ -1,6 +1,6 @@
 # Quiet Material for Apple platforms
 
-Native SwiftUI starter adapter for iOS 16+, iPadOS 16+ and macOS 13+. Requires Xcode 15+ and Swift 5.9+. This folder is a local Swift package; it has no third-party dependencies. The shared tokens use SwiftUI `Color`, logical points, and milliseconds. Semantic SwiftUI fonts supply Dynamic Type instead of copying web font sizes.
+Native SwiftUI component adapter for iOS 16+, iPadOS 16+ and macOS 13+. Requires Xcode 15+ and Swift 5.9+. This folder is a local Swift package; it has no third-party dependencies. The shared tokens use SwiftUI `Color`, logical points, and milliseconds. Semantic SwiftUI fonts supply Dynamic Type instead of copying web font sizes.
 
 ## Run the example
 
@@ -49,15 +49,15 @@ Use `QuietTextField("Name", text: $name)` and `QuietToggle("Notifications", isOn
 | Text field and form rows | `QuietTextField`, `QuietToggle`; compose into native `Form` as needed |
 | Switch | Native SwiftUI `Toggle` |
 | Navigation / dialog | Native `NavigationStack`, `NavigationLink`, `.sheet` in example |
-| Tabs, pickers, lists, menus, sliders, progress, alerts | Use `TabView`, `Picker`, `List`, `Menu`, `Slider`, `ProgressView`, `.alert` under the theme; no custom wrappers shipped |
+| Full catalog | `QuietCatalog.swift` supplies reusable controls/compositions across all catalog families; platform-specific scope below |
 
-This is an adapter and runnable starter screen, not an implementation of every web example. Native controls retain platform layout and interaction conventions. For native `List` or `Form`, use `.scrollContentBackground(.hidden)` and a black background, and apply `.listRowBackground(QuietTokens.colorSurface)` to rows. Theme your app's navigation toolbar backgrounds explicitly where needed; system chrome is platform-owned.
+This is a native adapter with a reusable catalog and runnable example. The catalog maps purpose to native semantics; not every web variant has identical geometry or motion. Native controls retain platform layout and interaction conventions. For native `List` or `Form`, use `.scrollContentBackground(.hidden)` and a black background, and apply `.listRowBackground(QuietTokens.colorSurface)` to rows. Theme your app's navigation toolbar backgrounds explicitly where needed; system chrome is platform-owned.
 
 ## Responsive and accessible behavior
 
 The sample measures the **available window**, including iPad split view and macOS resizing. It starts with one column, switches to two at 840 points, and returns to one for accessibility Dynamic Type categories. There are no device-name checks or fixed content heights. Text wraps and the whole page scrolls; controls use minimum 48-point height. A card's container is not made into an extra accessibility element, preserving its children.
 
-Apple's semantic fonts follow user text preferences. Button presses use a 10% state layer with MD3 standard easing; arbitrary 0.98 press scaling has been removed. Custom motion is disabled when `accessibilityReduceMotion` is true; native navigation and sheet motion remain managed by SwiftUI. No ambient or repeating animation runs. Do not clamp Dynamic Type or replace system back gestures. Keep custom icons labeled, localize strings, and use leading/trailing alignment for RTL.
+Apple's semantic fonts follow user text preferences. Button presses use a 10% state layer with MD3 standard easing; arbitrary 0.98 press scaling has been removed. Custom motion is disabled when `accessibilityReduceMotion` is true; native navigation and sheet motion remain managed by SwiftUI. The seven-contour loading indicator animates only when explicitly mounted for pending work; it pauses for Reduce Motion and an inactive scene. Do not use it as ambient decoration. Do not clamp Dynamic Type or replace system back gestures. Keep custom icons labeled, localize strings, and use leading/trailing alignment for RTL.
 
 ## MD3 motion integration
 
@@ -97,3 +97,36 @@ Before releasing a consuming app, build for both iOS and macOS, test a narrow iP
 - [ViewThatFits for additional content-led adaptations](https://developer.apple.com/documentation/swiftui/viewthatfits)
 
 Edit the shared source in `tokens/quiet-material.tokens.json` and run `npm run build` at the repository root to regenerate native tokens. Do not edit generated values directly.
+
+
+## Component catalog
+
+`QuietCatalog.swift` exports the following reusable views. All bindings, navigation selection, commands and dismissal state belong to the host application.
+
+| Category | Public APIs |
+| --- | --- |
+| Actions | `QuietActionButton` and five `QuietButtonKind` variants, `QuietIconButton`, `QuietFab` (compact/extended), `QuietButtonGroup`, `QuietSplitButton`, `QuietFabMenu`, `QuietSegments` |
+| Communication | `QuietBadge`, `QuietProgress`, `QuietLoadingIndicator`, `QuietSnackbar`, `.quietTooltip`, `QuietRichTooltip` |
+| Containment | `QuietSurfaceCard`, `QuietCarousel`, `QuietListItem`, `QuietDivider`, `.quietDialog`, `.quietFullScreenDialog`, `.quietBottomSheet`, `QuietStandardBottomSheet`, `QuietSideSheet` |
+| Navigation | `QuietAdaptiveNavigation`, `QuietNavigationBar`, `QuietNavigationRail`, `QuietNavigationDrawer`, `QuietAppBar`, `QuietTabs`, `QuietToolbar` |
+| Selection/input | `QuietCheckbox`, `QuietRadioGroup`, `QuietChip`, `QuietSlider`, `QuietRangeSlider`, `QuietDatePicker`, `QuietDateRangePicker`, `QuietTimePicker`, `QuietMenu`, `QuietField`, `QuietSearch`, existing `QuietToggle` |
+
+```swift
+@State private var destination = "home"
+
+// Inside a View's body, under QuietTheme:
+QuietAdaptiveNavigation(choices: [
+    QuietChoice(id: "home", label: "Home", systemImage: "house"),
+    QuietChoice(id: "settings", label: "Settings", systemImage: "gear")
+], selection: $destination) {
+    Text(destination)
+}
+```
+
+The adaptive container keeps the content in one structural location and moves navigation through safe-area insets. It uses current window width and accessibility text size; app routing remains your responsibility. `QuietAction` requires a stable ID and callback. The snackbar is controlled and remains visible until the app dismisses it; no timer silently removes an action. Plain tooltip text uses `.help`; essential help must also be available in the focusable rich help presentation on touch devices.
+
+The loading indicator uses the same seven branded contours, 650 ms target interval, stiffness 200/damping ratio 0.6 and compound rotation as the web implementation. It is a real shape morph, not a spinner alias. `TimelineView` stops its animation schedule for Reduce Motion or an inactive scene. The contour geometry is Quiet artwork, not a copy of Android RoundedPolygon paths.
+
+Apple-specific variants remain explicit: `QuietSegments` is single selection; multiple selection composes filter chips. Radio selection uses native `Picker`; a range uses two labeled native sliders; date range uses two coordinated date controls. Keep range bounds ordered before creating these views. Carousels are horizontal scrolling content, not all MD3 masking variants. `QuietField` has persistent labels rather than MD3 floating-label animation. Search combines a field with app-owned results. Toolbars/groups use native buttons without expressive connected-shape morphing. `QuietStandardBottomSheet` is an in-layout surface without detents; modal bottom sheets use medium/large native detents on iOS and native sheets on macOS. Full-screen dialogs use `fullScreenCover` on iOS and native sheets on macOS. The host must supply a visible dismiss action and can present `QuietSideSheet` through a native sheet at compact widths.
+
+These native presentation choices retain **Apple motion**, not universal MD3 motion parity. Source availability is not SDK validation: run `swift build --package-path platforms/apple` on macOS, then build an iOS host/simulator and test VoiceOver, input, cancellation and state restoration before release.

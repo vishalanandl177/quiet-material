@@ -218,3 +218,25 @@ test('explicit reduced motion suppresses pointer and keyboard ripples', (t) => {
   key(window, button, 'Enter');
   assert.equal(document.querySelector('.qm-ripple'), null);
 });
+
+test('snackbar runs a real action once, keeps dismiss separate and replaces older feedback', async t => {
+  const {document} = fixture(t, '<button id="origin">Archive</button>', {reduced:true});
+  const origin=document.getElementById('origin');origin.focus();
+  let calls=0, complete;
+  showSnackbar('Older notice',{document});
+  showSnackbar('Archived',{document,actionLabel:'Undo',onAction(){calls++;return new Promise(resolve=>{complete=resolve;});}});
+  assert.equal(document.querySelectorAll('.qm-snackbar').length,1);
+  const action=document.querySelector('.qm-snackbar-action');
+  assert.equal(action.textContent,'Undo');assert.equal(document.querySelector('.qm-snackbar-dismiss').textContent,'Dismiss');
+  action.focus();action.click();action.click();assert.equal(calls,1);assert.equal(action.disabled,true);
+  complete();await Promise.resolve();assert.equal(document.querySelector('.qm-snackbar'),null);assert.equal(document.activeElement,origin);
+});
+
+test('failed snackbar action remains available, announces failure and emits the error', async t => {
+  const {document}=fixture(t,'',{reduced:true});const error=new Error('offline');let detail;
+  document.addEventListener('qm:snackbar-action-error',event=>{detail=event.detail;});
+  const dismiss=showSnackbar('Archived',{document,actionLabel:'Undo',onAction(){throw error;},actionErrorMessage:'Offline. Try Undo again.'});
+  document.querySelector('.qm-snackbar-action').click();await Promise.resolve();
+  assert.equal(detail.error,error);assert.equal(document.querySelector('.qm-snackbar-action').disabled,false);
+  assert.equal(document.querySelector('[role="status"]').textContent,'Offline. Try Undo again.');dismiss();
+});
