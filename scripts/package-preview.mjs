@@ -1,0 +1,13 @@
+import {readFile,writeFile,mkdir} from 'node:fs/promises';
+const read = path=>readFile(new URL('../'+path,import.meta.url),'utf8');
+let html = await read('index.html');
+const tokens = await read('styles/tokens.css');
+const styles = (await read('styles/quiet-material.css')).replace(/@import[^;]+;/g,'');
+html=html.replace('<link rel="stylesheet" href="styles/quiet-material.css">','<style>'+tokens+'\n'+styles+'</style>');
+html=html.replace('<link rel="stylesheet" href="demo.css">','<style>'+await read('demo.css')+'</style>');
+let module = await read('src/quiet-material.js');
+let demo = (await read('demo.js')).replace(/^import .*?;\s*/m,'');
+html=html.replace('<script type="module" src="demo.js"></script>','<script type="module">\n'+module+'\n'+demo+'\n</script>');
+await mkdir(new URL('../dist/',import.meta.url),{recursive:true});
+await writeFile(new URL('../dist/quiet-material-preview.html',import.meta.url),html);
+console.log('Created dist/quiet-material-preview.html (self-contained component explorer; repository documentation links require the full checkout).');

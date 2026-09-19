@@ -1,0 +1,98 @@
+/* Generated from tokens/quiet-material.tokens.json. Run npm run build. */
+:root {
+  --qm-color-palette-black: #000000;
+  --qm-color-palette-charcoal: #242424;
+  --qm-color-palette-charcoal-high: #2d2d2d;
+  --qm-color-palette-charcoal-low: #171717;
+  --qm-color-palette-white: #f4f4f4;
+  --qm-color-palette-muted: #b7b7bd;
+  --qm-color-palette-blue: #a8c7fa;
+  --qm-color-palette-blue-dark: #10213b;
+  --qm-color-palette-blue-container: #24354e;
+  --qm-color-palette-mint: #86d9ae;
+  --qm-color-palette-mint-container: #153d2b;
+  --qm-color-palette-yellow: #f3d17d;
+  --qm-color-palette-yellow-container: #423411;
+  --qm-color-palette-red: #ffb4ab;
+  --qm-color-palette-red-container: #522622;
+  --qm-color-palette-outline: #828289;
+  --qm-color-palette-disabled: #77777d;
+  --qm-color-background: var(--qm-color-palette-black);
+  --qm-color-surface: var(--qm-color-palette-charcoal);
+  --qm-color-surface-high: var(--qm-color-palette-charcoal-high);
+  --qm-color-surface-low: var(--qm-color-palette-charcoal-low);
+  --qm-color-text: var(--qm-color-palette-white);
+  --qm-color-text-muted: var(--qm-color-palette-muted);
+  --qm-color-primary: var(--qm-color-palette-blue);
+  --qm-color-on-primary: var(--qm-color-palette-blue-dark);
+  --qm-color-primary-container: var(--qm-color-palette-blue-container);
+  --qm-color-on-primary-container: var(--qm-color-palette-blue);
+  --qm-color-secondary: var(--qm-color-palette-mint);
+  --qm-color-on-secondary: var(--qm-color-palette-mint-container);
+  --qm-color-success: var(--qm-color-palette-mint);
+  --qm-color-success-container: var(--qm-color-palette-mint-container);
+  --qm-color-warning: var(--qm-color-palette-yellow);
+  --qm-color-warning-container: var(--qm-color-palette-yellow-container);
+  --qm-color-danger: var(--qm-color-palette-red);
+  --qm-color-danger-container: var(--qm-color-palette-red-container);
+  --qm-color-outline: var(--qm-color-palette-outline);
+  --qm-color-focus: var(--qm-color-palette-blue);
+  --qm-color-disabled: var(--qm-color-palette-disabled);
+  --qm-color-action: var(--qm-color-palette-white);
+  --qm-color-on-action: var(--qm-color-palette-black);
+  --qm-space-0: 0px;
+  --qm-space-1: 4px;
+  --qm-space-2: 8px;
+  --qm-space-3: 12px;
+  --qm-space-4: 16px;
+  --qm-space-5: 20px;
+  --qm-space-6: 24px;
+  --qm-space-7: 28px;
+  --qm-space-8: 32px;
+  --qm-space-9: 36px;
+  --qm-space-10: 40px;
+  --qm-space-11: 44px;
+  --qm-space-12: 48px;
+  --qm-radius-small: 8px;
+  --qm-radius-control: 16px;
+  --qm-radius-card: 40px;
+  --qm-radius-dialog: 32px;
+  --qm-radius-pill: 999px;
+  --qm-font-body: Inter, Roboto, Arial, sans-serif;
+  --qm-font-mono: ui-monospace, SFMono-Regular, Consolas, monospace;
+  --qm-font-regular: 400;
+  --qm-font-medium: 500;
+  --qm-font-bold: 600;
+  --qm-type-display: 3.5rem;
+  --qm-type-headline: 2.25rem;
+  --qm-type-title: 1.5rem;
+  --qm-type-body: 1rem;
+  --qm-type-label: 0.875rem;
+  --qm-type-caption: 0.75rem;
+  --qm-line-height-tight: 1.1;
+  --qm-line-height-heading: 1.25;
+  --qm-line-height-body: 1.6;
+  --qm-line-height-control: 1.25;
+  --qm-duration-instant: 100ms;
+  --qm-duration-short: 150ms;
+  --qm-duration-medium: 250ms;
+  --qm-duration-long: 350ms;
+  --qm-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --qm-easing-enter: cubic-bezier(0, 0, 0, 1);
+  --qm-easing-exit: cubic-bezier(0.3, 0, 1, 1);
+  --qm-size-control: 48px;
+  --qm-size-content: 1200px;
+  --qm-size-reading: 720px;
+  --qm-size-sidebar: 256px;
+  --qm-border-width: 1px;
+  --qm-border-focus: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --qm-duration-instant: 0ms;
+    --qm-duration-short: 0ms;
+    --qm-duration-medium: 0ms;
+    --qm-duration-long: 0ms;
+  }
+}
