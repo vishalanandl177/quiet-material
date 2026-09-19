@@ -1,0 +1,48 @@
+{
+  "description": "Authored motion studies, not screen recordings.",
+  "samplingMs": 50,
+  "studies": {
+    "ripple": {
+      "gif": "assets/motion/ripple.gif",
+      "poster": "assets/motion/ripple.png",
+      "width": 640,
+      "height": 400,
+      "frames": 7,
+      "transitionMs": 350,
+      "readingHoldBeforeMs": 700,
+      "readingHoldAfterMs": 1050,
+      "totalMs": 2100,
+      "loops": false,
+      "gifBytes": 21366,
+      "posterBytes": 26914
+    },
+    "switch": {
+      "gif": "assets/motion/switch.gif",
+      "poster": "assets/motion/switch.png",
+      "width": 640,
+      "height": 400,
+      "frames": 6,
+      "transitionMs": 250,
+      "readingHoldBeforeMs": 700,
+      "readingHoldAfterMs": 1050,
+      "totalMs": 2000,
+      "loops": false,
+      "gifBytes": 19181,
+      "posterBytes": 32961
+    },
+    "sheet": {
+      "gif": "assets/motion/sheet.gif",
+      "poster": "assets/motion/sheet.png",
+      "width": 640,
+      "height": 400,
+      "frames": 8,
+      "transitionMs": 350,
+      "readingHoldBeforeMs": 700,
+      "readingHoldAfterMs": 1050,
+      "totalMs": 2100,
+      "loops": false,
+      "gifBytes": 37704,
+      "posterBytes": 37459
+    }
+  }
+}

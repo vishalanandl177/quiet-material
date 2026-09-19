@@ -1,7 +1,7 @@
 {
   "name": "@quiet-material/core",
-  "version": "1.0.0",
-  "description": "A quiet, black-first, Material-inspired design system for the web.",
+  "version": "1.1.0",
+  "description": "A mobile-first, black Material-inspired design system with portable tokens and native starters.",
   "private": true,
   "license": "UNLICENSED",
   "type": "module",
@@ -15,13 +15,17 @@
     },
     "./styles.css": "./styles/quiet-material.css",
     "./tokens.css": "./styles/tokens.css",
-    "./tokens.json": "./tokens/quiet-material.tokens.json"
+    "./tokens.json": "./tokens/quiet-material.tokens.json",
+    "./tokens.resolved.json": "./exports/quiet-material.tokens.resolved.json",
+    "./tokens.ts": "./exports/quiet-material.tokens.ts"
   },
   "files": [
     "styles",
     "src",
     "tokens",
-    "README.md"
+    "README.md",
+    "exports",
+    "platforms"
   ],
   "scripts": {
     "dev": "node scripts/serve.mjs",

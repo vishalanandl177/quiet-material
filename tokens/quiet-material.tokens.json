@@ -428,6 +428,11 @@
         "value": 999,
         "unit": "px"
       }
+    },
+    "cardCompact": {
+      "$type": "dimension",
+      "$value": "{radius.dialog}",
+      "$description": "Card corner radius for compact layouts; roomy layouts keep radius.card."
     }
   },
   "font": {
@@ -611,6 +616,11 @@
         "value": 256,
         "unit": "px"
       }
+    },
+    "touchTarget": {
+      "$type": "dimension",
+      "$value": "{size.control}",
+      "$description": "Minimum logical target size for touch controls; native platforms may enlarge it for accessibility."
     }
   },
   "border": {
@@ -627,6 +637,43 @@
         "value": 3,
         "unit": "px"
       }
+    }
+  },
+  "breakpoint": {
+    "medium": {
+      "$type": "dimension",
+      "$value": {
+        "value": 600,
+        "unit": "px"
+      },
+      "$description": "Medium layout starts at 600 logical units of available width."
+    },
+    "expanded": {
+      "$type": "dimension",
+      "$value": {
+        "value": 840,
+        "unit": "px"
+      },
+      "$description": "Expanded layout starts at 840 logical units of available width."
+    },
+    "wide": {
+      "$type": "dimension",
+      "$value": "{size.content}",
+      "$description": "Wide layout starts at 1200 logical units of available width."
+    }
+  },
+  "layout": {
+    "pagePaddingCompact": {
+      "$type": "dimension",
+      "$value": "{space.5}"
+    },
+    "pagePaddingMedium": {
+      "$type": "dimension",
+      "$value": "{space.8}"
+    },
+    "pagePaddingExpanded": {
+      "$type": "dimension",
+      "$value": "{space.12}"
     }
   }
 }

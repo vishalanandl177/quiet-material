@@ -1,4 +1,4 @@
-/* Generated from tokens/quiet-material.tokens.json. Run npm run build. */
+/* Generated from tokens/quiet-material.tokens.json. Run npm run build. Do not edit. */
 :root {
   --qm-color-palette-black: #000000;
   --qm-color-palette-charcoal: #242424;
@@ -58,6 +58,7 @@
   --qm-radius-card: 40px;
   --qm-radius-dialog: 32px;
   --qm-radius-pill: 999px;
+  --qm-radius-card-compact: var(--qm-radius-dialog);
   --qm-font-body: Inter, Roboto, Arial, sans-serif;
   --qm-font-mono: ui-monospace, SFMono-Regular, Consolas, monospace;
   --qm-font-regular: 400;
@@ -84,8 +85,15 @@
   --qm-size-content: 1200px;
   --qm-size-reading: 720px;
   --qm-size-sidebar: 256px;
+  --qm-size-touch-target: var(--qm-size-control);
   --qm-border-width: 1px;
   --qm-border-focus: 3px;
+  --qm-breakpoint-medium: 600px;
+  --qm-breakpoint-expanded: 840px;
+  --qm-breakpoint-wide: var(--qm-size-content);
+  --qm-layout-page-padding-compact: var(--qm-space-5);
+  --qm-layout-page-padding-medium: var(--qm-space-8);
+  --qm-layout-page-padding-expanded: var(--qm-space-12);
 }
 
 @media (prefers-reduced-motion: reduce) {

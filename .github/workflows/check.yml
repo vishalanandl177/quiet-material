@@ -15,5 +15,5 @@ jobs:
           package-manager-cache: false
       - run: npm ci --ignore-scripts
       - run: npm run check
-      - name: Verify committed token output
-        run: git diff --exit-code -- styles/tokens.css
+      - name: Verify all committed token outputs
+        run: git diff --exit-code -- styles/tokens.css exports platforms

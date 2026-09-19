@@ -1,16 +1,17 @@
 # Scope and governance
 
-## v1 scope
+## v1.1 scope
 
-Quiet Material is an independent web design system inspired by Material's emphasis on purposeful hierarchy and interaction. It is not an official Google library, a complete implementation of Material components, or a replacement for native Android or iOS SDKs.
+Quiet Material is an independent mobile-first design system inspired by Material's emphasis on purposeful hierarchy and interaction. It is not an official Google library, a complete implementation of Material components, or a replacement for native Android or iOS SDKs.
 
-The repository owns semantic design tokens, generated CSS variables, framework-independent component styles, a small progressive JavaScript layer, a component workbench and written usage contracts. The approved aesthetic is black pages, charcoal containers, generous rounded shapes, large white typography, restrained blue/mint accents and interaction-driven motion.
+The repository owns semantic design tokens, generated CSS and native values, framework-independent component styles, a small progressive JavaScript layer, a component workbench and written usage contracts. The approved aesthetic is black pages, charcoal containers, generous rounded shapes, large white typography, restrained blue/mint accents and interaction-driven motion.
 
 The source package is private and unpublished. No public license grant is supplied. Distribution, package publication and licensing require the repository owner's separate decision. The approved concept image is a visual reference; do not assume it is a source of reusable third-party icons, fonts or brand assets.
 
 ## Explicit limits
 
-- No React, Angular, Vue, Android or iOS adapter is included in v1.
+- Web styles are framework-independent; dedicated React/Angular/Vue wrapper packages are not included.
+- Android Compose, Apple SwiftUI and Flutter source starters are included. Native SDK builds and device review remain pending; they are not full bespoke ports of all 27 web catalog items.
 - No editable Figma library has been created by this repository; the handoff document describes a future mapping.
 - No application authentication, persistence, backend, permissions or business logic is included.
 - Data grids with virtualization, custom comboboxes, date pickers, drag-and-drop and rich-text editors are outside v1.

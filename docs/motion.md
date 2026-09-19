@@ -38,3 +38,7 @@ Animation must never gate saving, dismissal, focus restoration or other applicat
 ## Review
 
 A motion change should answer three questions: What changed? Why does movement clarify it? Is the interface equally usable with motion disabled? If the second answer is weak, omit the animation.
+
+## Visual studies
+
+See the [motion gallery](motion-gallery.md) for single-cycle GIFs, static posters and the token-driven generation script. Explorer playback is explicit, limited to one study, and stops when motion is reduced or the viewer leaves the page.

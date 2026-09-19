@@ -1,16 +1,16 @@
-# Quiet Material 1.0
+# Quiet Material 1.1
 
-The downloadable package includes a self-contained `quiet-material-preview.html` beside this file. Open it in a modern browser to explore the system without installing anything. Relative documentation and token links work when the whole folder is extracted.
+Start with [README](README.md), [platforms](docs/platforms.md) and [mobile-first rules](docs/mobile-first.md).
 
-For development, use the source `index.html` through the local server:
+For the responsive web explorer:
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Open `http://127.0.0.1:4173`. Run `npm run check` to rebuild tokens and execute the test suite.
+Open the printed local URL. The Platforms page includes the device concepts and native starter links; the Motion page has three opt-in single-cycle GIFs.
 
-The generated preview can be recreated with `npm run package:preview`; its build output is `dist/quiet-material-preview.html`. Copy that file to the repository root if you want its relative documentation links to work when opening it directly.
+Run `npm run check` to rebuild every token output and execute the repository tests. Run `npm run package:preview` to generate `dist/quiet-material-preview.html`, which embeds styles, scripts and visual assets. Documentation links in that standalone file require the full checkout and a matching relative location.
 
-Start with [README](README.md) and [the integration guide](docs/getting-started.md). The browser runtime has no third-party dependencies. Node and jsdom are development/testing tools only.
+Native SDK instructions and pending build/device checks are recorded inside each platform starter and [validation](docs/validation.md).

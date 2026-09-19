@@ -90,3 +90,7 @@ A positive timeout is clamped to at least 5000ms and pauses on hover/focus. acti
 For system changes, edit the source token JSON and rebuild. In a consuming product, prefer semantic variables such as --qm-color-surface and --qm-space-6. Keep the approved black background and re-check contrast, focus and reduced motion for any override. The stylesheet includes global typography and element defaults, so review its effects when integrating with existing CSS.
 
 Before shipping a product, review [component contracts](components.md), the [accessibility checks](accessibility.md) and [scope limitations](governance.md). An editable design-tool library and native mobile SDKs are not included.
+
+## Native applications
+
+For native toolkits, use the [platform starters and coverage matrix](platforms.md). `npm run build` regenerates all six token formats from the same source. [Mobile-first rules](mobile-first.md) apply to available window size, not device names.

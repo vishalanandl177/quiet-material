@@ -6,3 +6,12 @@ coverage/
 dist/
 .DS_Store
 *.log
+
+# Native toolchain output
+.dart_tool/
+.flutter-plugins-dependencies
+.build/
+.swiftpm/
+.gradle/
+**/build/
+**/local.properties

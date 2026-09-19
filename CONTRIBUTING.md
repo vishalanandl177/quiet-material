@@ -14,7 +14,7 @@ npm test
 npm run check
 ```
 
-The development command serves the workbench; use the URL printed by the server. Build regenerates CSS variables from tokens/quiet-material.tokens.json. Check runs build and tests. These are contributor instructions, not a statement that a particular checkout passed them.
+The development command serves the workbench; use the URL printed by the server. Build regenerates CSS, JSON, TypeScript, Kotlin, Swift and Dart tokens from tokens/quiet-material.tokens.json. Check runs build and tests. These are contributor instructions, not a statement that a particular checkout passed them.
 
 ## Change checklist
 

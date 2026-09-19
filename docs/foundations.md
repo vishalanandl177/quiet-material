@@ -1,6 +1,6 @@
 # Foundations
 
-Quiet Material gives content room to breathe: pure black pages, rounded charcoal containers, clear white type and just enough color to communicate an action or state. The approved reference is [the concept image](../assets/approved-concept.png). This specification translates that direction into reusable web rules; it does not reproduce a particular operating system.
+Quiet Material gives content room to breathe: pure black pages, rounded charcoal containers, clear white type and just enough color to communicate an action or state. The approved reference is [the concept image](../assets/approved-concept.png). This specification translates that direction into portable rules; it does not reproduce a particular operating system.
 
 ## Principles
 
@@ -68,9 +68,9 @@ Space tokens run from `--qm-space-0` through `--qm-space-12` in 4px steps: 0–4
 | radius-dialog | 32px | Modal surface |
 | radius-pill | 999px | Buttons, chips and rounded navigation |
 
-Default cards use a 40px radius; at viewport widths of 600px or less the component stylesheet reduces it to 32px and uses 24px padding. Use at least enough padding to keep content away from a large rounded corner. Do not put dense tables into tiny pill-shaped cells. A pill control can grow taller and wrap when translated text needs space.
+Cards start with a 32px radius and 24px padding; from 600px the component stylesheet uses a 40px radius and responsive padding. Use at least enough padding to keep content away from a large rounded corner. Do not put dense tables into tiny pill-shaped cells. A pill control can grow taller and wrap when translated text needs space.
 
-Content maximum width is 1200px; reading width is 720px; desktop sidebar width is 256px. Components should respond to available space rather than assume a fixed device. Stack columns on compact screens, allow controls to wrap and retain a useful reading order. The preferred control target is 48px.
+Content maximum width is 1200px; reading width is 720px; desktop sidebar width is 256px. Components should respond to available space rather than assume a fixed device. Stack columns on compact screens, allow controls to wrap and retain a useful reading order. The preferred control target is 48px. The [mobile-first contract](mobile-first.md) defines 600/840/1200 window classes and 20/32/48 page insets.
 
 ## Icons and imagery
 
@@ -80,7 +80,7 @@ Use imagery when it carries information. Keep it inside content regions rather t
 
 ## Token architecture
 
-The source is [quiet-material.tokens.json](../tokens/quiet-material.tokens.json); `npm run build` writes [tokens.css](../styles/tokens.css). Token paths become kebab-case custom properties with a `--qm-` prefix: `color.textMuted` becomes `--qm-color-text-muted`. Components consume semantic aliases rather than raw palette entries.
+The source is [quiet-material.tokens.json](../tokens/quiet-material.tokens.json); `npm run build` writes [tokens.css](../styles/tokens.css), resolved JSON, typed TypeScript, Kotlin, Swift and Dart. See [platform contracts](platforms.md) for units and adapters. Token paths become kebab-case custom properties with a `--qm-` prefix: `color.textMuted` becomes `--qm-color-text-muted`. Components consume semantic aliases rather than raw palette entries.
 
 The file uses `$type`, `$value` and alias references described by the [DTCG format specification](https://www.designtokens.org/tr/2025.10/format/). The repository implements the subset it needs; it does not claim to be a universal DTCG resolver. Rebuild after changing a source value. Do not hand-edit the generated CSS.
 
