@@ -1,6 +1,6 @@
 # Workbench screenshots
 
-Rendered by `node scripts/capture-screenshots.mjs` in headless Chromium at deviceScaleFactor 2 with
+Rendered by `node scripts/capture-screenshots.mjs` in headless Chromium at deviceScaleFactor 1 with
 `prefers-reduced-motion: reduce`. These are implementation evidence: what the components actually render.
 The approved concept board in `../../assets/reference/` is a design reference, not a screenshot.
 

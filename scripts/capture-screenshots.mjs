@@ -55,6 +55,8 @@ async function waitForServer(url, attempts = 60) {
 const { chromium } = loadPlaywright();
 await mkdir(output, { recursive: true });
 
+// 1x keeps the committed evidence small. Set SCALE=2 for retina captures locally.
+const scale = Number(process.env.SCALE ?? 1);
 const port = process.env.PORT ?? '4173';
 const server = spawn(process.execPath, [path.join(root, 'scripts/serve.mjs')], {
   cwd: root, env: { ...process.env, PORT: port }, stdio: 'inherit',
@@ -69,8 +71,7 @@ try {
     for (const size of SIZES) {
       const context = await browser.newContext({
         viewport: { width: size.width, height: size.height },
-        // 1x keeps the committed evidence small. Set SCALE=2 for retina captures locally.
-        deviceScaleFactor: Number(process.env.SCALE ?? 1), colorScheme: 'dark', reducedMotion: 'reduce',
+        deviceScaleFactor: scale, colorScheme: 'dark', reducedMotion: 'reduce',
       });
       const page = await context.newPage();
       for (const name of PAGES) {
@@ -92,7 +93,7 @@ try {
 
 await writeFile(path.join(output, 'README.md'),
   `# Workbench screenshots\n\n` +
-  `Rendered by \`node scripts/capture-screenshots.mjs\` in headless Chromium at deviceScaleFactor 2 with\n` +
+  `Rendered by \`node scripts/capture-screenshots.mjs\` in headless Chromium at deviceScaleFactor ${scale} with\n` +
   `\`prefers-reduced-motion: reduce\`. These are implementation evidence: what the components actually render.\n` +
   `The approved concept board in \`../../assets/reference/\` is a design reference, not a screenshot.\n\n` +
   `Widths cover the documented window classes: 320 and 390 compact, 768 medium, 1024 expanded, 1440 wide.\n\n` +
